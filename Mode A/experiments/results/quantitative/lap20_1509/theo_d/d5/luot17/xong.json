@@ -1,0 +1,15 @@
+{
+  "mechanism": "offchain",
+  "thi_nghiem": "theo_d",
+  "cau_hinh": "d5",
+  "run_id": 17,
+  "n": 32,
+  "d": 5,
+  "k": 9,
+  "warmup": 3,
+  "so_lan_do": 32,
+  "tien_trinh": "moi proof va moi lan verify la mot tien trinh prover moi",
+  "bat_dau": "2026-09-16T04:16:19.956Z",
+  "ket_thuc": "2026-09-16T04:16:37.172Z",
+  "thoi_gian_ms": 17215.8
+}

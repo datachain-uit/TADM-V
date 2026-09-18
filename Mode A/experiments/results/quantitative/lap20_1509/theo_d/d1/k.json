@@ -1,0 +1,30 @@
+{
+  "d": 1,
+  "k_toi_thieu": 8,
+  "k_thieu_hang": 7,
+  "phep_thu": "keygen_vk tren mach rong witness (mode check-k)",
+  "cac_lan_thu": [
+    {
+      "k": 4,
+      "du_hang": false
+    },
+    {
+      "k": 5,
+      "du_hang": false
+    },
+    {
+      "k": 6,
+      "du_hang": false
+    },
+    {
+      "k": 7,
+      "du_hang": false
+    },
+    {
+      "k": 8,
+      "du_hang": true,
+      "check_ms": 42.265299999999996
+    }
+  ],
+  "do_luc": "2026-09-16T03:00:22.401Z"
+}

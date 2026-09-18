@@ -1,0 +1,24 @@
+{
+  "n": 1,
+  "merkle_depth": 9,
+  "school_account_index": 0,
+  "student_account_offset": 1,
+  "students": [
+    {
+      "student_index": 0,
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "student_id": 24560000,
+      "amount": 2,
+      "private_key": "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
+      "public_key": "0x04ba5734d8f7091719471e7f7ed6b9df170dc70cc661ca05e688601ad984f068b0d67351e5f06073092499336ab0839ef8a521afd334e53807205fa2f08eec74f4",
+      "cid": "QmUT5a6JJHnytxEaRsRVj4v76pumQ6JBpFq5yHaBdASp9r",
+      "note": {
+        "student_id": 24560000,
+        "amount": 2,
+        "rho": "78594177315364526127144160697764365016992375485224672857477911396303741527"
+      },
+      "ganache_account_index": 1,
+      "preparation_ms": 70.84343300000182
+    }
+  ]
+}

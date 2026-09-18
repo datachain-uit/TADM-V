@@ -1,0 +1,27 @@
+{
+  "university": {
+    "name": "Qualitative Experiment University",
+    "walletAddress": "0x0000000000000000000000000000000000000000",
+    "privateKey": "replace-with-ganache-university-private-key"
+  },
+  "student": {
+    "id": 1001,
+    "email": "student@example.edu",
+    "walletAddress": "0x0000000000000000000000000000000000000000",
+    "privateKey": "replace-with-student-private-key",
+    "wrongPrivateKey": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "scholarship": {
+    "amountWei": "100000000000000000"
+  },
+  "pool": {
+    "initialFundingWei": "1000000000000000000",
+    "sponsorWalletAddress": "0x0000000000000000000000000000000000000000",
+    "sponsorAmountWei": "500000000000000000"
+  },
+  "run": {
+    "resetDatabase": true,
+    "studentCount": 1,
+    "useSharedDataset": true
+  }
+}

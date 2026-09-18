@@ -1,0 +1,72 @@
+{
+  "n": 4,
+  "merkle_depth": 2,
+  "school_account_index": 0,
+  "student_account_offset": 1,
+  "students": [
+    {
+      "student_index": 0,
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "student_id": 24560000,
+      "amount": 2,
+      "private_key": "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
+      "public_key": "0x04ba5734d8f7091719471e7f7ed6b9df170dc70cc661ca05e688601ad984f068b0d67351e5f06073092499336ab0839ef8a521afd334e53807205fa2f08eec74f4",
+      "cid": "QmaaDebHWr5wjF6i9Y4NX8db34h8hgsuFcwx2EMPnuMe8e",
+      "note": {
+        "student_id": 24560000,
+        "amount": 2,
+        "rho": "254864682026641102663294455675928909698246721346871589309588977549642403043"
+      },
+      "ganache_account_index": 1,
+      "preparation_ms": 32.0456000000122
+    },
+    {
+      "student_index": 1,
+      "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      "student_id": 24560001,
+      "amount": 2,
+      "private_key": "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
+      "public_key": "0x049d9031e97dd78ff8c15aa86939de9b1e791066a0224e331bc962a2099a7b1f0464b8bbafe1535f2301c72c2cb3535b172da30b02686ab0393d348614f157fbdb",
+      "cid": "QmSGeHM5Vb5Zec7SZ9Z5cce4AzGm779RruqaoJMJJfTQXU",
+      "note": {
+        "student_id": 24560001,
+        "amount": 2,
+        "rho": "144885855281253291345516867639651848334815816234093860468774090514149566771"
+      },
+      "ganache_account_index": 2,
+      "preparation_ms": 44.5798000000068
+    },
+    {
+      "student_index": 2,
+      "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+      "student_id": 24560002,
+      "amount": 2,
+      "private_key": "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6",
+      "public_key": "0x0420b871f3ced029e14472ec4ebc3c0448164942b123aa6af91a3386c1c403e0ebd3b4a5752a2b6c49e574619e6aa0549eb9ccd036b9bbc507e1f7f9712a236092",
+      "cid": "QmYMcYXTXZzBhD6YVKBZZkiLfCxSz58juMpvRCVFJj2zgK",
+      "note": {
+        "student_id": 24560002,
+        "amount": 2,
+        "rho": "85103627785007785550021557651081637533096969434311106542567044143790471294"
+      },
+      "ganache_account_index": 3,
+      "preparation_ms": 33.589400000011665
+    },
+    {
+      "student_index": 3,
+      "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
+      "student_id": 24560003,
+      "amount": 2,
+      "private_key": "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a",
+      "public_key": "0x04bf6ee64a8d2fdc551ec8bb9ef862ef6b4bcb1805cdc520c3aa5866c0575fd3b514c5562c3caae7aec5cd6f144b57135c75b6f6cea059c3d08d1f39a9c227219d",
+      "cid": "QmZQBWowfXFEVZKZUNefFZPBGvUn26gsrSXfLszMpwLotB",
+      "note": {
+        "student_id": 24560003,
+        "amount": 2,
+        "rho": "184274981089939821740590161990029828686524002548728385858834253779146581117"
+      },
+      "ganache_account_index": 4,
+      "preparation_ms": 38.73089999999502
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "mechanism": "onchain",
+  "thi_nghiem": "theo_n",
+  "cau_hinh": "n100",
+  "run_id": 3,
+  "n": 100,
+  "d": 9,
+  "k": 13,
+  "warmup": 3,
+  "so_lan_do": 100,
+  "calldata_bytes": 4352,
+  "proof_bytes": 4224,
+  "tien_trinh": "mot tien trinh prover moi cho ca luot: keygen 1 lan, warm-up, roi n proof",
+  "bat_dau": "2026-09-14T19:49:19.672Z",
+  "ket_thuc": "2026-09-14T19:59:04.382Z",
+  "thoi_gian_ms": 584710
+}

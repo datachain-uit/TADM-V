@@ -1,0 +1,13 @@
+[workspace]
+resolver = "3"
+members = [
+    "circuits",
+    "prover"]
+[workspace.dependencies]
+
+halo2curves = "0.6.0"
+snark-verifier = "0.2.3"
+snark-verifier-sdk = "0.2.3"
+rand = "0.8"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

@@ -1,0 +1,55 @@
+{
+  "vi_sao_co_tep_nay": "d7 la do sau DUY NHAT khong co bac thang chung minh trong verifier.json: ham do can duoi (findSmallestK) tra ve 13 nen buoc xuat verifier bat dau thang tu K=13 va chi thu dung mot lan. Cac do sau khac deu co day du cac lan thu. Tep nay do bu phan con thieu.",
+  "do_luc": "2026-09-17T00:45:00+07:00",
+  "dieu_kien_do": "may ranh — da dung runner theo_d truoc khi do, nen phep do nay khong lam nhieu thoi gian cua luot nao",
+  "phep_thu": "prover export-verifier-from-dataset voi HALO2_K dat truoc; export chay keygen_vk nen that bai o day la that bai THAT cua mach",
+  "dataset": "dataset_n128_d7.json (n = 128, merkle_depth = 7)",
+  "so_o_mach_advice": 40860,
+
+  "cac_lan_thu": [
+    {
+      "k": 11,
+      "du_hang": false,
+      "loi": "NOT ENOUGH ADVICE COLUMNS. Perhaps blinding factors were not taken into account. The max non-poisoned rows is 2039",
+      "so_cot_duoc_cap": 20,
+      "suc_chua": 40780,
+      "thieu": 80
+    },
+    {
+      "k": 12,
+      "du_hang": false,
+      "loi": "NOT ENOUGH ADVICE COLUMNS. Perhaps blinding factors were not taken into account. The max non-poisoned rows is 4087",
+      "so_cot_duoc_cap": 10,
+      "suc_chua": 40870,
+      "ghi_chu": "suc chua chi hon nhu cau 10 o — khong du cho dem giua cac context nen van hong"
+    },
+    {
+      "k": 13,
+      "du_hang": true,
+      "deployed_bytecode_bytes": 17886,
+      "eip170_pct": 72.78
+    }
+  ],
+
+  "ket_luan": "K = 13 la DUNG cho d7, va bay gio la so do chu khong con la suy luan. K = 11 va K = 12 deu that bai that su.",
+
+  "vi_sao_K_khong_don_dieu_theo_d": {
+    "hien_tuong": "d8 (sau hon, 45405 o) chay duoc o K=10, trong khi d7 (40860 o) hong o ca K=11 lan K=12. Nhin qua tuong mau thuan.",
+    "nguyen_nhan": "calculate_params(None) cua halo2-base tinh so cot = ceil(so_o / 2^K), tuc dung 2^K hang. Nhung luc gan that chi co 2^K - 9 hang dung duoc (9 hang danh cho blinding). Vi vay do sau nao co ti so so_o/2^K roi SAT MEP so nguyen se bi cap thieu cot.",
+    "kiem_chung_bang_so": [
+      { "cau_hinh": "d7 K=11", "ti_so": 19.95, "cot": 20, "suc_chua": 40780, "can": 40860, "ket_qua": "hong" },
+      { "cau_hinh": "d7 K=12", "ti_so": 9.97, "cot": 10, "suc_chua": 40870, "can": 40860, "ket_qua": "hong" },
+      { "cau_hinh": "d6 K=12", "ti_so": 8.87, "cot": 9, "suc_chua": 36783, "can": 36315, "ket_qua": "chay duoc" },
+      { "cau_hinh": "d8 K=12", "ti_so": 11.08, "cot": 12, "suc_chua": 49044, "can": 45405, "ket_qua": "chay duoc" },
+      { "cau_hinh": "d8 K=10", "ti_so": 44.34, "cot": 45, "suc_chua": 45675, "can": 45405, "ket_qua": "chay duoc" }
+    ],
+    "he_qua_cho_bai": "Bang K theo do sau (11, 11, 12, 12, 12, 12, 13, 13) KHONG don dieu, va do la tinh chat that cua halo2-base chu khong phai loi do. Bai phai giai thich cho nay, neu khong nguoi doc se tuong co loi."
+  },
+
+  "so_o_advice_theo_do_sau": {
+    "d6": 36315,
+    "d7": 40860,
+    "d8": 45405,
+    "ghi_chu": "tang deu +4545 o moi tang Merkle — so o thi don dieu, chi co so cot duoc cap la khong"
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "metadata": {
+    "mechanism": "onchain",
+    "measured_at_local": "2026-09-12T06-08-05",
+    "network": "sepolia",
+    "chain_id": "11155111",
+    "rpc_host": "ethereum-sepolia-rpc.publicnode.com",
+    "school_address": "0x5bb6412Ad5809D73165EaE915ABee923d191655b",
+    "n_pool": 500,
+    "students_withdrawn": [
+      0,
+      250,
+      499
+    ],
+    "withdrawal_design": "split — verifyAndRecord + settle",
+    "reference_run": "experiments/results/quantitative/luot_bao_cao (09/09/2026, Ganache, Shanghai)",
+    "proof_source": "experiments/results/sepolia/proofs_a25_n500.json",
+    "baseline_same_circuit": false,
+    "baseline_note": "gas_onchain_n500.csv la cua lo do 09/09 (TRUOC A25). Mach da doi, nen delta_vs_ganache o deploy_verifier va verify_record KHONG phai sai so cua mang — doi chieu dung la lan chay cung script nay tren Ganache."
+  },
+  "level2_criteria": {
+    "deployed": true,
+    "root_approved": true,
+    "all_withdrawals_succeeded": true,
+    "replay_rejected": true,
+    "root_rebuilt_from_chain_logs": true
+  },
+  "level2_reached": true,
+  "contracts": {
+    "halo2_verifier": "0xf6D276CB65E3040719aF610bc771941C6715340D",
+    "shielded_pool": "0xB222C4f161F486A1860a29BAF83f74F952115359",
+    "explorer_verifier": "https://sepolia.etherscan.io/address/0xf6D276CB65E3040719aF610bc771941C6715340D",
+    "explorer_pool": "https://sepolia.etherscan.io/address/0xB222C4f161F486A1860a29BAF83f74F952115359"
+  },
+  "deploy_verifier": {
+    "hash": "0xe3d558c624c4df7f026852a38a0998e73e7b6fbac073e5f62b47cf66ff31ecaf",
+    "block": 11685010,
+    "gas_used": 4554511,
+    "status": 1,
+    "explorer": "https://sepolia.etherscan.io/tx/0xe3d558c624c4df7f026852a38a0998e73e7b6fbac073e5f62b47cf66ff31ecaf",
+    "ganache_gas_used": 4371791,
+    "delta_vs_ganache": 182720
+  },
+  "deploy_pool": {
+    "hash": "0x4f90677be0206fb5fb7a13649471b3deee0d9106901a66af55139d7426e2046a",
+    "block": 11685011,
+    "gas_used": 1979758,
+    "status": 1,
+    "explorer": "https://sepolia.etherscan.io/tx/0x4f90677be0206fb5fb7a13649471b3deee0d9106901a66af55139d7426e2046a",
+    "ganache_gas_used": 1884412,
+    "delta_vs_ganache": 95346
+  },
+  "update_root": {
+    "hash": "0x66b272fd6f86f9ed445ccf8be128b279c98a5de84ebd79ced72cb3d4706fd9a7",
+    "block": 11685013,
+    "gas_used": 661040,
+    "status": 1,
+    "explorer": "https://sepolia.etherscan.io/tx/0x66b272fd6f86f9ed445ccf8be128b279c98a5de84ebd79ced72cb3d4706fd9a7",
+    "commitments": 500,
+    "ganache_gas_used": 459000,
+    "delta_vs_ganache": 202040,
+    "calldata": {
+      "calldata_bytes": 16100,
+      "zero_bytes": 132,
+      "nonzero_bytes": 15968,
+      "tokens": 64004,
+      "standard_calldata_gas": 256016,
+      "eip7623_floor_gas": 661040
+    },
+    "gas_equals_eip7623_floor": true,
+    "current_root_on_chain": "0x098b50423eb1b80e5a7fb520438bb4f17cbf6c9b9e6ebef7938342aa2df694fe",
+    "valid_root_on_chain": true
+  },
+  "withdrawals": [
+    {
+      "student_index": 0,
+      "recipient": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "recipient_existed_before": true,
+      "verify_by_call_ms": 290.73,
+      "ganache_verify_onchain_ms": 823.0047,
+      "verify_and_record": {
+        "hash": "0x602432b4380eea0049a3bbb0bd1583db53ea4a4277196ed6fdf042973c7cabcd",
+        "block": 11685014,
+        "gas_used": 623800,
+        "status": 1,
+        "explorer": "https://sepolia.etherscan.io/tx/0x602432b4380eea0049a3bbb0bd1583db53ea4a4277196ed6fdf042973c7cabcd",
+        "ganache_gas_used": 595188,
+        "delta_vs_ganache": 28612
+      },
+      "settle": {
+        "hash": "0x6375510cf461eacf58b3ed7bb9c90cce1a85dd8e3170262cad8dce2e1dfeb0b8",
+        "block": 11685015,
+        "gas_used": 82882,
+        "status": 1,
+        "explorer": "https://sepolia.etherscan.io/tx/0x6375510cf461eacf58b3ed7bb9c90cce1a85dd8e3170262cad8dce2e1dfeb0b8",
+        "ganache_gas_used": 69626,
+        "delta_vs_ganache": 13256
+      },
+      "split_total_gas": 706682,
+      "nullifier_marked_used": true
+    },
+    {
+      "student_index": 250,
+      "recipient": "0xcA5BF6Ad85A06dD38dD9c3F7ece13b9397Aa4C1F",
+      "recipient_existed_before": true,
+      "verify_by_call_ms": 460.52,
+      "ganache_verify_onchain_ms": 584.5202,
+      "verify_and_record": {
+        "hash": "0x3c28eb24378d4c91e3a5a033b103d48218d5a88ab132c17e66787d31e8de8e9f",
+        "block": 11685017,
+        "gas_used": 623800,
+        "status": 1,
+        "explorer": "https://sepolia.etherscan.io/tx/0x3c28eb24378d4c91e3a5a033b103d48218d5a88ab132c17e66787d31e8de8e9f",
+        "ganache_gas_used": 595152,
+        "delta_vs_ganache": 28648
+      },
+      "settle": {
+        "hash": "0x248d263c0187fba3dafe624f76350dc158fc11359f9a7e8832bbf67f227d70f0",
+        "block": 11685018,
+        "gas_used": 72226,
+        "status": 1,
+        "explorer": "https://sepolia.etherscan.io/tx/0x248d263c0187fba3dafe624f76350dc158fc11359f9a7e8832bbf67f227d70f0",
+        "ganache_gas_used": 69626,
+        "delta_vs_ganache": 2600
+      },
+      "split_total_gas": 696026,
+      "nullifier_marked_used": true
+    },
+    {
+      "student_index": 499,
+      "recipient": "0x42cBC74D159f243FAa636759DED727AE3b1D9471",
+      "recipient_existed_before": true,
+      "verify_by_call_ms": 444.91,
+      "ganache_verify_onchain_ms": 553.4978,
+      "verify_and_record": {
+        "hash": "0x0485e73e2a2dc333182b5c146fd5c75738bba69b4889a05db6a9cb8aef8371a5",
+        "block": 11685020,
+        "gas_used": 623752,
+        "status": 1,
+        "explorer": "https://sepolia.etherscan.io/tx/0x0485e73e2a2dc333182b5c146fd5c75738bba69b4889a05db6a9cb8aef8371a5",
+        "ganache_gas_used": 595236,
+        "delta_vs_ganache": 28516
+      },
+      "settle": {
+        "hash": "0x15afe20a5526f8a189b64f672208a33e6cf08d05e705823616820aded73d4669",
+        "block": 11685022,
+        "gas_used": 72226,
+        "status": 1,
+        "explorer": "https://sepolia.etherscan.io/tx/0x15afe20a5526f8a189b64f672208a33e6cf08d05e705823616820aded73d4669",
+        "ganache_gas_used": 69626,
+        "delta_vs_ganache": 2600
+      },
+      "split_total_gas": 695978,
+      "nullifier_marked_used": true
+    }
+  ],
+  "nullifier_replay": {
+    "student_index": 0,
+    "verify_and_record_again": {
+      "static_call_reverted": true,
+      "revert_reason": "claim already recorded",
+      "send_error": null,
+      "hash": "0x6aba3adb134453915a63ab3345aaea2f4f95eff16cb761df810946298659c0b5",
+      "block": 11685023,
+      "status": 0,
+      "gas_used": 198000,
+      "explorer": "https://sepolia.etherscan.io/tx/0x6aba3adb134453915a63ab3345aaea2f4f95eff16cb761df810946298659c0b5"
+    },
+    "settle_again": {
+      "static_call_reverted": true,
+      "revert_reason": "nullifier already used",
+      "send_error": null,
+      "hash": "0x532597ea6e2225e9dbc28095cdd9a534d0c4701b6d09e82b41ed865787e42ea2",
+      "block": 11685025,
+      "status": 0,
+      "gas_used": 35695,
+      "explorer": "https://sepolia.etherscan.io/tx/0x532597ea6e2225e9dbc28095cdd9a534d0c4701b6d09e82b41ed865787e42ea2"
+    }
+  },
+  "root_rebuild_from_logs": {
+    "log_block": 11685013,
+    "commitments_in_log": 500,
+    "rebuilt_root": "0x098b50423eb1b80e5a7fb520438bb4f17cbf6c9b9e6ebef7938342aa2df694fe",
+    "matches_current_root": true
+  }
+}

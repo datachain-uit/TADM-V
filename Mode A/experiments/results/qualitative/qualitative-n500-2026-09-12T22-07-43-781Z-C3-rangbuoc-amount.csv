@@ -1,0 +1,8 @@
+﻿branch,run_at,git_commit,chain_id,item,value
+off-chain (ADV),2026-09-12T22:07:43.781Z,2ec59fc9522059b44a23c3a62e6926a48311e8c1,1337,withdrawTakesProof,✗ the withdraw function has no proof parameter
+off-chain (ADV),2026-09-12T22:07:43.781Z,2ec59fc9522059b44a23c3a62e6926a48311e8c1,1337,contractReadsAmountFromProof,"✗ the contract has no proof to decode, so it cannot compare"
+off-chain (ADV),2026-09-12T22:07:43.781Z,2ec59fc9522059b44a23c3a62e6926a48311e8c1,1337,closedBinding,"✗ the `amount` binding is guaranteed by the backend ONLY, not closed at contract level"
+off-chain (ADV),2026-09-12T22:07:43.781Z,2ec59fc9522059b44a23c3a62e6926a48311e8c1,1337,conclusion,"The contract does NOT take the proof, so it cannot read `amount` from the public inputs and cannot compare it with the `amount` argument. The `amount` binding is guaranteed by the backend only, NOT closed at contract level."
+off-chain (ADV),2026-09-12T22:07:43.781Z,2ec59fc9522059b44a23c3a62e6926a48311e8c1,1337,verificationEvidence,"none - ADV has no proof at contract level, so there is no require to test"
+off-chain (ADV),2026-09-12T22:07:43.781Z,2ec59fc9522059b44a23c3a62e6926a48311e8c1,1337,contributionRef,C3 - item 4: the experiment shows the limitation of ADV
+off-chain (ADV),2026-09-12T22:07:43.781Z,2ec59fc9522059b44a23c3a62e6926a48311e8c1,1337,caution,Must NOT be written as if the two mechanisms give the same security guarantee.

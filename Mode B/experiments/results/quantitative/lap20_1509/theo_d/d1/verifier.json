@@ -1,0 +1,23 @@
+{
+  "d": 1,
+  "n": 2,
+  "k": 11,
+  "k_toi_thieu_du_hang": 10,
+  "tieu_chi": "K nho nhat ma verifier deploy duoc (bytecode ≤ EIP-170)",
+  "deployed_bytecode_bytes": 20806,
+  "eip170_pct": 84.66,
+  "sol_bytes": 89551,
+  "cac_lan_thu": [
+    {
+      "k": 10,
+      "deployed_bytecode_bytes": 31110,
+      "lot_eip170": false
+    },
+    {
+      "k": 11,
+      "deployed_bytecode_bytes": 20806,
+      "lot_eip170": true
+    }
+  ],
+  "xuat_luc": "2026-09-16T04:35:54.910Z"
+}

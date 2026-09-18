@@ -1,0 +1,8 @@
+﻿branch,run_at,git_commit,chain_id,item,value
+on-chain (ONC),2026-09-12T23:03:03.358Z,626c13cbbf5eb4bf826533308ffc7bb9744195de,1337,withdrawTakesProof,✓ the withdraw function has a proof/bytes parameter
+on-chain (ONC),2026-09-12T23:03:03.358Z,626c13cbbf5eb4bf826533308ffc7bb9744195de,1337,contractReadsAmountFromProof,✓ the contract decodes `amount` from the proof's public inputs and compares it with the argument
+on-chain (ONC),2026-09-12T23:03:03.358Z,626c13cbbf5eb4bf826533308ffc7bb9744195de,1337,closedBinding,✓ the `amount` binding is CLOSED at contract level
+on-chain (ONC),2026-09-12T23:03:03.358Z,626c13cbbf5eb4bf826533308ffc7bb9744195de,1337,conclusion,"The contract DOES take the proof, decodes `amount` from the public inputs and compares it with the `amount` argument. The `amount` binding is CLOSED at contract level."
+on-chain (ONC),2026-09-12T23:03:03.358Z,626c13cbbf5eb4bf826533308ffc7bb9744195de,1337,verificationEvidence,contracts/test/ShieldedPoolWithdrawGate.js (5/5) - checks the three require statements
+on-chain (ONC),2026-09-12T23:03:03.358Z,626c13cbbf5eb4bf826533308ffc7bb9744195de,1337,contributionRef,C3 - item 4: the experiment shows the limitation of ADV
+on-chain (ONC),2026-09-12T23:03:03.358Z,626c13cbbf5eb4bf826533308ffc7bb9744195de,1337,caution,Must NOT be written as if the two mechanisms give the same security guarantee.

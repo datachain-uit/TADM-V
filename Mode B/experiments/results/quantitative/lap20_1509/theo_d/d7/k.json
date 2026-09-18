@@ -1,0 +1,42 @@
+{
+  "d": 7,
+  "n": 128,
+  "k_toi_thieu": 13,
+  "k_thieu_hang": 12,
+  "phep_thu": "keygen_vk tren mach mau (mode check-k)",
+  "cac_lan_thu": [
+    {
+      "k": 6,
+      "du_hang": false
+    },
+    {
+      "k": 7,
+      "du_hang": false
+    },
+    {
+      "k": 8,
+      "du_hang": false
+    },
+    {
+      "k": 9,
+      "du_hang": false
+    },
+    {
+      "k": 10,
+      "du_hang": false
+    },
+    {
+      "k": 11,
+      "du_hang": false
+    },
+    {
+      "k": 12,
+      "du_hang": false
+    },
+    {
+      "k": 13,
+      "du_hang": true
+    }
+  ],
+  "do_luc": "2026-09-16T04:33:43.715Z"
+}

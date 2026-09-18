@@ -1,0 +1,8 @@
+[workspace]
+
+members = [
+    "circuits",
+    "prover"
+]
+
+resolved = "2"

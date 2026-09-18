@@ -1,0 +1,13 @@
+loai,mechanism,network,chain_id,buoc,student_index,gas_used,ganache_gas_used,delta_vs_ganache,thoi_gian_ms,block,status,tx_hash,ghi_chu
+trien_khai,offchain,sepolia,11155111,deploy_pool,,968565,968565,0,,11685032,1,0x320c37c78954f0207f803fa4ebf0b3153ca68736316feae30b8873b3a5371446,ShieldedPool 0xb5dB57aBc6e8F99907db4D7b7511a6A1F7BCaaC1
+duyet_root,offchain,sepolia,11155111,updateRoot,,661280,459074,202206,,11685033,1,0x3d0e66f216bbaf406b7a3a9ab5863427a3557635fe49f2f95fd562c6f4bccc31,500 commitment; calldata 16100 B; sàn EIP-7623 661280; gas bằng sàn: true
+rut,offchain,sepolia,11155111,withdrawOffChain,0,77911,64655,13256,6.8734,11685035,1,0x26dc570d642b1cfe371b6c71e5ebefff159f3c05b3b13ff038831ea0afbf52f1,ví nhận 0x70997970C51812dc3A010C7d01b50e0d17dc79C8; ví đã tồn tại: true; thoi_gian_ms là verify off-chain (tiến trình prover riêng); nullifier đánh dấu đã dùng: true
+rut,offchain,sepolia,11155111,withdrawOffChain,250,67267,64667,2600,5.2848,11685036,1,0x486f779da5027dff4d74e58118555f8ee3fad6789c8fa00d926f2bacff2f9902,ví nhận 0xcA5BF6Ad85A06dD38dD9c3F7ece13b9397Aa4C1F; ví đã tồn tại: true; thoi_gian_ms là verify off-chain (tiến trình prover riêng); nullifier đánh dấu đã dùng: true
+rut,offchain,sepolia,11155111,withdrawOffChain,499,67267,64667,2600,5.7235000000000005,11685038,1,0x1d8489cba081bb6df0c1a08e231621a16913baac662f1208a1448179bde61f85,ví nhận 0x42cBC74D159f243FAa636759DED727AE3b1D9471; ví đã tồn tại: true; thoi_gian_ms là verify off-chain (tiến trình prover riêng); nullifier đánh dấu đã dùng: true
+dung_lai,offchain,sepolia,11155111,withdrawOffChain_lai,0,30541,,,,11685039,0,0x4a6dd4678f73be552dc221e26011431b72940bd51565bbc9849151656cd90b40,PHẢI bị từ chối: nullifier already used
+tieu_chi,offchain,sepolia,11155111,deployed,,,,,,,,,ĐẠT
+tieu_chi,offchain,sepolia,11155111,root_approved,,,,,,,,,ĐẠT
+tieu_chi,offchain,sepolia,11155111,all_withdrawals_succeeded,,,,,,,,,ĐẠT
+tieu_chi,offchain,sepolia,11155111,replay_rejected,,,,,,,,,ĐẠT
+tieu_chi,offchain,sepolia,11155111,root_rebuilt_from_chain_logs,,,,,,,,,ĐẠT
+tong_hop,offchain,sepolia,11155111,level2_reached,,,,,,,,,"true; dựng lại cây từ log: 500 commitment, khớp root: true; nguồn proof: experiments/results/sepolia/proofs_a25_n500.json; baseline_same_circuit: false"

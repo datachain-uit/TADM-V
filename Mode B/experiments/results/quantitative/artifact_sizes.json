@@ -1,0 +1,226 @@
+{
+  "metadata": {
+    "measured_at": "2026-09-12T13:47:13.262Z",
+    "git_commit": "626c13c",
+    "machine": {
+      "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+      "cpu_cores": 8,
+      "total_ram_gb": 7.7,
+      "platform": "win32 10.0.26200",
+      "node": "v22.13.0"
+    },
+    "proof_system": {
+      "mechanism": "onchain",
+      "library": "halo2-base / halo2-axiom + snark-verifier-sdk",
+      "curve": "BN254",
+      "commitment_scheme": "KZG (SHPLONK)",
+      "k": 13,
+      "merkle_depth": 9,
+      "max_leaves_per_pool": 512,
+      "public_inputs": [
+        "root",
+        "nullifier",
+        "amount"
+      ],
+      "trusted_setup": "ParamsKZG::setup(13, ChaCha20Rng::from_seed([42u8; 32])) - fixed seed, reproducible, NOT a ceremony"
+    },
+    "solidity": {
+      "builds": [
+        {
+          "solc": "0.8.20",
+          "evm_version": "paris",
+          "optimizer": "off",
+          "optimizer_runs": 200,
+          "contracts": [
+            "ShieldedPool.sol"
+          ]
+        },
+        {
+          "solc": "0.8.19",
+          "evm_version": "paris",
+          "optimizer": "off",
+          "optimizer_runs": 200,
+          "contracts": [
+            "Halo2Verifier.sol"
+          ]
+        },
+        {
+          "solc": "0.8.20",
+          "evm_version": "paris",
+          "optimizer": "off",
+          "optimizer_runs": 200,
+          "contracts": [
+            "MockHalo2Verifier.sol",
+            "ShieldedPool.sol",
+            "VerifierTestHelper.sol"
+          ]
+        },
+        {
+          "solc": "0.8.19",
+          "evm_version": "paris",
+          "optimizer": "off",
+          "optimizer_runs": 200,
+          "contracts": [
+            "Halo2Verifier.sol",
+            "MyZkApp.sol"
+          ]
+        }
+      ],
+      "note": "Read from artifacts/build-info - the settings solc ACTUALLY used, not copied from hardhat.config.js."
+    },
+    "chain": {
+      "rpc": "Ganache 127.0.0.1:8545",
+      "startup_command": "ganache --wallet.mnemonic \"test test test test test test test test test test test junk\" --wallet.totalAccounts 501",
+      "hardfork": "Ganache default - must match the evmVersion above",
+      "gas_is_a_counted_quantity": "Gas is fixed by the EVM specification, NOT by the client => it carries over to mainnet as long as the hardfork matches. Wall-clock time does NOT carry over.",
+      "opcodes_used_by_this_system": "SLOAD, SSTORE, CALL, STATICCALL, memory, calldata - their prices last changed at Berlin/London, both BEFORE paris. Shanghai and Cancun only ADD opcodes; they do not reprice existing ones => these gas figures still hold on today's mainnet."
+    }
+  },
+  "verifier_contract": {
+    "source_bytes": 89669,
+    "deployed_bytecode_bytes": 20834,
+    "creation_bytecode_bytes": 20866,
+    "eip170_limit_bytes": 24576,
+    "eip170_usage_percent": 84.8
+  },
+  "pool_contract": {
+    "source_bytes": 15650,
+    "deployed_bytecode_bytes": 8697,
+    "creation_bytecode_bytes": 9473,
+    "eip170_limit_bytes": 24576,
+    "eip170_usage_percent": 35.4
+  },
+  "withdraw_calldata": {
+    "function_signature": "withdraw(bytes,bytes32,bytes32,address,uint256)",
+    "selector_bytes": 4,
+    "total_args": 5,
+    "dynamic_args": 1,
+    "proof_blob_bytes": 4352,
+    "proof_blob_padded_bytes": 4352,
+    "calldata_bytes": 4548,
+    "note": "D7 definition: 4-byte selector + all ABI-encoded arguments. THIS is the figure to compare against ADV (132 bytes), NOT proof_calldata below."
+  },
+  "block_gas": {
+    "block_gas_limit": 30000000,
+    "withdraw": {
+      "mean": 582672,
+      "min": 582495,
+      "max": 582819,
+      "samples": 1054,
+      "block_gas_percent": 1.94
+    },
+    "verify_record": {
+      "mean": 615664,
+      "min": 615487,
+      "max": 615811,
+      "samples": 1054,
+      "block_gas_percent": 2.05
+    },
+    "settle": {
+      "mean": 69624,
+      "min": 69602,
+      "max": 69626,
+      "samples": 1054,
+      "block_gas_percent": 0.23
+    },
+    "split_total": {
+      "total_gas": 685288,
+      "block_gas_percent": 2.28,
+      "note": "verify_record_gas + settle_gas - the split design, which is the real withdrawal path. Costs more than the folded `withdraw` because of the second transaction base fee plus the Claim storage write."
+    },
+    "deploy_pool": {
+      "mean": 1979758,
+      "min": 1979758,
+      "max": 1979758,
+      "samples": 1054,
+      "block_gas_percent": 6.6
+    },
+    "deploy_verifier": {
+      "mean": 4554511,
+      "min": 4554511,
+      "max": 4554511,
+      "samples": 1054,
+      "block_gas_percent": 15.18
+    },
+    "whole_system": {
+      "total_gas": 6534269,
+      "block_gas_percent": 21.78,
+      "consists_of": "deploy_verifier_gas + deploy_pool_gas",
+      "second_pool_onward": 1979758,
+      "second_pool_note": "if the verifier is reused - see contracts/test/PoolIsolation.js assertion 1"
+    },
+    "note": "block_gas_limit is an ASSUMPTION about mainnet (30M), not a measurement. The gas figures are real measurements on Ganache. `withdraw` is a RECURRING per-transaction cost; `whole_system` is a ONE-TIME cost - two different questions."
+  },
+  "bytecode_vs_deploy_gas": {
+    "g_codedeposit_per_byte": 200,
+    "g_codedeposit_source": "Ethereum Yellow Paper - an EVM constant, NOT a measurement",
+    "measured_slope_gas_per_byte": 223.1,
+    "measured_slope_source": "arithmetic mean of the two measured points in `pool` and `verifier` below - recomputed on every run, never hand-typed",
+    "slope_explanation": "200 (code deposited on chain) + the rest (creation bytecode is also sent as transaction calldata, plus constructor work) - the same bytes are paid twice",
+    "pool": {
+      "deployed_bytecode_bytes": 8697,
+      "code_deposit_gas": 1739400,
+      "deploy_gas_measured": 1979758,
+      "remainder": 240358,
+      "gas_per_byte_measured": 227.64
+    },
+    "verifier": {
+      "deployed_bytecode_bytes": 20834,
+      "code_deposit_gas": 4166800,
+      "deploy_gas_measured": 4554511,
+      "remainder": 387711,
+      "gas_per_byte_measured": 218.61
+    },
+    "remainder_consists_of": "21 000 base transaction + 32 000 contract creation + calldata for the creation bytecode + constructor execution",
+    "note": "Bytecode size and deploy gas are TWO VIEWS of one thing: bytes answer 'is it allowed on chain at all' (EIP-170), gas answers 'how much does it cost'."
+  },
+  "proof_calldata": {
+    "public_input_bytes": 128,
+    "public_input_layout": "[0..32) root · [32..64) nullifier · [64..96) amount · [96..128) recipient",
+    "per_scenario": {
+      "n1": {
+        "records": 1,
+        "calldata_bytes_min": 4352,
+        "calldata_bytes_max": 4352,
+        "generated_at": "2026-09-12T11:54:24.186Z"
+      },
+      "n10": {
+        "records": 10,
+        "calldata_bytes_min": 4352,
+        "calldata_bytes_max": 4352,
+        "generated_at": "2026-09-12T11:54:42.099Z"
+      },
+      "n30": {
+        "records": 30,
+        "calldata_bytes_min": 4352,
+        "calldata_bytes_max": 4352,
+        "generated_at": "2026-09-12T11:55:31.411Z"
+      },
+      "n60": {
+        "records": 60,
+        "calldata_bytes_min": 4352,
+        "calldata_bytes_max": 4352,
+        "generated_at": "2026-09-12T11:57:12.947Z"
+      },
+      "n100": {
+        "records": 100,
+        "calldata_bytes_min": 4352,
+        "calldata_bytes_max": 4352,
+        "generated_at": "2026-09-12T11:59:35.769Z"
+      },
+      "n353": {
+        "records": 353,
+        "calldata_bytes_min": 4352,
+        "calldata_bytes_max": 4352,
+        "generated_at": "2026-09-12T12:08:33.577Z"
+      },
+      "n500": {
+        "records": 500,
+        "calldata_bytes_min": 4352,
+        "calldata_bytes_max": 4352,
+        "generated_at": "2026-09-12T12:20:54.443Z"
+      }
+    },
+    "note": "calldata = 128-byte public input + the proof blob. Size does NOT depend on n: every student has their own proof and the Merkle depth is fixed at 9."
+  }
+}

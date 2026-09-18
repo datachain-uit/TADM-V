@@ -1,0 +1,1338 @@
+{
+  "theo_n": {
+    "mechanism": "offchain",
+    "so_luot": 20,
+    "warmup": 3,
+    "hat_giong": 20260915,
+    "cau_hinh": [
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n1",
+        "n": 1,
+        "d": 9
+      },
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n10",
+        "n": 10,
+        "d": 9
+      },
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n30",
+        "n": 30,
+        "d": 9
+      },
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n60",
+        "n": 60,
+        "d": 9
+      },
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n100",
+        "n": 100,
+        "d": 9
+      },
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n500",
+        "n": 500,
+        "d": 9
+      }
+    ],
+    "k_theo_cau_hinh": {
+      "n1": 9,
+      "n10": 9,
+      "n30": 9,
+      "n60": 9,
+      "n100": 9,
+      "n500": 9
+    },
+    "tim_k": [],
+    "dinh_nghia_luot": "một lượt = snapshot chuỗi → warm-up → n lần đo → revert; mỗi proof/verify là một tiến trình prover mới; thứ tự cấu hình xáo mỗi vòng",
+    "lan_khoi_chay": [
+      {
+        "bat_dau": "2026-09-14T11:28:53.112Z",
+        "luot_chon": [
+          1
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "n10"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "14152eee2b5ca0e9ff9262730d33355ed937155e",
+          "so_tep_sua_ngoai_ket_qua": 8,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/clients/prover/halo2ProverClient.ts",
+            " M backend/src/experiments/quantitativeExperiment.ts",
+            " M prover/src/generate_proof.rs",
+            " M prover/src/inputs_builder.rs",
+            " M prover/src/main.rs",
+            "?? backend/src/experiments/lap20Experiment.ts",
+            "?? backend/src/experiments/tongHopLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 1633792,
+          "sua_luc": "2026-09-14T07:50:11.745Z",
+          "sha256": "656daa8704e3708ccfc162a6dd41e72d04cd26be2b61adeecbe7d6f205deb9a3"
+        }
+      },
+      {
+        "bat_dau": "2026-09-14T11:35:39.762Z",
+        "luot_chon": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "n1",
+              "n10",
+              "n500",
+              "n100",
+              "n30",
+              "n60"
+            ]
+          },
+          {
+            "luot": 2,
+            "cau_hinh": [
+              "n60",
+              "n30",
+              "n10",
+              "n500",
+              "n1",
+              "n100"
+            ]
+          },
+          {
+            "luot": 3,
+            "cau_hinh": [
+              "n100",
+              "n30",
+              "n500",
+              "n60",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 4,
+            "cau_hinh": [
+              "n100",
+              "n60",
+              "n30",
+              "n1",
+              "n10",
+              "n500"
+            ]
+          },
+          {
+            "luot": 5,
+            "cau_hinh": [
+              "n30",
+              "n60",
+              "n500",
+              "n100",
+              "n10",
+              "n1"
+            ]
+          },
+          {
+            "luot": 6,
+            "cau_hinh": [
+              "n100",
+              "n60",
+              "n500",
+              "n30",
+              "n10",
+              "n1"
+            ]
+          },
+          {
+            "luot": 7,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n10",
+              "n60",
+              "n30",
+              "n500"
+            ]
+          },
+          {
+            "luot": 8,
+            "cau_hinh": [
+              "n100",
+              "n500",
+              "n60",
+              "n30",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 9,
+            "cau_hinh": [
+              "n10",
+              "n30",
+              "n1",
+              "n100",
+              "n500",
+              "n60"
+            ]
+          },
+          {
+            "luot": 10,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n500",
+              "n60",
+              "n10",
+              "n30"
+            ]
+          },
+          {
+            "luot": 11,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n30",
+              "n500",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 12,
+            "cau_hinh": [
+              "n500",
+              "n30",
+              "n1",
+              "n100",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 13,
+            "cau_hinh": [
+              "n60",
+              "n1",
+              "n100",
+              "n30",
+              "n10",
+              "n500"
+            ]
+          },
+          {
+            "luot": 14,
+            "cau_hinh": [
+              "n30",
+              "n100",
+              "n1",
+              "n500",
+              "n60",
+              "n10"
+            ]
+          },
+          {
+            "luot": 15,
+            "cau_hinh": [
+              "n10",
+              "n1",
+              "n30",
+              "n60",
+              "n500",
+              "n100"
+            ]
+          },
+          {
+            "luot": 16,
+            "cau_hinh": [
+              "n30",
+              "n500",
+              "n100",
+              "n1",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 17,
+            "cau_hinh": [
+              "n10",
+              "n1",
+              "n30",
+              "n100",
+              "n60",
+              "n500"
+            ]
+          },
+          {
+            "luot": 18,
+            "cau_hinh": [
+              "n1",
+              "n500",
+              "n30",
+              "n10",
+              "n100",
+              "n60"
+            ]
+          },
+          {
+            "luot": 19,
+            "cau_hinh": [
+              "n30",
+              "n100",
+              "n500",
+              "n60",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 20,
+            "cau_hinh": [
+              "n500",
+              "n1",
+              "n60",
+              "n100",
+              "n30",
+              "n10"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "14152eee2b5ca0e9ff9262730d33355ed937155e",
+          "so_tep_sua_ngoai_ket_qua": 10,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/clients/prover/halo2ProverClient.ts",
+            " M backend/src/experiments/quantitativeExperiment.ts",
+            " M prover/src/generate_proof.rs",
+            " M prover/src/inputs_builder.rs",
+            " M prover/src/main.rs",
+            " M shared/proof.bin",
+            " M shared/proof.json",
+            "?? backend/src/experiments/lap20Experiment.ts",
+            "?? backend/src/experiments/tongHopLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 1633792,
+          "sua_luc": "2026-09-14T07:50:11.745Z",
+          "sha256": "656daa8704e3708ccfc162a6dd41e72d04cd26be2b61adeecbe7d6f205deb9a3"
+        }
+      },
+      {
+        "bat_dau": "2026-09-14T11:37:14.506Z",
+        "luot_chon": [
+          1
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "n1"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "14152eee2b5ca0e9ff9262730d33355ed937155e",
+          "so_tep_sua_ngoai_ket_qua": 10,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/clients/prover/halo2ProverClient.ts",
+            " M backend/src/experiments/quantitativeExperiment.ts",
+            " M prover/src/generate_proof.rs",
+            " M prover/src/inputs_builder.rs",
+            " M prover/src/main.rs",
+            " M shared/proof.bin",
+            " M shared/proof.json",
+            "?? backend/src/experiments/lap20Experiment.ts",
+            "?? backend/src/experiments/tongHopLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 1633792,
+          "sua_luc": "2026-09-14T07:50:11.745Z",
+          "sha256": "656daa8704e3708ccfc162a6dd41e72d04cd26be2b61adeecbe7d6f205deb9a3"
+        }
+      },
+      {
+        "bat_dau": "2026-09-14T11:38:04.049Z",
+        "luot_chon": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "n1",
+              "n10",
+              "n500",
+              "n100",
+              "n30",
+              "n60"
+            ]
+          },
+          {
+            "luot": 2,
+            "cau_hinh": [
+              "n60",
+              "n30",
+              "n10",
+              "n500",
+              "n1",
+              "n100"
+            ]
+          },
+          {
+            "luot": 3,
+            "cau_hinh": [
+              "n100",
+              "n30",
+              "n500",
+              "n60",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 4,
+            "cau_hinh": [
+              "n100",
+              "n60",
+              "n30",
+              "n1",
+              "n10",
+              "n500"
+            ]
+          },
+          {
+            "luot": 5,
+            "cau_hinh": [
+              "n30",
+              "n60",
+              "n500",
+              "n100",
+              "n10",
+              "n1"
+            ]
+          },
+          {
+            "luot": 6,
+            "cau_hinh": [
+              "n100",
+              "n60",
+              "n500",
+              "n30",
+              "n10",
+              "n1"
+            ]
+          },
+          {
+            "luot": 7,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n10",
+              "n60",
+              "n30",
+              "n500"
+            ]
+          },
+          {
+            "luot": 8,
+            "cau_hinh": [
+              "n100",
+              "n500",
+              "n60",
+              "n30",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 9,
+            "cau_hinh": [
+              "n10",
+              "n30",
+              "n1",
+              "n100",
+              "n500",
+              "n60"
+            ]
+          },
+          {
+            "luot": 10,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n500",
+              "n60",
+              "n10",
+              "n30"
+            ]
+          },
+          {
+            "luot": 11,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n30",
+              "n500",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 12,
+            "cau_hinh": [
+              "n500",
+              "n30",
+              "n1",
+              "n100",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 13,
+            "cau_hinh": [
+              "n60",
+              "n1",
+              "n100",
+              "n30",
+              "n10",
+              "n500"
+            ]
+          },
+          {
+            "luot": 14,
+            "cau_hinh": [
+              "n30",
+              "n100",
+              "n1",
+              "n500",
+              "n60",
+              "n10"
+            ]
+          },
+          {
+            "luot": 15,
+            "cau_hinh": [
+              "n10",
+              "n1",
+              "n30",
+              "n60",
+              "n500",
+              "n100"
+            ]
+          },
+          {
+            "luot": 16,
+            "cau_hinh": [
+              "n30",
+              "n500",
+              "n100",
+              "n1",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 17,
+            "cau_hinh": [
+              "n10",
+              "n1",
+              "n30",
+              "n100",
+              "n60",
+              "n500"
+            ]
+          },
+          {
+            "luot": 18,
+            "cau_hinh": [
+              "n1",
+              "n500",
+              "n30",
+              "n10",
+              "n100",
+              "n60"
+            ]
+          },
+          {
+            "luot": 19,
+            "cau_hinh": [
+              "n30",
+              "n100",
+              "n500",
+              "n60",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 20,
+            "cau_hinh": [
+              "n500",
+              "n1",
+              "n60",
+              "n100",
+              "n30",
+              "n10"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "14152eee2b5ca0e9ff9262730d33355ed937155e",
+          "so_tep_sua_ngoai_ket_qua": 10,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/clients/prover/halo2ProverClient.ts",
+            " M backend/src/experiments/quantitativeExperiment.ts",
+            " M prover/src/generate_proof.rs",
+            " M prover/src/inputs_builder.rs",
+            " M prover/src/main.rs",
+            " M shared/proof.bin",
+            " M shared/proof.json",
+            "?? backend/src/experiments/lap20Experiment.ts",
+            "?? backend/src/experiments/tongHopLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 1633792,
+          "sua_luc": "2026-09-14T07:50:11.745Z",
+          "sha256": "656daa8704e3708ccfc162a6dd41e72d04cd26be2b61adeecbe7d6f205deb9a3"
+        }
+      }
+    ]
+  },
+  "theo_d": {
+    "mechanism": "offchain",
+    "so_luot": 20,
+    "warmup": 3,
+    "hat_giong": 20260915,
+    "cau_hinh": [
+      {
+        "experiment": "theo_d",
+        "name": "d1",
+        "n": 2,
+        "d": 1
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d2",
+        "n": 4,
+        "d": 2
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d3",
+        "n": 8,
+        "d": 3
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d4",
+        "n": 16,
+        "d": 4
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d5",
+        "n": 32,
+        "d": 5
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d6",
+        "n": 64,
+        "d": 6
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d7",
+        "n": 128,
+        "d": 7
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d8",
+        "n": 256,
+        "d": 8
+      }
+    ],
+    "k_theo_cau_hinh": {
+      "d1": 8,
+      "d2": 8,
+      "d3": 8,
+      "d4": 9,
+      "d5": 9,
+      "d6": 9,
+      "d7": 9,
+      "d8": 9
+    },
+    "tim_k": [
+      {
+        "d": 1,
+        "k_toi_thieu": 8,
+        "k_thieu_hang": 7,
+        "phep_thu": "keygen_vk tren mach rong witness (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": true,
+            "check_ms": 42.265299999999996
+          }
+        ],
+        "do_luc": "2026-09-16T03:00:22.401Z"
+      },
+      {
+        "d": 2,
+        "k_toi_thieu": 8,
+        "k_thieu_hang": 7,
+        "phep_thu": "keygen_vk tren mach rong witness (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": true,
+            "check_ms": 43.401500000000006
+          }
+        ],
+        "do_luc": "2026-09-16T03:00:22.502Z"
+      },
+      {
+        "d": 3,
+        "k_toi_thieu": 8,
+        "k_thieu_hang": 7,
+        "phep_thu": "keygen_vk tren mach rong witness (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": true,
+            "check_ms": 42.860099999999996
+          }
+        ],
+        "do_luc": "2026-09-16T03:00:22.598Z"
+      },
+      {
+        "d": 4,
+        "k_toi_thieu": 9,
+        "k_thieu_hang": 8,
+        "phep_thu": "keygen_vk tren mach rong witness (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": true,
+            "check_ms": 64.7784
+          }
+        ],
+        "do_luc": "2026-09-16T03:00:22.736Z"
+      },
+      {
+        "d": 5,
+        "k_toi_thieu": 9,
+        "k_thieu_hang": 8,
+        "phep_thu": "keygen_vk tren mach rong witness (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": true,
+            "check_ms": 62.85209999999999
+          }
+        ],
+        "do_luc": "2026-09-16T03:00:22.869Z"
+      },
+      {
+        "d": 6,
+        "k_toi_thieu": 9,
+        "k_thieu_hang": 8,
+        "phep_thu": "keygen_vk tren mach rong witness (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": true,
+            "check_ms": 66.40390000000001
+          }
+        ],
+        "do_luc": "2026-09-16T03:00:23.011Z"
+      },
+      {
+        "d": 7,
+        "k_toi_thieu": 9,
+        "k_thieu_hang": 8,
+        "phep_thu": "keygen_vk tren mach rong witness (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": true,
+            "check_ms": 66.4476
+          }
+        ],
+        "do_luc": "2026-09-16T03:00:23.148Z"
+      },
+      {
+        "d": 8,
+        "k_toi_thieu": 9,
+        "k_thieu_hang": 8,
+        "phep_thu": "keygen_vk tren mach rong witness (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": true,
+            "check_ms": 65.52040000000001
+          }
+        ],
+        "do_luc": "2026-09-16T03:00:23.288Z"
+      }
+    ],
+    "dinh_nghia_luot": "mot luot = snapshot chuoi → warm-up → n lan do → revert; moi proof/verify la mot tien trinh prover moi; thu tu cau hinh xao moi vong",
+    "lan_khoi_chay": [
+      {
+        "bat_dau": "2026-09-16T03:00:23.292Z",
+        "luot_chon": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "d3",
+              "d2",
+              "d1",
+              "d6",
+              "d8",
+              "d7",
+              "d4",
+              "d5"
+            ]
+          },
+          {
+            "luot": 2,
+            "cau_hinh": [
+              "d5",
+              "d8",
+              "d7",
+              "d4",
+              "d3",
+              "d1",
+              "d2",
+              "d6"
+            ]
+          },
+          {
+            "luot": 3,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d7",
+              "d5",
+              "d8",
+              "d6",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 4,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d2",
+              "d6",
+              "d5",
+              "d1",
+              "d3",
+              "d7"
+            ]
+          },
+          {
+            "luot": 5,
+            "cau_hinh": [
+              "d4",
+              "d5",
+              "d1",
+              "d7",
+              "d6",
+              "d8",
+              "d3",
+              "d2"
+            ]
+          },
+          {
+            "luot": 6,
+            "cau_hinh": [
+              "d3",
+              "d6",
+              "d5",
+              "d7",
+              "d8",
+              "d4",
+              "d2",
+              "d1"
+            ]
+          },
+          {
+            "luot": 7,
+            "cau_hinh": [
+              "d1",
+              "d5",
+              "d8",
+              "d3",
+              "d2",
+              "d6",
+              "d4",
+              "d7"
+            ]
+          },
+          {
+            "luot": 8,
+            "cau_hinh": [
+              "d7",
+              "d2",
+              "d8",
+              "d6",
+              "d4",
+              "d5",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 9,
+            "cau_hinh": [
+              "d6",
+              "d3",
+              "d4",
+              "d1",
+              "d2",
+              "d7",
+              "d8",
+              "d5"
+            ]
+          },
+          {
+            "luot": 10,
+            "cau_hinh": [
+              "d7",
+              "d2",
+              "d1",
+              "d8",
+              "d6",
+              "d5",
+              "d3",
+              "d4"
+            ]
+          },
+          {
+            "luot": 11,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d1",
+              "d7",
+              "d8",
+              "d6",
+              "d3",
+              "d5"
+            ]
+          },
+          {
+            "luot": 12,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d7",
+              "d6",
+              "d1",
+              "d2",
+              "d3",
+              "d5"
+            ]
+          },
+          {
+            "luot": 13,
+            "cau_hinh": [
+              "d1",
+              "d3",
+              "d4",
+              "d6",
+              "d7",
+              "d5",
+              "d2",
+              "d8"
+            ]
+          },
+          {
+            "luot": 14,
+            "cau_hinh": [
+              "d1",
+              "d4",
+              "d5",
+              "d8",
+              "d7",
+              "d2",
+              "d6",
+              "d3"
+            ]
+          },
+          {
+            "luot": 15,
+            "cau_hinh": [
+              "d4",
+              "d2",
+              "d3",
+              "d1",
+              "d5",
+              "d8",
+              "d7",
+              "d6"
+            ]
+          },
+          {
+            "luot": 16,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d6",
+              "d1",
+              "d3",
+              "d7",
+              "d2",
+              "d5"
+            ]
+          },
+          {
+            "luot": 17,
+            "cau_hinh": [
+              "d4",
+              "d3",
+              "d2",
+              "d1",
+              "d8",
+              "d6",
+              "d5",
+              "d7"
+            ]
+          },
+          {
+            "luot": 18,
+            "cau_hinh": [
+              "d3",
+              "d8",
+              "d1",
+              "d4",
+              "d5",
+              "d2",
+              "d7",
+              "d6"
+            ]
+          },
+          {
+            "luot": 19,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d5",
+              "d7",
+              "d8",
+              "d6",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 20,
+            "cau_hinh": [
+              "d6",
+              "d8",
+              "d2",
+              "d1",
+              "d7",
+              "d5",
+              "d4",
+              "d3"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "923d9039f254f2276996c33e218feb920aad324b",
+          "so_tep_sua_ngoai_ket_qua": 7,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/experiments/lap20Experiment.ts",
+            " D backend/src/experiments/tongHopLap20.ts",
+            " M shared/proof.bin",
+            " M shared/proof.json",
+            " M shared/vk.txt",
+            "?? backend/src/experiments/summarizeLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 1633792,
+          "sua_luc": "2026-09-14T07:50:11.745Z",
+          "sha256": "656daa8704e3708ccfc162a6dd41e72d04cd26be2b61adeecbe7d6f205deb9a3"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,2218 @@
+{
+  "theo_n": {
+    "mechanism": "onchain",
+    "so_luot": 20,
+    "warmup": 3,
+    "hat_giong": 20260915,
+    "k": 13,
+    "cau_hinh": [
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n1",
+        "n": 1,
+        "d": 9
+      },
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n10",
+        "n": 10,
+        "d": 9
+      },
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n30",
+        "n": 30,
+        "d": 9
+      },
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n60",
+        "n": 60,
+        "d": 9
+      },
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n100",
+        "n": 100,
+        "d": 9
+      },
+      {
+        "thiNghiem": "theo_n",
+        "ten": "n500",
+        "n": 500,
+        "d": 9
+      }
+    ],
+    "dinh_nghia_luot": "mot luot = tien trinh prover moi (keygen 1 lan, warm-up, n proof) → snapshot chuoi → deploy + duyet root + warm-up + n lan do gas → revert; thu tu cau hinh xao moi vong",
+    "lan_khoi_chay": [
+      {
+        "bat_dau": "2026-09-14T11:29:17.748Z",
+        "luot_chon": [
+          1
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "n10"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "3eeec1584fd3491f2008032d71975cf4ea60c610",
+          "so_tep_sua_ngoai_ket_qua": 5,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/experiments/benchmarkGas.ts",
+            " M prover/src/experiment.rs",
+            "?? backend/src/experiments/lap20Experiment.ts",
+            "?? backend/src/experiments/tongHopLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 5875712,
+          "sua_luc": "2026-09-14T07:51:37.336Z",
+          "sha256": "eebe52f16a66586173d06bd32722f19134245a652ea039a7740df21549a50904"
+        }
+      },
+      {
+        "bat_dau": "2026-09-14T11:37:19.243Z",
+        "luot_chon": [
+          1
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "n1"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "3eeec1584fd3491f2008032d71975cf4ea60c610",
+          "so_tep_sua_ngoai_ket_qua": 5,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/experiments/benchmarkGas.ts",
+            " M prover/src/experiment.rs",
+            "?? backend/src/experiments/lap20Experiment.ts",
+            "?? backend/src/experiments/tongHopLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 5875712,
+          "sua_luc": "2026-09-14T07:51:37.336Z",
+          "sha256": "eebe52f16a66586173d06bd32722f19134245a652ea039a7740df21549a50904"
+        }
+      },
+      {
+        "bat_dau": "2026-09-14T13:40:23.512Z",
+        "luot_chon": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "n1",
+              "n10",
+              "n500",
+              "n100",
+              "n30",
+              "n60"
+            ]
+          },
+          {
+            "luot": 2,
+            "cau_hinh": [
+              "n60",
+              "n30",
+              "n10",
+              "n500",
+              "n1",
+              "n100"
+            ]
+          },
+          {
+            "luot": 3,
+            "cau_hinh": [
+              "n100",
+              "n30",
+              "n500",
+              "n60",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 4,
+            "cau_hinh": [
+              "n100",
+              "n60",
+              "n30",
+              "n1",
+              "n10",
+              "n500"
+            ]
+          },
+          {
+            "luot": 5,
+            "cau_hinh": [
+              "n30",
+              "n60",
+              "n500",
+              "n100",
+              "n10",
+              "n1"
+            ]
+          },
+          {
+            "luot": 6,
+            "cau_hinh": [
+              "n100",
+              "n60",
+              "n500",
+              "n30",
+              "n10",
+              "n1"
+            ]
+          },
+          {
+            "luot": 7,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n10",
+              "n60",
+              "n30",
+              "n500"
+            ]
+          },
+          {
+            "luot": 8,
+            "cau_hinh": [
+              "n100",
+              "n500",
+              "n60",
+              "n30",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 9,
+            "cau_hinh": [
+              "n10",
+              "n30",
+              "n1",
+              "n100",
+              "n500",
+              "n60"
+            ]
+          },
+          {
+            "luot": 10,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n500",
+              "n60",
+              "n10",
+              "n30"
+            ]
+          },
+          {
+            "luot": 11,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n30",
+              "n500",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 12,
+            "cau_hinh": [
+              "n500",
+              "n30",
+              "n1",
+              "n100",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 13,
+            "cau_hinh": [
+              "n60",
+              "n1",
+              "n100",
+              "n30",
+              "n10",
+              "n500"
+            ]
+          },
+          {
+            "luot": 14,
+            "cau_hinh": [
+              "n30",
+              "n100",
+              "n1",
+              "n500",
+              "n60",
+              "n10"
+            ]
+          },
+          {
+            "luot": 15,
+            "cau_hinh": [
+              "n10",
+              "n1",
+              "n30",
+              "n60",
+              "n500",
+              "n100"
+            ]
+          },
+          {
+            "luot": 16,
+            "cau_hinh": [
+              "n30",
+              "n500",
+              "n100",
+              "n1",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 17,
+            "cau_hinh": [
+              "n10",
+              "n1",
+              "n30",
+              "n100",
+              "n60",
+              "n500"
+            ]
+          },
+          {
+            "luot": 18,
+            "cau_hinh": [
+              "n1",
+              "n500",
+              "n30",
+              "n10",
+              "n100",
+              "n60"
+            ]
+          },
+          {
+            "luot": 19,
+            "cau_hinh": [
+              "n30",
+              "n100",
+              "n500",
+              "n60",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 20,
+            "cau_hinh": [
+              "n500",
+              "n1",
+              "n60",
+              "n100",
+              "n30",
+              "n10"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "3eeec1584fd3491f2008032d71975cf4ea60c610",
+          "so_tep_sua_ngoai_ket_qua": 5,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/experiments/benchmarkGas.ts",
+            " M prover/src/experiment.rs",
+            "?? backend/src/experiments/lap20Experiment.ts",
+            "?? backend/src/experiments/tongHopLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 5875712,
+          "sua_luc": "2026-09-14T07:51:37.336Z",
+          "sha256": "eebe52f16a66586173d06bd32722f19134245a652ea039a7740df21549a50904"
+        }
+      },
+      {
+        "bat_dau": "2026-09-14T18:52:04.218Z",
+        "luot_chon": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "n1",
+              "n10",
+              "n500",
+              "n100",
+              "n30",
+              "n60"
+            ]
+          },
+          {
+            "luot": 2,
+            "cau_hinh": [
+              "n60",
+              "n30",
+              "n10",
+              "n500",
+              "n1",
+              "n100"
+            ]
+          },
+          {
+            "luot": 3,
+            "cau_hinh": [
+              "n100",
+              "n30",
+              "n500",
+              "n60",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 4,
+            "cau_hinh": [
+              "n100",
+              "n60",
+              "n30",
+              "n1",
+              "n10",
+              "n500"
+            ]
+          },
+          {
+            "luot": 5,
+            "cau_hinh": [
+              "n30",
+              "n60",
+              "n500",
+              "n100",
+              "n10",
+              "n1"
+            ]
+          },
+          {
+            "luot": 6,
+            "cau_hinh": [
+              "n100",
+              "n60",
+              "n500",
+              "n30",
+              "n10",
+              "n1"
+            ]
+          },
+          {
+            "luot": 7,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n10",
+              "n60",
+              "n30",
+              "n500"
+            ]
+          },
+          {
+            "luot": 8,
+            "cau_hinh": [
+              "n100",
+              "n500",
+              "n60",
+              "n30",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 9,
+            "cau_hinh": [
+              "n10",
+              "n30",
+              "n1",
+              "n100",
+              "n500",
+              "n60"
+            ]
+          },
+          {
+            "luot": 10,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n500",
+              "n60",
+              "n10",
+              "n30"
+            ]
+          },
+          {
+            "luot": 11,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n30",
+              "n500",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 12,
+            "cau_hinh": [
+              "n500",
+              "n30",
+              "n1",
+              "n100",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 13,
+            "cau_hinh": [
+              "n60",
+              "n1",
+              "n100",
+              "n30",
+              "n10",
+              "n500"
+            ]
+          },
+          {
+            "luot": 14,
+            "cau_hinh": [
+              "n30",
+              "n100",
+              "n1",
+              "n500",
+              "n60",
+              "n10"
+            ]
+          },
+          {
+            "luot": 15,
+            "cau_hinh": [
+              "n10",
+              "n1",
+              "n30",
+              "n60",
+              "n500",
+              "n100"
+            ]
+          },
+          {
+            "luot": 16,
+            "cau_hinh": [
+              "n30",
+              "n500",
+              "n100",
+              "n1",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 17,
+            "cau_hinh": [
+              "n10",
+              "n1",
+              "n30",
+              "n100",
+              "n60",
+              "n500"
+            ]
+          },
+          {
+            "luot": 18,
+            "cau_hinh": [
+              "n1",
+              "n500",
+              "n30",
+              "n10",
+              "n100",
+              "n60"
+            ]
+          },
+          {
+            "luot": 19,
+            "cau_hinh": [
+              "n30",
+              "n100",
+              "n500",
+              "n60",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 20,
+            "cau_hinh": [
+              "n500",
+              "n1",
+              "n60",
+              "n100",
+              "n30",
+              "n10"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "3eeec1584fd3491f2008032d71975cf4ea60c610",
+          "so_tep_sua_ngoai_ket_qua": 5,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/experiments/benchmarkGas.ts",
+            " M prover/src/experiment.rs",
+            "?? backend/src/experiments/lap20Experiment.ts",
+            "?? backend/src/experiments/tongHopLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 5875712,
+          "sua_luc": "2026-09-14T07:51:37.336Z",
+          "sha256": "eebe52f16a66586173d06bd32722f19134245a652ea039a7740df21549a50904"
+        }
+      },
+      {
+        "bat_dau": "2026-09-15T11:59:20.360Z",
+        "luot_chon": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "n1",
+              "n10",
+              "n500",
+              "n100",
+              "n30",
+              "n60"
+            ]
+          },
+          {
+            "luot": 2,
+            "cau_hinh": [
+              "n60",
+              "n30",
+              "n10",
+              "n500",
+              "n1",
+              "n100"
+            ]
+          },
+          {
+            "luot": 3,
+            "cau_hinh": [
+              "n100",
+              "n30",
+              "n500",
+              "n60",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 4,
+            "cau_hinh": [
+              "n100",
+              "n60",
+              "n30",
+              "n1",
+              "n10",
+              "n500"
+            ]
+          },
+          {
+            "luot": 5,
+            "cau_hinh": [
+              "n30",
+              "n60",
+              "n500",
+              "n100",
+              "n10",
+              "n1"
+            ]
+          },
+          {
+            "luot": 6,
+            "cau_hinh": [
+              "n100",
+              "n60",
+              "n500",
+              "n30",
+              "n10",
+              "n1"
+            ]
+          },
+          {
+            "luot": 7,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n10",
+              "n60",
+              "n30",
+              "n500"
+            ]
+          },
+          {
+            "luot": 8,
+            "cau_hinh": [
+              "n100",
+              "n500",
+              "n60",
+              "n30",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 9,
+            "cau_hinh": [
+              "n10",
+              "n30",
+              "n1",
+              "n100",
+              "n500",
+              "n60"
+            ]
+          },
+          {
+            "luot": 10,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n500",
+              "n60",
+              "n10",
+              "n30"
+            ]
+          },
+          {
+            "luot": 11,
+            "cau_hinh": [
+              "n1",
+              "n100",
+              "n30",
+              "n500",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 12,
+            "cau_hinh": [
+              "n500",
+              "n30",
+              "n1",
+              "n100",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 13,
+            "cau_hinh": [
+              "n60",
+              "n1",
+              "n100",
+              "n30",
+              "n10",
+              "n500"
+            ]
+          },
+          {
+            "luot": 14,
+            "cau_hinh": [
+              "n30",
+              "n100",
+              "n1",
+              "n500",
+              "n60",
+              "n10"
+            ]
+          },
+          {
+            "luot": 15,
+            "cau_hinh": [
+              "n10",
+              "n1",
+              "n30",
+              "n60",
+              "n500",
+              "n100"
+            ]
+          },
+          {
+            "luot": 16,
+            "cau_hinh": [
+              "n30",
+              "n500",
+              "n100",
+              "n1",
+              "n10",
+              "n60"
+            ]
+          },
+          {
+            "luot": 17,
+            "cau_hinh": [
+              "n10",
+              "n1",
+              "n30",
+              "n100",
+              "n60",
+              "n500"
+            ]
+          },
+          {
+            "luot": 18,
+            "cau_hinh": [
+              "n1",
+              "n500",
+              "n30",
+              "n10",
+              "n100",
+              "n60"
+            ]
+          },
+          {
+            "luot": 19,
+            "cau_hinh": [
+              "n30",
+              "n100",
+              "n500",
+              "n60",
+              "n1",
+              "n10"
+            ]
+          },
+          {
+            "luot": 20,
+            "cau_hinh": [
+              "n500",
+              "n1",
+              "n60",
+              "n100",
+              "n30",
+              "n10"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "3eeec1584fd3491f2008032d71975cf4ea60c610",
+          "so_tep_sua_ngoai_ket_qua": 5,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/experiments/benchmarkGas.ts",
+            " M prover/src/experiment.rs",
+            "?? backend/src/experiments/lap20Experiment.ts",
+            "?? backend/src/experiments/tongHopLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 5875712,
+          "sua_luc": "2026-09-14T07:51:37.336Z",
+          "sha256": "eebe52f16a66586173d06bd32722f19134245a652ea039a7740df21549a50904"
+        }
+      }
+    ]
+  },
+  "theo_d": {
+    "mechanism": "onchain",
+    "so_luot": 20,
+    "warmup": 3,
+    "hat_giong": 20260915,
+    "k_theo_cau_hinh": {
+      "d1": 11,
+      "d2": 11,
+      "d3": 12,
+      "d4": 12,
+      "d5": 12,
+      "d6": 12,
+      "d7": 13,
+      "d8": 13
+    },
+    "k_toi_thieu_du_hang": {
+      "d1": 10,
+      "d2": 10,
+      "d3": 10,
+      "d4": 10,
+      "d5": 10,
+      "d6": 10,
+      "d7": 13,
+      "d8": 10
+    },
+    "tieu_chi_chon_k": "K nho nhat ma verifier deploy duoc (bytecode ≤ EIP-170)",
+    "tim_k": [
+      {
+        "d": 1,
+        "n": 2,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk tren mach mau (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true
+          }
+        ],
+        "do_luc": "2026-09-16T04:31:42.513Z"
+      },
+      {
+        "d": 2,
+        "n": 4,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk tren mach mau (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true
+          }
+        ],
+        "do_luc": "2026-09-16T04:31:43.861Z"
+      },
+      {
+        "d": 3,
+        "n": 8,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk tren mach mau (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true
+          }
+        ],
+        "do_luc": "2026-09-16T04:31:46.304Z"
+      },
+      {
+        "d": 4,
+        "n": 16,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk tren mach mau (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true
+          }
+        ],
+        "do_luc": "2026-09-16T04:31:52.197Z"
+      },
+      {
+        "d": 5,
+        "n": 32,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk tren mach mau (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true
+          }
+        ],
+        "do_luc": "2026-09-16T04:32:06.957Z"
+      },
+      {
+        "d": 6,
+        "n": 64,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk tren mach mau (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true
+          }
+        ],
+        "do_luc": "2026-09-16T04:32:31.347Z"
+      },
+      {
+        "d": 7,
+        "n": 128,
+        "k_toi_thieu": 13,
+        "k_thieu_hang": 12,
+        "phep_thu": "keygen_vk tren mach mau (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": false
+          },
+          {
+            "k": 11,
+            "du_hang": false
+          },
+          {
+            "k": 12,
+            "du_hang": false
+          },
+          {
+            "k": 13,
+            "du_hang": true
+          }
+        ],
+        "do_luc": "2026-09-16T04:33:43.715Z"
+      },
+      {
+        "d": 8,
+        "n": 256,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk tren mach mau (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true
+          }
+        ],
+        "do_luc": "2026-09-16T04:35:19.244Z"
+      }
+    ],
+    "cau_hinh": [
+      {
+        "experiment": "theo_d",
+        "name": "d1",
+        "n": 2,
+        "d": 1
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d2",
+        "n": 4,
+        "d": 2
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d3",
+        "n": 8,
+        "d": 3
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d4",
+        "n": 16,
+        "d": 4
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d5",
+        "n": 32,
+        "d": 5
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d6",
+        "n": 64,
+        "d": 6
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d7",
+        "n": 128,
+        "d": 7
+      },
+      {
+        "experiment": "theo_d",
+        "name": "d8",
+        "n": 256,
+        "d": 8
+      }
+    ],
+    "dinh_nghia_luot": "mot luot = tien trinh prover moi (keygen 1 lan, warm-up, n proof) → snapshot chuoi → deploy + duyet root + warm-up + n lan do gas → revert; thu tu cau hinh xao moi vong",
+    "lan_khoi_chay": [
+      {
+        "bat_dau": "2026-09-16T04:38:34.930Z",
+        "luot_chon": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "d3",
+              "d2",
+              "d1",
+              "d6",
+              "d8",
+              "d7",
+              "d4",
+              "d5"
+            ]
+          },
+          {
+            "luot": 2,
+            "cau_hinh": [
+              "d5",
+              "d8",
+              "d7",
+              "d4",
+              "d3",
+              "d1",
+              "d2",
+              "d6"
+            ]
+          },
+          {
+            "luot": 3,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d7",
+              "d5",
+              "d8",
+              "d6",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 4,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d2",
+              "d6",
+              "d5",
+              "d1",
+              "d3",
+              "d7"
+            ]
+          },
+          {
+            "luot": 5,
+            "cau_hinh": [
+              "d4",
+              "d5",
+              "d1",
+              "d7",
+              "d6",
+              "d8",
+              "d3",
+              "d2"
+            ]
+          },
+          {
+            "luot": 6,
+            "cau_hinh": [
+              "d3",
+              "d6",
+              "d5",
+              "d7",
+              "d8",
+              "d4",
+              "d2",
+              "d1"
+            ]
+          },
+          {
+            "luot": 7,
+            "cau_hinh": [
+              "d1",
+              "d5",
+              "d8",
+              "d3",
+              "d2",
+              "d6",
+              "d4",
+              "d7"
+            ]
+          },
+          {
+            "luot": 8,
+            "cau_hinh": [
+              "d7",
+              "d2",
+              "d8",
+              "d6",
+              "d4",
+              "d5",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 9,
+            "cau_hinh": [
+              "d6",
+              "d3",
+              "d4",
+              "d1",
+              "d2",
+              "d7",
+              "d8",
+              "d5"
+            ]
+          },
+          {
+            "luot": 10,
+            "cau_hinh": [
+              "d7",
+              "d2",
+              "d1",
+              "d8",
+              "d6",
+              "d5",
+              "d3",
+              "d4"
+            ]
+          },
+          {
+            "luot": 11,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d1",
+              "d7",
+              "d8",
+              "d6",
+              "d3",
+              "d5"
+            ]
+          },
+          {
+            "luot": 12,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d7",
+              "d6",
+              "d1",
+              "d2",
+              "d3",
+              "d5"
+            ]
+          },
+          {
+            "luot": 13,
+            "cau_hinh": [
+              "d1",
+              "d3",
+              "d4",
+              "d6",
+              "d7",
+              "d5",
+              "d2",
+              "d8"
+            ]
+          },
+          {
+            "luot": 14,
+            "cau_hinh": [
+              "d1",
+              "d4",
+              "d5",
+              "d8",
+              "d7",
+              "d2",
+              "d6",
+              "d3"
+            ]
+          },
+          {
+            "luot": 15,
+            "cau_hinh": [
+              "d4",
+              "d2",
+              "d3",
+              "d1",
+              "d5",
+              "d8",
+              "d7",
+              "d6"
+            ]
+          },
+          {
+            "luot": 16,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d6",
+              "d1",
+              "d3",
+              "d7",
+              "d2",
+              "d5"
+            ]
+          },
+          {
+            "luot": 17,
+            "cau_hinh": [
+              "d4",
+              "d3",
+              "d2",
+              "d1",
+              "d8",
+              "d6",
+              "d5",
+              "d7"
+            ]
+          },
+          {
+            "luot": 18,
+            "cau_hinh": [
+              "d3",
+              "d8",
+              "d1",
+              "d4",
+              "d5",
+              "d2",
+              "d7",
+              "d6"
+            ]
+          },
+          {
+            "luot": 19,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d5",
+              "d7",
+              "d8",
+              "d6",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 20,
+            "cau_hinh": [
+              "d6",
+              "d8",
+              "d2",
+              "d1",
+              "d7",
+              "d5",
+              "d4",
+              "d3"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "84dbe1f4ec11ae69164e041895dccf812c392de3",
+          "so_tep_sua_ngoai_ket_qua": 9,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/experiments/benchmarkGas.ts",
+            " M backend/src/experiments/lap20Experiment.ts",
+            " D backend/src/experiments/tongHopLap20.ts",
+            " M circuits/src/circuit.rs",
+            " M prover/src/experiment.rs",
+            " M prover/src/generate_proof.rs",
+            " M prover/src/main.rs",
+            "?? backend/src/experiments/summarizeLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 5880832,
+          "sua_luc": "2026-09-16T02:26:31.038Z",
+          "sha256": "18c4e7e113012a4e64e9d46c7595c8162fe857b40d9ef555cdbe87b924902a19"
+        }
+      },
+      {
+        "bat_dau": "2026-09-16T16:54:04.417Z",
+        "luot_chon": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "d3",
+              "d2",
+              "d1",
+              "d6",
+              "d8",
+              "d7",
+              "d4",
+              "d5"
+            ]
+          },
+          {
+            "luot": 2,
+            "cau_hinh": [
+              "d5",
+              "d8",
+              "d7",
+              "d4",
+              "d3",
+              "d1",
+              "d2",
+              "d6"
+            ]
+          },
+          {
+            "luot": 3,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d7",
+              "d5",
+              "d8",
+              "d6",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 4,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d2",
+              "d6",
+              "d5",
+              "d1",
+              "d3",
+              "d7"
+            ]
+          },
+          {
+            "luot": 5,
+            "cau_hinh": [
+              "d4",
+              "d5",
+              "d1",
+              "d7",
+              "d6",
+              "d8",
+              "d3",
+              "d2"
+            ]
+          },
+          {
+            "luot": 6,
+            "cau_hinh": [
+              "d3",
+              "d6",
+              "d5",
+              "d7",
+              "d8",
+              "d4",
+              "d2",
+              "d1"
+            ]
+          },
+          {
+            "luot": 7,
+            "cau_hinh": [
+              "d1",
+              "d5",
+              "d8",
+              "d3",
+              "d2",
+              "d6",
+              "d4",
+              "d7"
+            ]
+          },
+          {
+            "luot": 8,
+            "cau_hinh": [
+              "d7",
+              "d2",
+              "d8",
+              "d6",
+              "d4",
+              "d5",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 9,
+            "cau_hinh": [
+              "d6",
+              "d3",
+              "d4",
+              "d1",
+              "d2",
+              "d7",
+              "d8",
+              "d5"
+            ]
+          },
+          {
+            "luot": 10,
+            "cau_hinh": [
+              "d7",
+              "d2",
+              "d1",
+              "d8",
+              "d6",
+              "d5",
+              "d3",
+              "d4"
+            ]
+          },
+          {
+            "luot": 11,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d1",
+              "d7",
+              "d8",
+              "d6",
+              "d3",
+              "d5"
+            ]
+          },
+          {
+            "luot": 12,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d7",
+              "d6",
+              "d1",
+              "d2",
+              "d3",
+              "d5"
+            ]
+          },
+          {
+            "luot": 13,
+            "cau_hinh": [
+              "d1",
+              "d3",
+              "d4",
+              "d6",
+              "d7",
+              "d5",
+              "d2",
+              "d8"
+            ]
+          },
+          {
+            "luot": 14,
+            "cau_hinh": [
+              "d1",
+              "d4",
+              "d5",
+              "d8",
+              "d7",
+              "d2",
+              "d6",
+              "d3"
+            ]
+          },
+          {
+            "luot": 15,
+            "cau_hinh": [
+              "d4",
+              "d2",
+              "d3",
+              "d1",
+              "d5",
+              "d8",
+              "d7",
+              "d6"
+            ]
+          },
+          {
+            "luot": 16,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d6",
+              "d1",
+              "d3",
+              "d7",
+              "d2",
+              "d5"
+            ]
+          },
+          {
+            "luot": 17,
+            "cau_hinh": [
+              "d4",
+              "d3",
+              "d2",
+              "d1",
+              "d8",
+              "d6",
+              "d5",
+              "d7"
+            ]
+          },
+          {
+            "luot": 18,
+            "cau_hinh": [
+              "d3",
+              "d8",
+              "d1",
+              "d4",
+              "d5",
+              "d2",
+              "d7",
+              "d6"
+            ]
+          },
+          {
+            "luot": 19,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d5",
+              "d7",
+              "d8",
+              "d6",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 20,
+            "cau_hinh": [
+              "d6",
+              "d8",
+              "d2",
+              "d1",
+              "d7",
+              "d5",
+              "d4",
+              "d3"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "84dbe1f4ec11ae69164e041895dccf812c392de3",
+          "so_tep_sua_ngoai_ket_qua": 9,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/experiments/benchmarkGas.ts",
+            " M backend/src/experiments/lap20Experiment.ts",
+            " D backend/src/experiments/tongHopLap20.ts",
+            " M circuits/src/circuit.rs",
+            " M prover/src/experiment.rs",
+            " M prover/src/generate_proof.rs",
+            " M prover/src/main.rs",
+            "?? backend/src/experiments/summarizeLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 5880832,
+          "sua_luc": "2026-09-16T02:26:31.038Z",
+          "sha256": "18c4e7e113012a4e64e9d46c7595c8162fe857b40d9ef555cdbe87b924902a19"
+        }
+      },
+      {
+        "bat_dau": "2026-09-16T17:24:26.362Z",
+        "luot_chon": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "d3",
+              "d2",
+              "d1",
+              "d6",
+              "d8",
+              "d7",
+              "d4",
+              "d5"
+            ]
+          },
+          {
+            "luot": 2,
+            "cau_hinh": [
+              "d5",
+              "d8",
+              "d7",
+              "d4",
+              "d3",
+              "d1",
+              "d2",
+              "d6"
+            ]
+          },
+          {
+            "luot": 3,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d7",
+              "d5",
+              "d8",
+              "d6",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 4,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d2",
+              "d6",
+              "d5",
+              "d1",
+              "d3",
+              "d7"
+            ]
+          },
+          {
+            "luot": 5,
+            "cau_hinh": [
+              "d4",
+              "d5",
+              "d1",
+              "d7",
+              "d6",
+              "d8",
+              "d3",
+              "d2"
+            ]
+          },
+          {
+            "luot": 6,
+            "cau_hinh": [
+              "d3",
+              "d6",
+              "d5",
+              "d7",
+              "d8",
+              "d4",
+              "d2",
+              "d1"
+            ]
+          },
+          {
+            "luot": 7,
+            "cau_hinh": [
+              "d1",
+              "d5",
+              "d8",
+              "d3",
+              "d2",
+              "d6",
+              "d4",
+              "d7"
+            ]
+          },
+          {
+            "luot": 8,
+            "cau_hinh": [
+              "d7",
+              "d2",
+              "d8",
+              "d6",
+              "d4",
+              "d5",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 9,
+            "cau_hinh": [
+              "d6",
+              "d3",
+              "d4",
+              "d1",
+              "d2",
+              "d7",
+              "d8",
+              "d5"
+            ]
+          },
+          {
+            "luot": 10,
+            "cau_hinh": [
+              "d7",
+              "d2",
+              "d1",
+              "d8",
+              "d6",
+              "d5",
+              "d3",
+              "d4"
+            ]
+          },
+          {
+            "luot": 11,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d1",
+              "d7",
+              "d8",
+              "d6",
+              "d3",
+              "d5"
+            ]
+          },
+          {
+            "luot": 12,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d7",
+              "d6",
+              "d1",
+              "d2",
+              "d3",
+              "d5"
+            ]
+          },
+          {
+            "luot": 13,
+            "cau_hinh": [
+              "d1",
+              "d3",
+              "d4",
+              "d6",
+              "d7",
+              "d5",
+              "d2",
+              "d8"
+            ]
+          },
+          {
+            "luot": 14,
+            "cau_hinh": [
+              "d1",
+              "d4",
+              "d5",
+              "d8",
+              "d7",
+              "d2",
+              "d6",
+              "d3"
+            ]
+          },
+          {
+            "luot": 15,
+            "cau_hinh": [
+              "d4",
+              "d2",
+              "d3",
+              "d1",
+              "d5",
+              "d8",
+              "d7",
+              "d6"
+            ]
+          },
+          {
+            "luot": 16,
+            "cau_hinh": [
+              "d8",
+              "d4",
+              "d6",
+              "d1",
+              "d3",
+              "d7",
+              "d2",
+              "d5"
+            ]
+          },
+          {
+            "luot": 17,
+            "cau_hinh": [
+              "d4",
+              "d3",
+              "d2",
+              "d1",
+              "d8",
+              "d6",
+              "d5",
+              "d7"
+            ]
+          },
+          {
+            "luot": 18,
+            "cau_hinh": [
+              "d3",
+              "d8",
+              "d1",
+              "d4",
+              "d5",
+              "d2",
+              "d7",
+              "d6"
+            ]
+          },
+          {
+            "luot": 19,
+            "cau_hinh": [
+              "d2",
+              "d4",
+              "d5",
+              "d7",
+              "d8",
+              "d6",
+              "d1",
+              "d3"
+            ]
+          },
+          {
+            "luot": 20,
+            "cau_hinh": [
+              "d6",
+              "d8",
+              "d2",
+              "d1",
+              "d7",
+              "d5",
+              "d4",
+              "d3"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26200",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "84dbe1f4ec11ae69164e041895dccf812c392de3",
+          "so_tep_sua_ngoai_ket_qua": 9,
+          "tep_sua": [
+            " M backend/package.json",
+            " M backend/src/experiments/benchmarkGas.ts",
+            " M backend/src/experiments/lap20Experiment.ts",
+            " D backend/src/experiments/tongHopLap20.ts",
+            " M circuits/src/circuit.rs",
+            " M prover/src/experiment.rs",
+            " M prover/src/generate_proof.rs",
+            " M prover/src/main.rs",
+            "?? backend/src/experiments/summarizeLap20.ts"
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 5880832,
+          "sua_luc": "2026-09-16T02:26:31.038Z",
+          "sha256": "18c4e7e113012a4e64e9d46c7595c8162fe857b40d9ef555cdbe87b924902a19"
+        }
+      }
+    ]
+  }
+}

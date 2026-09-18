@@ -1,0 +1,18 @@
+loai,mechanism,network,chain_id,buoc,student_index,gas_used,ganache_gas_used,delta_vs_ganache,thoi_gian_ms,block,status,tx_hash,ghi_chu
+trien_khai,onchain,sepolia,11155111,deploy_verifier,,4554511,4371791,182720,,11685010,1,0xe3d558c624c4df7f026852a38a0998e73e7b6fbac073e5f62b47cf66ff31ecaf,Halo2Verifier 0xf6D276CB65E3040719aF610bc771941C6715340D
+trien_khai,onchain,sepolia,11155111,deploy_pool,,1979758,1884412,95346,,11685011,1,0x4f90677be0206fb5fb7a13649471b3deee0d9106901a66af55139d7426e2046a,ShieldedPool 0xB222C4f161F486A1860a29BAF83f74F952115359
+duyet_root,onchain,sepolia,11155111,updateRoot,,661040,459000,202040,,11685013,1,0x66b272fd6f86f9ed445ccf8be128b279c98a5de84ebd79ced72cb3d4706fd9a7,500 commitment; calldata 16100 B; san EIP-7623 661040; gas bang san: true
+rut,onchain,sepolia,11155111,verifyAndRecord,0,623800,595188,28612,290.73,11685014,1,0x602432b4380eea0049a3bbb0bd1583db53ea4a4277196ed6fdf042973c7cabcd,vi nhan 0x70997970C51812dc3A010C7d01b50e0d17dc79C8; vi da ton tai: true; thoi_gian_ms la eth_call toi verifier (Ganache 823.0047 ms)
+rut,onchain,sepolia,11155111,settle,0,82882,69626,13256,,11685015,1,0x6375510cf461eacf58b3ed7bb9c90cce1a85dd8e3170262cad8dce2e1dfeb0b8,nullifier danh dau da dung: true
+rut,onchain,sepolia,11155111,verifyAndRecord,250,623800,595152,28648,460.52,11685017,1,0x3c28eb24378d4c91e3a5a033b103d48218d5a88ab132c17e66787d31e8de8e9f,vi nhan 0xcA5BF6Ad85A06dD38dD9c3F7ece13b9397Aa4C1F; vi da ton tai: true; thoi_gian_ms la eth_call toi verifier (Ganache 584.5202 ms)
+rut,onchain,sepolia,11155111,settle,250,72226,69626,2600,,11685018,1,0x248d263c0187fba3dafe624f76350dc158fc11359f9a7e8832bbf67f227d70f0,nullifier danh dau da dung: true
+rut,onchain,sepolia,11155111,verifyAndRecord,499,623752,595236,28516,444.91,11685020,1,0x0485e73e2a2dc333182b5c146fd5c75738bba69b4889a05db6a9cb8aef8371a5,vi nhan 0x42cBC74D159f243FAa636759DED727AE3b1D9471; vi da ton tai: true; thoi_gian_ms la eth_call toi verifier (Ganache 553.4978 ms)
+rut,onchain,sepolia,11155111,settle,499,72226,69626,2600,,11685022,1,0x15afe20a5526f8a189b64f672208a33e6cf08d05e705823616820aded73d4669,nullifier danh dau da dung: true
+dung_lai,onchain,sepolia,11155111,verifyAndRecord_lai,0,198000,,,,11685023,0,0x6aba3adb134453915a63ab3345aaea2f4f95eff16cb761df810946298659c0b5,PHAI bi tu choi: claim already recorded
+dung_lai,onchain,sepolia,11155111,settle_lai,0,35695,,,,11685025,0,0x532597ea6e2225e9dbc28095cdd9a534d0c4701b6d09e82b41ed865787e42ea2,PHAI bi tu choi: nullifier already used
+tieu_chi,onchain,sepolia,11155111,deployed,,,,,,,,,DAT
+tieu_chi,onchain,sepolia,11155111,root_approved,,,,,,,,,DAT
+tieu_chi,onchain,sepolia,11155111,all_withdrawals_succeeded,,,,,,,,,DAT
+tieu_chi,onchain,sepolia,11155111,replay_rejected,,,,,,,,,DAT
+tieu_chi,onchain,sepolia,11155111,root_rebuilt_from_chain_logs,,,,,,,,,DAT
+tong_hop,onchain,sepolia,11155111,level2_reached,,,,,,,,,"true; dung lai cay tu log: 500 commitment, khop root: true; nguon proof: experiments/results/sepolia/proofs_a25_n500.json; baseline_same_circuit: false"

@@ -1,0 +1,13 @@
+**/target/
+**/node_modules/
+**/artifacts/
+**/cache/
+**/.env
+**/experiment.config.json
+**/lap20_1509/**/proofs.json
+**/lap20_1509/**/prover.log
+**/quantitative/check/
+**/shared/proof.bin
+**/shared/proof.json
+**/shared/vk.txt
+_KIEM_TRA_TAI_LAP.md

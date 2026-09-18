@@ -1,0 +1,15 @@
+{
+  "mechanism": "offchain",
+  "thi_nghiem": "theo_n",
+  "cau_hinh": "n30",
+  "run_id": 13,
+  "n": 30,
+  "d": 9,
+  "k": 9,
+  "warmup": 3,
+  "so_lan_do": 30,
+  "tien_trinh": "mỗi proof và mỗi lần verify là một tiến trình prover mới",
+  "bat_dau": "2026-09-14T12:52:44.170Z",
+  "ket_thuc": "2026-09-14T12:53:00.975Z",
+  "thoi_gian_ms": 16804.7
+}

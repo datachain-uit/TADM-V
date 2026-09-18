@@ -1,0 +1,107 @@
+{
+  "metadata": {
+    "measured_at": "2026-09-12T11:54:05.329Z",
+    "git_commit": "2ec59fc",
+    "machine": {
+      "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+      "cpu_cores": 8,
+      "total_ram_gb": 7.7,
+      "platform": "win32 10.0.26200",
+      "node": "v22.13.0"
+    },
+    "proof_system": {
+      "mechanism": "offchain",
+      "library": "halo2_proofs 0.3.2 (zcash)",
+      "curve": "Pasta (Pallas/Vesta)",
+      "commitment_scheme": "IPA",
+      "k": 9,
+      "merkle_depth": 9,
+      "max_leaves_per_pool": 512,
+      "public_inputs": [
+        "root",
+        "nullifier",
+        "amount"
+      ],
+      "trusted_setup": "IPA - NO trusted setup required. This is a fundamental difference from the on-chain branch (KZG needs an SRS) and from Groth16 (needs a per-circuit ceremony)."
+    },
+    "solidity": {
+      "builds": [
+        {
+          "solc": "0.8.20",
+          "evm_version": "paris",
+          "optimizer": "off",
+          "optimizer_runs": 200,
+          "contracts": [
+            "ShieldedPool.sol"
+          ]
+        }
+      ],
+      "note": "Read from artifacts/build-info - the settings solc ACTUALLY used, not copied from hardhat.config.js."
+    },
+    "chain": {
+      "rpc": "Ganache 127.0.0.1:8545",
+      "startup_command": "ganache --wallet.mnemonic \"test test test test test test test test test test test junk\" --wallet.totalAccounts 501",
+      "hardfork": "Ganache default - must match the evmVersion above",
+      "gas_is_a_counted_quantity": "Gas is fixed by the EVM specification, NOT by the client => it carries over to mainnet as long as the hardfork matches. Wall-clock time does NOT carry over.",
+      "opcodes_used_by_this_system": "SLOAD, SSTORE, CALL, STATICCALL, memory, calldata - their prices last changed at Berlin/London, both BEFORE paris. Shanghai and Cancun only ADD opcodes; they do not reprice existing ones => these gas figures still hold on today's mainnet."
+    }
+  },
+  "verifier_contract": {
+    "exists": false,
+    "deployed_bytecode_bytes": null,
+    "eip170_limit_bytes": 24576,
+    "eip170_usage_percent": null,
+    "note": "MECHANISM DOES NOT EXIST - the off-chain branch has no verifier contract. This cell must stay EMPTY in the paper, never 0 (0 reads as 'free to deploy' and hides the real price: the contract cannot verify the proof itself)."
+  },
+  "pool_contract": {
+    "source_bytes": 6899,
+    "deployed_bytecode_bytes": 4121,
+    "creation_bytecode_bytes": 4485,
+    "eip170_limit_bytes": 24576,
+    "eip170_usage_percent": 16.8
+  },
+  "withdraw_calldata": {
+    "function_signature": "withdrawOffChain(bytes32,bytes32,address,uint256)",
+    "selector_bytes": 4,
+    "static_args": 4,
+    "dynamic_args": 0,
+    "calldata_bytes": 132,
+    "note": "D7 definition: 4-byte selector + all ABI-encoded arguments. ADV sends no proof on chain, hence NO dynamic argument - which is simultaneously the gain (tiny calldata) and the loss (the contract cannot verify anything; it trusts the university)."
+  },
+  "block_gas": {
+    "block_gas_limit": 30000000,
+    "withdraw": {
+      "mean": 64665,
+      "min": 64643,
+      "max": 64667,
+      "samples": 1054,
+      "block_gas_percent": 0.22
+    },
+    "deploy_pool": {
+      "mean": 968565,
+      "min": 968565,
+      "max": 968565,
+      "samples": 1054,
+      "block_gas_percent": 3.23
+    },
+    "deploy_verifier": null,
+    "whole_system": {
+      "total_gas": 968565,
+      "block_gas_percent": 3.23,
+      "consists_of": "deploy_pool_gas (ADV has no verifier to deploy)"
+    },
+    "note": "block_gas_limit is an ASSUMPTION about mainnet (30M), not a measurement. The gas figures are real measurements on Ganache. `withdraw` is a RECURRING per-transaction cost; `whole_system` is a ONE-TIME cost - two different questions."
+  },
+  "bytecode_vs_deploy_gas": {
+    "g_codedeposit_per_byte": 200,
+    "g_codedeposit_source": "Ethereum Yellow Paper - an EVM constant, not a measurement",
+    "pool": {
+      "deployed_bytecode_bytes": 4121,
+      "code_deposit_gas": 824200,
+      "deploy_gas_measured": 968565,
+      "remainder": 144365,
+      "remainder_consists_of": "21 000 base transaction + 32 000 contract creation + calldata for the creation bytecode (~13-16 gas/byte) + constructor execution"
+    },
+    "note": "Bytecode size and deploy gas are TWO VIEWS of one thing: bytes answer 'is it allowed on chain at all' (EIP-170), gas answers 'how much does it cost'."
+  }
+}
