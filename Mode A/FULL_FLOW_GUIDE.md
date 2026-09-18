@@ -1,6 +1,6 @@
 # FULL_FLOW_GUIDE.md — Chạy tay toàn bộ luồng off-chain
 
-Hướng dẫn chạy tay end-to-end cho **`zk-circuits-halo2-advanced`** (cơ chế off-chain verification).
+Hướng dẫn chạy tay end-to-end cho **`Mode A`** (cơ chế off-chain verification).
 Mọi lệnh đều copy-paste được, ghi rõ thư mục đang đứng và kỳ vọng kết quả.
 
 Tài liệu này **chỉ mô tả những gì thực sự có trong repo**. Chỗ nào repo không có cách chạy rõ ràng
@@ -43,7 +43,7 @@ thì ghi thẳng **KHÔNG XÁC ĐỊNH ĐƯỢC** thay vì đoán lệnh.
 - Shell: **PowerShell** trên Windows.
 - Đường dẫn gốc repo trong tài liệu này:
   ```
-  C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced
+  <artifact>\Mode A
   ```
 - Ký hiệu `$VAR` là biến PowerShell bạn tự gán trong cùng một cửa sổ terminal. **Đừng đóng
   terminal giữa chừng**, sẽ mất hết biến.
@@ -60,7 +60,7 @@ Ganache `127.0.0.1:8545` · IPFS API `127.0.0.1:5001` · MongoDB. Runner **khôn
 ### Bước 2 — Tạo config (một lần)
 
 ```powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced\backend
+Set-Location <artifact>\Mode A\backend
 Copy-Item experiment.config.example.json experiment.config.json
 notepad experiment.config.json
 ```
@@ -234,7 +234,7 @@ Ngược lại, **backend server thì không tồn tại** — xem mục A4.
 ## A0. Tạo `backend/.env` (làm trước tiên)
 
 ```powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced\backend
+Set-Location <artifact>\Mode A\backend
 Copy-Item .env.example .env
 ```
 
@@ -279,7 +279,7 @@ kiểm tra bên dưới vốn được viết cho Atlas nên vẫn chạy đúng
 ### Kiểm tra đã kết nối được
 
 ```powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced\backend
+Set-Location <artifact>\Mode A\backend
 npm run --silent db:test
 ```
 
@@ -347,7 +347,7 @@ ganache --wallet.totalAccounts 10 --chain.chainId 1337 --server.port 8545
 
 ```powershell
 # Cách 2 — Hardhat node (từ thư mục contracts của repo này)
-Set-Location C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced\contracts
+Set-Location <artifact>\Mode A\contracts
 npx hardhat node
 ```
 
@@ -366,7 +366,7 @@ không unlock, phải set `$env:UNIVERSITY_PRIVATE_KEY` trước các lệnh c�
 Compile contract (một lần):
 
 ```powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced\contracts
+Set-Location <artifact>\Mode A\contracts
 npm install
 npm run compile
 ```
@@ -380,7 +380,7 @@ Kỳ vọng: `Compiled 1 Solidity file successfully`. Backend đọc ABI/bytecod
 
 **KHÔNG CÓ — và đây không phải thiếu sót cần bổ sung, mà là kiến trúc của repo.**
 
-Backend của `zk-circuits-halo2-advanced` **không phải server**. Nó là tập hợp **tiến trình CLI
+Backend của `Mode A` **không phải server**. Nó là tập hợp **tiến trình CLI
 một-lần**: mỗi lệnh `npm run ...` mở kết nối MongoDB, làm một việc, đóng kết nối rồi thoát. Các
 bước chia sẻ trạng thái với nhau **chỉ qua MongoDB**.
 
@@ -401,7 +401,7 @@ Hệ quả cụ thể:
 Chạy **một lần** sau khi build prover (B5), và chạy lại mỗi khi đổi `K` hoặc `MERKLE_DEPTH`:
 
 ```powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced\backend
+Set-Location <artifact>\Mode A\backend
 ..\target\release\prover.exe setup
 ```
 
@@ -438,7 +438,7 @@ không nạp lại được. Đừng dùng làm đầu vào cho bước nào.
 ## B5. Build circuit + prover
 
 ```powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced
+Set-Location <artifact>\Mode A
 cargo build --release -p prover
 ```
 
@@ -495,7 +495,7 @@ Note **không** được tạo bằng lệnh riêng lẻ. Nó là kết quả c�
 Tất cả lệnh trong mục này chạy ở:
 
 ```powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced\backend
+Set-Location <artifact>\Mode A\backend
 ```
 
 ### B6.1 — Tạo University
@@ -894,7 +894,7 @@ const mongoose = require("mongoose");
 ```
 
 ```powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced\backend
+Set-Location <artifact>\Mode A\backend
 node inspect.js
 ```
 
@@ -1084,7 +1084,7 @@ nên đổi thẳng public input được.
 `shared/proof.json` với đủ **năm** trường (`proof`, `root`, `nullifier`, `amount`, `recipient` — A25):
 
 ```powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-circuits-halo2-advanced\backend
+Set-Location <artifact>\Mode A\backend
 Get-Content ..\shared\proof.json | ..\target\release\prover.exe verify
 ```
 

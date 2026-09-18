@@ -103,7 +103,7 @@ Ganache `127.0.0.1:8545` · IPFS API `127.0.0.1:5001` · MongoDB. Runner **khôn
 ### Bước 2 — Tạo config (một lần)
 
 ```powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-halo2-onchain\backend
+Set-Location <artifact>\Mode B\backend
 Copy-Item experiment.config.example.json experiment.config.json
 notepad experiment.config.json
 ```
@@ -341,7 +341,7 @@ advanced. On-chain dùng 6 collection được namespace riêng — 🆕 `onchai
 - MongoDB local hoặc MongoDB Atlas.
 
 ~~~powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-halo2-onchain
+Set-Location <artifact>\Mode B
 cargo build --release -p prover
 
 # BẮT BUỘC nếu circuit vừa đổi (xem mục 2b). Ghi đè
@@ -377,7 +377,7 @@ HBKKHT thật của UIT là **353 suất**; xem `code/STATUS.md` mục `d = 9`)*
 public input đều làm verifier cũ **vô hiệu**. Phải chạy lại:
 
 ~~~powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-halo2-onchain
+Set-Location <artifact>\Mode B
 .\target\release\prover.exe export-verifier
 ~~~
 
@@ -427,7 +427,7 @@ Cần thấy API nghe ở `/ip4/127.0.0.1/tcp/5001`.
 Terminal 3:
 
 ~~~powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-halo2-onchain\backend
+Set-Location <artifact>\Mode B\backend
 ~~~
 
 ## 4. Reset database test và gán role
@@ -649,7 +649,7 @@ Cần thấy `4 passing`, gồm test trả tiền một lần rồi reject cùng
 Sau khi Ganache/IPFS đang chạy:
 
 ~~~powershell
-Set-Location C:\Users\VivoBook\research-project\code\zk-halo2-onchain\backend
+Set-Location <artifact>\Mode B\backend
 npm run flow:full
 ~~~
 

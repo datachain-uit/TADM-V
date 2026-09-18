@@ -389,7 +389,7 @@ function assertVerifierIsHeadVersion() {
 
     try {
         head = execSync(
-            "git show HEAD:contracts/contracts/Halo2Verifier.sol",
+            "git show HEAD:./contracts/contracts/Halo2Verifier.sol",
             { cwd: PROJECT_ROOT, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 }
         );
     } catch (error: any) {

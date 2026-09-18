@@ -14,11 +14,32 @@ const {
     withDatabaseCleanup
 } = require("./databaseController");
 
+/*
+ * 🔴 Sua 18/09/2026 — THU TU THAM SO bi lech so voi CLI goi no.
+ *
+ * Truoc:  (universityId, studentId, email, staffId)
+ * CLI goi: (universityId, staffId,  studentId, email)     <- cli/studentCli.ts:24
+ *
+ * Nen `staffId` nhan email, `studentId` nhan ma nhan su, `email` nhan MSSV. Service
+ * ben duoi goi dung `createStudentProfile(universityId, staffId, studentId, email)`
+ * nen no di tim nhan su mang ten la email => "Staff not found in this university".
+ *
+ * typecheck KHONG bat duoc: ca bon tham so deu la string (hoac string | number).
+ *
+ * Nay doi thu tu cho khop CLI, va khop luon nhanh off-chain — nhanh do van dung
+ * tu dau (`zk-circuits-halo2-advanced/.../studentController.ts`).
+ *
+ * ⚠️ KHONG anh huong so lieu nao: nguoi goi duy nhat cua ham nay la `cli/studentCli.ts`.
+ * Runner dinh tinh, runner an danh va `fullFlowService.ts` cua ONC goi THANG
+ * `createStudentProfile` (service), khong qua controller; runner dinh luong khong
+ * tao ho so sinh vien bao gio. Loi chi chan LUONG CHAY TAY bang CLI — tuc dung
+ * duong ma nguoi tai lap se go theo FULL_FLOW_TEST.md.
+ */
 async function createStudentProfileController(
     universityId: string,
+    staffId: string,
     studentId: string | number,
-    email: string,
-    staffId: string
+    email: string
 ) {
     if (!universityId || !staffId || !studentId || !email) {
         throw new Error(
