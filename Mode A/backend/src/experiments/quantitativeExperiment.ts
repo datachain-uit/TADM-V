@@ -111,7 +111,7 @@ const SCENARIOS: number[] =
                     x.trim()
                 )
             )
-        : [1, 10, 30, 60, 100, 353, 500];
+        : [1, 10, 30, 60, 100, 500];
 
 /*
  * Header dùng chung cho CẢ HAI dạng file gas:

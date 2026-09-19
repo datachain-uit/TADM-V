@@ -3,7 +3,7 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 
 const SCENARIOS =
-    [1, 10, 30, 60, 100, 353, 500];
+    [1, 10, 30, 60, 100, 500];
 
 function getProjectRoot() {
     return path.resolve(

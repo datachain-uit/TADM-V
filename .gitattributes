@@ -1,0 +1,4 @@
+# Keep line endings stable so that re-generated result files compare byte-for-byte
+# against the committed ones on every platform (Git for Windows defaults to autocrlf=true,
+# which would otherwise check these files out as CRLF while the runners write LF).
+* text=auto eol=lf

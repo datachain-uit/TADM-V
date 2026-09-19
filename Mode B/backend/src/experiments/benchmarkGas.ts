@@ -73,7 +73,7 @@ const VERIFIER_ARTIFACT =
 // =========================
 
 const SCENARIOS_MAC_DINH =
-    [1, 10, 30, 60, 100, 353, 500];
+    [1, 10, 30, 60, 100, 500];
 
 /*
  * K19 — cho phep chay thu mot vai kich ban:  KICH_BAN=1,10
