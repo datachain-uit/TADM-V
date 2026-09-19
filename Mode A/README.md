@@ -41,8 +41,13 @@ setup | check-k | rho | commitment | nullifier | root | prove | verify
 | `check-k` | runs `keygen_vk` on a shape-only circuit; exits non-zero on `NotEnoughRowsAvailable` |
 | `rho` | one field element, rejection-sampled on `OsRng` |
 
+Run the prover from `backend/`: its parameter paths are relative to that directory
+(`../shared/params.bin`, `../target/params_k<K>.bin`). `commitment` and `nullifier` read
+`{student_id, amount, rho}` on stdin; `root` also needs `commitments` and `merkle_index`.
+
 `MERKLE_DEPTH` and `HALO2_K` override `d` and `K` (defaults 9, 9). A `K` other than 9 writes its parameters
-to `target/params_k<K>.bin`.
+to `target/params_k<K>.bin`. `setup` regenerates `shared/params.bin` byte-identically; `check-k` answers
+`{"k":9,"merkle_depth":9,"ok":true}` at `K = 9` and exits 101 with `NotEnoughRowsAvailable` at `K = 8`.
 
 ## `K` in the depth sweep
 
@@ -67,7 +72,6 @@ Output: `experiments/results/quantitative/performance_offchain_n*.csv`, `proofs_
 
 ## End-to-end flow
 
-Full walkthrough with expected output per step: [`FULL_FLOW_GUIDE.md`](FULL_FLOW_GUIDE.md) (Vietnamese).
 From `backend/`, with Ganache + IPFS + MongoDB running. `accounts[0]` = university, `accounts[1]` = sponsor,
 `accounts[2]` = student. `university:create` seeds the two staff accounts `CTSV-01` (student affairs) and
 `KHTC-01` (finance); each `<…>` comes from the previous command's output.

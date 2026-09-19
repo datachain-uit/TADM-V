@@ -26,7 +26,6 @@ Mode A/ , Mode B/
 │   ├── src/experiments/   the runners listed in §4
 │   └── .env.example       copy to .env
 ├── shared/params.bin      Mode A only: IPA parameters for K = 9
-├── FULL_FLOW_*.md         manual end-to-end walkthrough (Vietnamese)
 └── experiments/
     ├── data/              dataset_n{1,10,30,60,100,500}.json — inputs
     └── results/

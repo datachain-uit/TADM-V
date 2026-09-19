@@ -42,7 +42,8 @@ public inputs, `K`. Regenerate only when one of those changes:
 cd contracts && npm run compile                                      # then redeploy; the pool deploys its verifier
 ```
 
-A verifier built for another depth rejects every proof. Before measuring, the LAP20 runner compares the file
+Run these from `backend/`; the paths above are relative to it. Re-exporting at `d = 9` reproduces the
+committed `Halo2Verifier.sol` byte-for-byte. A verifier built for another depth rejects every proof. Before measuring, the LAP20 runner compares the file
 on disk with the version in git HEAD, so the working copy must be a git checkout (`git init` is enough); on a
 mismatch it stops before measuring. The `theo_d` sweep regenerates one verifier per depth, then restores the
 `d = 9` verifier and checks its bytecode is byte-identical to the original.
@@ -77,7 +78,6 @@ Output: `experiments/results/quantitative/performance_onchain_n*.csv`, `proofs_n
 
 ## End-to-end flow
 
-Full walkthrough with expected output per step: [`FULL_FLOW_TEST.md`](FULL_FLOW_TEST.md) (Vietnamese).
 `npm run flow:full` runs all of it in one command. Step by step, from `backend/`, with Ganache + IPFS +
 MongoDB running. `accounts[0]` = university, `accounts[1]` = sponsor, `accounts[2]` = student.
 `university:create` seeds the two staff accounts `CTSV-01` (student affairs) and `KHTC-01` (finance); each
