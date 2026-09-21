@@ -2,11 +2,10 @@ thi_nghiem,mechanism,cau_hinh,n,d,k,metric,cach_dem,R,N,mean,sd,min,max,don_vi,n
 theo_d,offchain,d8,256,8,9,deploy_pool_gas,moi_luot,20,20,968565,0,968565,968565,gas,lap20
 theo_d,offchain,d8,256,8,9,update_root_gas,moi_luot,20,20,270200,0,270200,270200,gas,lap20
 theo_d,offchain,d8,256,8,9,withdraw_gas,moi_lan_do,20,5120,64652.609375,5.133474,64631,64655,gas,lap20
-theo_d,offchain,d8,256,8,9,withdraw_ms,moi_lan_do,20,5120,32.234451,20.383722,14.8275,1196.083,ms,lap20
-theo_d,offchain,d8,256,8,9,witness_ms,moi_lan_do,20,5120,1.355727,0.175197,0.9247,3.636,ms,lap20
-theo_d,offchain,d8,256,8,9,setup_ms,moi_lan_do,20,5120,128.064494,17.469599,99.2866,396.5768,ms,lap20
-theo_d,offchain,d8,256,8,9,prove_ms,moi_lan_do,20,5120,206.893735,22.557105,164.099,485.7706,ms,lap20
-theo_d,offchain,d8,256,8,9,proof_generation_ms,moi_lan_do,20,5120,208.249463,22.606022,165.543,487.1325,ms,lap20
-theo_d,offchain,d8,256,8,9,verify_native_ms,moi_lan_do,20,5120,7.283875,1.566759,5.6377,67.5241,ms,lap20
+theo_d,offchain,d8,256,8,9,withdraw_ms,moi_lan_do,20,5120,32.94001,11.413637,18.9742,161.6211,ms,lap20
+theo_d,offchain,d8,256,8,9,witness_ms,moi_lan_do,20,5120,1.237029,0.333378,0.8457,4.1179,ms,lap20
+theo_d,offchain,d8,256,8,9,setup_ms,moi_luot,20,20,100.518805,5.69134,95.7583,119.303,ms,lap20
+theo_d,offchain,d8,256,8,9,prove_ms,moi_lan_do,20,5120,210.807472,21.419305,173.1848,574.516,ms,lap20
+theo_d,offchain,d8,256,8,9,proof_generation_ms,moi_lan_do,20,5120,212.0445,21.521732,174.0724,575.8721,ms,lap20
+theo_d,offchain,d8,256,8,9,verify_native_ms,moi_lan_do,20,5120,8.310557,1.965368,5.6591,58.342,ms,lap20
 theo_d,offchain,d8,256,8,9,proof_bytes,moi_luot,20,20,3104,0,3104,3104,B,lap20
-theo_d,offchain,d8,256,8,9,verify_setup_ms,moi_lan_do,20,5120,95.469138,10.746481,74.6569,383.8654,ms,lap20

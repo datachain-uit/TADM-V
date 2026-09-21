@@ -73,8 +73,29 @@ Run `npm run compile` and redeploy between `experiment:proofs` and `experiment:g
 measured against the previous verifier. `generateAllProofs.ts` checks `EXPECTED_CALLDATA_BYTES` (4 352); a
 stale value makes it skip every scenario.
 
+`experiment:lap20` writes one directory per run under `experiments/results/quantitative/lap20_1509/<theo_n|theo_d>/<nN|dD>/luotNN/`, and
+`experiment:lap20:tonghop` writes the summary tables next to those runs. `THU_MUC_LAP` overrides the
+root directory.
+
 Output: `experiments/results/quantitative/performance_onchain_n*.csv`, `proofs_n*.json`,
 `gas_onchain_raw.csv`, and `lap20_1509/**/luotNN/prover.log`.
+
+## Which files the paper quotes
+
+Every Mode B figure in the paper comes from one of these. The runners overwrite results in place, so a test
+run must be redirected with `THU_MUC_LAP` (see the root README §4, Level 2).
+
+| Figure in the paper | File | Where in it |
+|---|---|---|
+| Withdrawal gas, proof generation time and verification time per pool size `n` | `experiments/results/quantitative/lap20_1509/theo_n/bang_bai_bao_theo_n.csv` | `tach_gas` is the withdrawal (`verify_record_gas` + `settle_gas`); also `proof_generation_ms`, `verify_onchain_ms` |
+| The same per Merkle depth `d`, with `k` and the verifier size | `experiments/results/quantitative/lap20_1509/theo_d/bang_bai_bao_theo_d.csv` | one row per `d`; the chosen `k`, its bytecode size and every attempt are in `theo_d/dD/verifier.json` |
+| Full statistics behind both tables | `.../theo_n/tong_hop_theo_n.csv`, `.../theo_d/tong_hop_theo_d.csv` | mean, SD, min, max, `R`, `N`, `cach_dem` per metric |
+| Per-run means | `.../theo_n/nN/theo_luot.csv`, `.../theo_d/dD/theo_luot.csv` | one row per run |
+| How the lot was run | `.../lap20_1509/cau_hinh_chay.json` | runs per configuration, warm-up count, shuffle seed, round order, machine, prover binary hash |
+| Pool deployment 1 979 758, verifier deployment 4 554 511, verifier 20 834 B, pool 8 697 B | `experiments/results/quantitative/artifact_sizes.json` | `block_gas.deploy_pool.mean`, `block_gas.deploy_verifier.mean`, `verifier_contract.deployed_bytecode_bytes`, `pool_contract.deployed_bytecode_bytes` |
+| Totals per scholarship round | `experiments/results/quantitative/luot_bao_cao/` | the single-run lot of 12 Sep 2026 |
+| Sepolia deployment and withdrawals | `experiments/results/sepolia/kiem_nghiem_sepolia_2026-09-12T06-08-05.json` | addresses, gas, transaction hashes; the `.csv` beside it is the same run |
+| Qualitative criteria | `experiments/results/qualitative/qualitative-onchain-n500-2026-09-12T23-03-03-358Z-tieuchi.csv` | one row per criterion and evidence item, with its verdict |
 
 ## End-to-end flow
 

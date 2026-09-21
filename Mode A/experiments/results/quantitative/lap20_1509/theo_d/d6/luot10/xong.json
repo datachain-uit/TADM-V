@@ -8,8 +8,9 @@
   "k": 9,
   "warmup": 3,
   "so_lan_do": 64,
-  "tien_trinh": "moi proof va moi lan verify la mot tien trinh prover moi",
-  "bat_dau": "2026-09-16T03:45:03.226Z",
-  "ket_thuc": "2026-09-16T03:45:36.285Z",
-  "thoi_gian_ms": 33058.9
+  "che_do": "nong",
+  "tien_trinh": "mot tien trinh prove-batch cho ca luot: keygen 1 lan, warm-up, roi n proof, verify trong cung tien trinh",
+  "bat_dau": "2026-09-17T05:54:27.086Z",
+  "ket_thuc": "2026-09-17T05:54:44.754Z",
+  "thoi_gian_ms": 17667.7
 }

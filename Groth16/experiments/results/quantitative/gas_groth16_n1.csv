@@ -1,0 +1,2 @@
+mechanism,n,student_index,deploy_pool_gas,deploy_verifier_gas,update_root_gas,verify_gas,verify_onchain_ms,withdraw_gas,withdraw_ms,verify_record_gas,verify_record_ms,settle_gas,settle_ms,root,nullifier
+groth16,1,0,2109494,445503,73114,235782,1030.250400,286667,436.691200,321843,417.751000,69626,23.459700,0x2d891526869a2034fb0fb35f06ec60aa0e4a7d24973bd7a3cb711a9da8cb53fa,0x1ec1641aac31af7f11729fe67452fe5014aaf164a223e33696a1d192fd1bd9ee

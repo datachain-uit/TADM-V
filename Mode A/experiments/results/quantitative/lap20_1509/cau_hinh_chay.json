@@ -4,40 +4,41 @@
     "so_luot": 20,
     "warmup": 3,
     "hat_giong": 20260915,
+    "che_do": "nong",
     "cau_hinh": [
       {
-        "thiNghiem": "theo_n",
-        "ten": "n1",
+        "experiment": "theo_n",
+        "name": "n1",
         "n": 1,
         "d": 9
       },
       {
-        "thiNghiem": "theo_n",
-        "ten": "n10",
+        "experiment": "theo_n",
+        "name": "n10",
         "n": 10,
         "d": 9
       },
       {
-        "thiNghiem": "theo_n",
-        "ten": "n30",
+        "experiment": "theo_n",
+        "name": "n30",
         "n": 30,
         "d": 9
       },
       {
-        "thiNghiem": "theo_n",
-        "ten": "n60",
+        "experiment": "theo_n",
+        "name": "n60",
         "n": 60,
         "d": 9
       },
       {
-        "thiNghiem": "theo_n",
-        "ten": "n100",
+        "experiment": "theo_n",
+        "name": "n100",
         "n": 100,
         "d": 9
       },
       {
-        "thiNghiem": "theo_n",
-        "ten": "n500",
+        "experiment": "theo_n",
+        "name": "n500",
         "n": 500,
         "d": 9
       }
@@ -51,10 +52,10 @@
       "n500": 9
     },
     "tim_k": [],
-    "dinh_nghia_luot": "một lượt = snapshot chuỗi → warm-up → n lần đo → revert; mỗi proof/verify là một tiến trình prover mới; thứ tự cấu hình xáo mỗi vòng",
+    "dinh_nghia_luot": "mot luot = snapshot chuoi → warm-up → n lan do → revert; MOT tien trinh prove-batch cho ca luot (keygen 1 lan, verify trong cung tien trinh); thu tu cau hinh xao moi vong",
     "lan_khoi_chay": [
       {
-        "bat_dau": "2026-09-14T11:28:53.112Z",
+        "bat_dau": "2026-09-17T04:18:12.654Z",
         "luot_chon": [
           1
         ],
@@ -62,7 +63,7 @@
           {
             "luot": 1,
             "cau_hinh": [
-              "n10"
+              "n1"
             ]
           }
         ],
@@ -74,28 +75,29 @@
           "node": "v22.13.0"
         },
         "git": {
-          "commit": "14152eee2b5ca0e9ff9262730d33355ed937155e",
-          "so_tep_sua_ngoai_ket_qua": 8,
+          "commit": "4d6d703c476a81a1297ac2625350e82fb36292ed",
+          "so_tep_sua_ngoai_ket_qua": 9,
           "tep_sua": [
-            " M backend/package.json",
             " M backend/src/clients/prover/halo2ProverClient.ts",
+            " M backend/src/experiments/lap20Experiment.ts",
             " M backend/src/experiments/quantitativeExperiment.ts",
             " M prover/src/generate_proof.rs",
             " M prover/src/inputs_builder.rs",
             " M prover/src/main.rs",
-            "?? backend/src/experiments/lap20Experiment.ts",
-            "?? backend/src/experiments/tongHopLap20.ts"
+            " M shared/proof.bin",
+            " M shared/proof.json",
+            " M shared/vk.txt"
           ]
         },
         "prover": {
           "duong_dan": "target\\release\\prover.exe",
-          "kich_thuoc": 1633792,
-          "sua_luc": "2026-09-14T07:50:11.745Z",
-          "sha256": "656daa8704e3708ccfc162a6dd41e72d04cd26be2b61adeecbe7d6f205deb9a3"
+          "kich_thuoc": 1658368,
+          "sua_luc": "2026-09-17T04:00:04.784Z",
+          "sha256": "7ba82d4f680d076af60256772580f6761b01df82a46b35a4a04d0d2c25f0befc"
         }
       },
       {
-        "bat_dau": "2026-09-14T11:35:39.762Z",
+        "bat_dau": "2026-09-17T04:27:53.126Z",
         "luot_chon": [
           1,
           2,
@@ -348,345 +350,25 @@
           "node": "v22.13.0"
         },
         "git": {
-          "commit": "14152eee2b5ca0e9ff9262730d33355ed937155e",
-          "so_tep_sua_ngoai_ket_qua": 10,
+          "commit": "4d6d703c476a81a1297ac2625350e82fb36292ed",
+          "so_tep_sua_ngoai_ket_qua": 9,
           "tep_sua": [
-            " M backend/package.json",
             " M backend/src/clients/prover/halo2ProverClient.ts",
+            " M backend/src/experiments/lap20Experiment.ts",
             " M backend/src/experiments/quantitativeExperiment.ts",
             " M prover/src/generate_proof.rs",
             " M prover/src/inputs_builder.rs",
             " M prover/src/main.rs",
             " M shared/proof.bin",
             " M shared/proof.json",
-            "?? backend/src/experiments/lap20Experiment.ts",
-            "?? backend/src/experiments/tongHopLap20.ts"
+            " M shared/vk.txt"
           ]
         },
         "prover": {
           "duong_dan": "target\\release\\prover.exe",
-          "kich_thuoc": 1633792,
-          "sua_luc": "2026-09-14T07:50:11.745Z",
-          "sha256": "656daa8704e3708ccfc162a6dd41e72d04cd26be2b61adeecbe7d6f205deb9a3"
-        }
-      },
-      {
-        "bat_dau": "2026-09-14T11:37:14.506Z",
-        "luot_chon": [
-          1
-        ],
-        "thu_tu": [
-          {
-            "luot": 1,
-            "cau_hinh": [
-              "n1"
-            ]
-          }
-        ],
-        "may": {
-          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
-          "so_luong_cpu": 8,
-          "ram_gb": 7.7,
-          "he_dieu_hanh": "win32 10.0.26200",
-          "node": "v22.13.0"
-        },
-        "git": {
-          "commit": "14152eee2b5ca0e9ff9262730d33355ed937155e",
-          "so_tep_sua_ngoai_ket_qua": 10,
-          "tep_sua": [
-            " M backend/package.json",
-            " M backend/src/clients/prover/halo2ProverClient.ts",
-            " M backend/src/experiments/quantitativeExperiment.ts",
-            " M prover/src/generate_proof.rs",
-            " M prover/src/inputs_builder.rs",
-            " M prover/src/main.rs",
-            " M shared/proof.bin",
-            " M shared/proof.json",
-            "?? backend/src/experiments/lap20Experiment.ts",
-            "?? backend/src/experiments/tongHopLap20.ts"
-          ]
-        },
-        "prover": {
-          "duong_dan": "target\\release\\prover.exe",
-          "kich_thuoc": 1633792,
-          "sua_luc": "2026-09-14T07:50:11.745Z",
-          "sha256": "656daa8704e3708ccfc162a6dd41e72d04cd26be2b61adeecbe7d6f205deb9a3"
-        }
-      },
-      {
-        "bat_dau": "2026-09-14T11:38:04.049Z",
-        "luot_chon": [
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11,
-          12,
-          13,
-          14,
-          15,
-          16,
-          17,
-          18,
-          19,
-          20
-        ],
-        "thu_tu": [
-          {
-            "luot": 1,
-            "cau_hinh": [
-              "n1",
-              "n10",
-              "n500",
-              "n100",
-              "n30",
-              "n60"
-            ]
-          },
-          {
-            "luot": 2,
-            "cau_hinh": [
-              "n60",
-              "n30",
-              "n10",
-              "n500",
-              "n1",
-              "n100"
-            ]
-          },
-          {
-            "luot": 3,
-            "cau_hinh": [
-              "n100",
-              "n30",
-              "n500",
-              "n60",
-              "n1",
-              "n10"
-            ]
-          },
-          {
-            "luot": 4,
-            "cau_hinh": [
-              "n100",
-              "n60",
-              "n30",
-              "n1",
-              "n10",
-              "n500"
-            ]
-          },
-          {
-            "luot": 5,
-            "cau_hinh": [
-              "n30",
-              "n60",
-              "n500",
-              "n100",
-              "n10",
-              "n1"
-            ]
-          },
-          {
-            "luot": 6,
-            "cau_hinh": [
-              "n100",
-              "n60",
-              "n500",
-              "n30",
-              "n10",
-              "n1"
-            ]
-          },
-          {
-            "luot": 7,
-            "cau_hinh": [
-              "n1",
-              "n100",
-              "n10",
-              "n60",
-              "n30",
-              "n500"
-            ]
-          },
-          {
-            "luot": 8,
-            "cau_hinh": [
-              "n100",
-              "n500",
-              "n60",
-              "n30",
-              "n1",
-              "n10"
-            ]
-          },
-          {
-            "luot": 9,
-            "cau_hinh": [
-              "n10",
-              "n30",
-              "n1",
-              "n100",
-              "n500",
-              "n60"
-            ]
-          },
-          {
-            "luot": 10,
-            "cau_hinh": [
-              "n1",
-              "n100",
-              "n500",
-              "n60",
-              "n10",
-              "n30"
-            ]
-          },
-          {
-            "luot": 11,
-            "cau_hinh": [
-              "n1",
-              "n100",
-              "n30",
-              "n500",
-              "n10",
-              "n60"
-            ]
-          },
-          {
-            "luot": 12,
-            "cau_hinh": [
-              "n500",
-              "n30",
-              "n1",
-              "n100",
-              "n10",
-              "n60"
-            ]
-          },
-          {
-            "luot": 13,
-            "cau_hinh": [
-              "n60",
-              "n1",
-              "n100",
-              "n30",
-              "n10",
-              "n500"
-            ]
-          },
-          {
-            "luot": 14,
-            "cau_hinh": [
-              "n30",
-              "n100",
-              "n1",
-              "n500",
-              "n60",
-              "n10"
-            ]
-          },
-          {
-            "luot": 15,
-            "cau_hinh": [
-              "n10",
-              "n1",
-              "n30",
-              "n60",
-              "n500",
-              "n100"
-            ]
-          },
-          {
-            "luot": 16,
-            "cau_hinh": [
-              "n30",
-              "n500",
-              "n100",
-              "n1",
-              "n10",
-              "n60"
-            ]
-          },
-          {
-            "luot": 17,
-            "cau_hinh": [
-              "n10",
-              "n1",
-              "n30",
-              "n100",
-              "n60",
-              "n500"
-            ]
-          },
-          {
-            "luot": 18,
-            "cau_hinh": [
-              "n1",
-              "n500",
-              "n30",
-              "n10",
-              "n100",
-              "n60"
-            ]
-          },
-          {
-            "luot": 19,
-            "cau_hinh": [
-              "n30",
-              "n100",
-              "n500",
-              "n60",
-              "n1",
-              "n10"
-            ]
-          },
-          {
-            "luot": 20,
-            "cau_hinh": [
-              "n500",
-              "n1",
-              "n60",
-              "n100",
-              "n30",
-              "n10"
-            ]
-          }
-        ],
-        "may": {
-          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
-          "so_luong_cpu": 8,
-          "ram_gb": 7.7,
-          "he_dieu_hanh": "win32 10.0.26200",
-          "node": "v22.13.0"
-        },
-        "git": {
-          "commit": "14152eee2b5ca0e9ff9262730d33355ed937155e",
-          "so_tep_sua_ngoai_ket_qua": 10,
-          "tep_sua": [
-            " M backend/package.json",
-            " M backend/src/clients/prover/halo2ProverClient.ts",
-            " M backend/src/experiments/quantitativeExperiment.ts",
-            " M prover/src/generate_proof.rs",
-            " M prover/src/inputs_builder.rs",
-            " M prover/src/main.rs",
-            " M shared/proof.bin",
-            " M shared/proof.json",
-            "?? backend/src/experiments/lap20Experiment.ts",
-            "?? backend/src/experiments/tongHopLap20.ts"
-          ]
-        },
-        "prover": {
-          "duong_dan": "target\\release\\prover.exe",
-          "kich_thuoc": 1633792,
-          "sua_luc": "2026-09-14T07:50:11.745Z",
-          "sha256": "656daa8704e3708ccfc162a6dd41e72d04cd26be2b61adeecbe7d6f205deb9a3"
+          "kich_thuoc": 1658368,
+          "sua_luc": "2026-09-17T04:00:04.784Z",
+          "sha256": "7ba82d4f680d076af60256772580f6761b01df82a46b35a4a04d0d2c25f0befc"
         }
       }
     ]
@@ -696,6 +378,7 @@
     "so_luot": 20,
     "warmup": 3,
     "hat_giong": 20260915,
+    "che_do": "nong",
     "cau_hinh": [
       {
         "experiment": "theo_d",
@@ -782,10 +465,10 @@
           {
             "k": 8,
             "du_hang": true,
-            "check_ms": 42.265299999999996
+            "check_ms": 52.4176
           }
         ],
-        "do_luc": "2026-09-16T03:00:22.401Z"
+        "do_luc": "2026-09-17T05:31:30.152Z"
       },
       {
         "d": 2,
@@ -812,10 +495,10 @@
           {
             "k": 8,
             "du_hang": true,
-            "check_ms": 43.401500000000006
+            "check_ms": 48.3971
           }
         ],
-        "do_luc": "2026-09-16T03:00:22.502Z"
+        "do_luc": "2026-09-17T05:31:30.257Z"
       },
       {
         "d": 3,
@@ -842,10 +525,10 @@
           {
             "k": 8,
             "du_hang": true,
-            "check_ms": 42.860099999999996
+            "check_ms": 48.7717
           }
         ],
-        "do_luc": "2026-09-16T03:00:22.598Z"
+        "do_luc": "2026-09-17T05:31:30.363Z"
       },
       {
         "d": 4,
@@ -876,10 +559,10 @@
           {
             "k": 9,
             "du_hang": true,
-            "check_ms": 64.7784
+            "check_ms": 69.69
           }
         ],
-        "do_luc": "2026-09-16T03:00:22.736Z"
+        "do_luc": "2026-09-17T05:31:30.504Z"
       },
       {
         "d": 5,
@@ -910,10 +593,10 @@
           {
             "k": 9,
             "du_hang": true,
-            "check_ms": 62.85209999999999
+            "check_ms": 71.463
           }
         ],
-        "do_luc": "2026-09-16T03:00:22.869Z"
+        "do_luc": "2026-09-17T05:31:30.653Z"
       },
       {
         "d": 6,
@@ -944,10 +627,10 @@
           {
             "k": 9,
             "du_hang": true,
-            "check_ms": 66.40390000000001
+            "check_ms": 90.2656
           }
         ],
-        "do_luc": "2026-09-16T03:00:23.011Z"
+        "do_luc": "2026-09-17T05:31:30.817Z"
       },
       {
         "d": 7,
@@ -978,10 +661,10 @@
           {
             "k": 9,
             "du_hang": true,
-            "check_ms": 66.4476
+            "check_ms": 80.74380000000001
           }
         ],
-        "do_luc": "2026-09-16T03:00:23.148Z"
+        "do_luc": "2026-09-17T05:31:30.982Z"
       },
       {
         "d": 8,
@@ -1012,16 +695,16 @@
           {
             "k": 9,
             "du_hang": true,
-            "check_ms": 65.52040000000001
+            "check_ms": 74.1244
           }
         ],
-        "do_luc": "2026-09-16T03:00:23.288Z"
+        "do_luc": "2026-09-17T05:31:31.142Z"
       }
     ],
-    "dinh_nghia_luot": "mot luot = snapshot chuoi → warm-up → n lan do → revert; moi proof/verify la mot tien trinh prover moi; thu tu cau hinh xao moi vong",
+    "dinh_nghia_luot": "mot luot = snapshot chuoi → warm-up → n lan do → revert; MOT tien trinh prove-batch cho ca luot (keygen 1 lan, verify trong cung tien trinh); thu tu cau hinh xao moi vong",
     "lan_khoi_chay": [
       {
-        "bat_dau": "2026-09-16T03:00:23.292Z",
+        "bat_dau": "2026-09-17T05:31:31.151Z",
         "luot_chon": [
           1,
           2,
@@ -1314,23 +997,25 @@
           "node": "v22.13.0"
         },
         "git": {
-          "commit": "923d9039f254f2276996c33e218feb920aad324b",
-          "so_tep_sua_ngoai_ket_qua": 7,
+          "commit": "4d6d703c476a81a1297ac2625350e82fb36292ed",
+          "so_tep_sua_ngoai_ket_qua": 9,
           "tep_sua": [
-            " M backend/package.json",
+            " M backend/src/clients/prover/halo2ProverClient.ts",
             " M backend/src/experiments/lap20Experiment.ts",
-            " D backend/src/experiments/tongHopLap20.ts",
+            " M backend/src/experiments/quantitativeExperiment.ts",
+            " M prover/src/generate_proof.rs",
+            " M prover/src/inputs_builder.rs",
+            " M prover/src/main.rs",
             " M shared/proof.bin",
             " M shared/proof.json",
-            " M shared/vk.txt",
-            "?? backend/src/experiments/summarizeLap20.ts"
+            " M shared/vk.txt"
           ]
         },
         "prover": {
           "duong_dan": "target\\release\\prover.exe",
-          "kich_thuoc": 1633792,
-          "sua_luc": "2026-09-14T07:50:11.745Z",
-          "sha256": "656daa8704e3708ccfc162a6dd41e72d04cd26be2b61adeecbe7d6f205deb9a3"
+          "kich_thuoc": 1658368,
+          "sua_luc": "2026-09-17T04:00:04.784Z",
+          "sha256": "7ba82d4f680d076af60256772580f6761b01df82a46b35a4a04d0d2c25f0befc"
         }
       }
     ]

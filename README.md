@@ -108,31 +108,42 @@ ignored by git, so the committed results stay untouched.
 Compare `check/theo_n/bang_bai_bao_theo_n.csv` with row `n10` of
 `lap20_1509/theo_n/bang_bai_bao_theo_n.csv`:
 
-| Mode A, `n = 10` | 20 runs, N = 200 | 1 run, N = 10 |
-|---|---|---|
-| `withdraw_gas` | 64 665 ± 5 | 64 665 ± 5 |
-| `proof_generation_ms` | 210.1 ± 23.0 | 211.8 ± 16.1 |
-| `verify_native_ms` | 7.3 ± 0.7 | 7.2 ± 1.0 |
-| `setup_ms` | 127.5 ± 14.6 | 123.6 ± 7.9 |
+| Mode A, `n = 10` | published lot, 20 runs, N = 200 |
+|---|---|
+| `withdraw_gas` | 64 665 ± 5 |
+| `proof_generation_ms` | 203.5 ± 18.4 |
+| `verify_native_ms` | 7.1 ± 0.9 |
+| `setup_ms` | 102.9 ± 12.1 |
 
-| Mode B, `n = 10` | 20 runs, N = 200 | 1 run, N = 10 |
-|---|---|---|
-| `tach_gas` | 685 269 ± 56 | 685 225 ± 78 |
-| `verify_record_gas` | 615 643 ± 56 | 615 599 ± 78 |
-| `settle_gas` | 69 626 ± 0 | 69 626 |
-| `proof_generation_ms` | 1 229.3 ± 91.6 | 1 236.7 ± 91.5 |
-| `setup_ms` | 1 598.6 ± 122.2 | 1 468.7 |
+| Mode B, `n = 10` | published lot, 20 runs, N = 200 |
+|---|---|
+| `tach_gas` | 685 269 ± 56 |
+| `verify_record_gas` | 615 643 ± 56 |
+| `settle_gas` | 69 626 ± 0 |
+| `proof_generation_ms` | 1 229.3 ± 91.6 |
+| `setup_ms` | 1 598.6 ± 122.2 |
 
-Gas must land inside the spread above. Times are machine- and load-dependent.
+A one-run check must land inside the gas spread above. Times are machine- and load-dependent.
 
 ### Level 3 — full re-run
 
 ```bash
 cd backend
-THI_NGHIEM=theo_n npm run experiment:lap20     # d = 9, n ∈ {1, 10, 30, 60, 100, 500}
-THI_NGHIEM=theo_d npm run experiment:lap20     # d ∈ {1 … 8}, n = 2^d
+
+# Mode A
+CHE_DO=nong THI_NGHIEM=theo_n npm run experiment:lap20   # d = 9, n ∈ {1, 10, 30, 60, 100, 500}
+CHE_DO=nong THI_NGHIEM=theo_d npm run experiment:lap20   # d ∈ {1 … 8}, n = 2^d
+
+# Mode B
+THI_NGHIEM=theo_n npm run experiment:lap20
+THI_NGHIEM=theo_d npm run experiment:lap20
+
 npm run experiment:lap20:tonghop
 ```
+
+Results land in `experiments/results/quantitative/`: the Mode B commands write into `lap20_1509/`, the
+Mode A commands into `lap_20/`. Set `THU_MUC_LAP` to send them somewhere else instead; the published lot is
+never overwritten either way.
 
 Duration on the machine in §2 — `theo_n`: Mode A ≈ 2 h, Mode B ≈ 27 h. `theo_d`: Mode A ≈ 1.5 h,
 Mode B ≈ 24 h. Run Mode A and Mode B one after the other, never together.
@@ -157,6 +168,10 @@ cp experiment.config.example.json experiment.config.json   # fill in wallets fro
 npm run experiment:qualitative -- ./experiment.config.json # Ganache + IPFS + MongoDB
 npm run experiment:sepolia                                 # needs a funded Sepolia key in .env
 ```
+
+They write, respectively, `experiments/results/quantitative/artifact_sizes.json`,
+`experiments/results/qualitative/qualitative-<timestamp>.json` plus three `.csv` beside it, and
+`experiments/results/sepolia/kiem_nghiem_<network>_<timestamp>.json` plus its `.csv`.
 
 The qualitative runner with `"resetDatabase": true` only accepts a database whose name contains
 `qualitative` or `experiment`. Its verdicts (`pass` / `partial` / `by_design_not_met`) must match
@@ -214,6 +229,7 @@ Vietnamese, and the runners read them, so they are part of the data format.
 | Name | Meaning |
 |---|---|
 | `THI_NGHIEM` | `theo_n` (vary pool size) or `theo_d` (vary depth) |
+| `CHE_DO` | Mode A only; `nong` is the setting the published lot was measured with |
 | `SO_LUOT` | runs per configuration (default 20) |
 | `WARMUP` | warm-up iterations per run (default 3) |
 | `KICH_BAN` | pool sizes `n` for `theo_n` |
@@ -269,8 +285,3 @@ Vietnamese, and the runners read them, so they are part of the data format.
 - Every key in this repository is a test key; dataset `private_key` fields are Ganache accounts of the
   mnemonic above.
 - The contracts are a research prototype and have not been audited.
-- Results were produced by the code at tag `<TAG>`.
-
-## 9. Citation and license
-
-`<citation>` · License: `<to be decided>`

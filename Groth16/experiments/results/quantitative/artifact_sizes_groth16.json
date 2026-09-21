@@ -1,0 +1,189 @@
+{
+  "metadata": {
+    "measured_at": "2026-09-20T14:33:30.481Z",
+    "git_commit": null,
+    "git_commit_note": "baseline-comparisons/ khong phai git repo (code/ cung khong). Khong co commit de ghim. Tai lap bang cach chay lai day chuyen trong FULL_FLOW_TEST.md.",
+    "machine": {
+      "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+      "cpu_cores": 8,
+      "total_ram_gb": 7.7,
+      "platform": "win32 10.0.26200",
+      "node": "v22.13.0"
+    },
+    "proof_system": {
+      "mechanism": "baseline-groth16",
+      "library": "circom 2.x + snarkjs (groth16)",
+      "curve": "bn128",
+      "commitment_scheme": "Groth16 (pairing-based)",
+      "k": null,
+      "k_note": "Groth16 dung R1CS, khong co tham so `k` nhu PLONKish. Dai luong tuong duong gan nhat la so rang buoc.",
+      "constraints": 5701,
+      "private_inputs": 20,
+      "public_inputs_count": 4,
+      "merkle_depth": 9,
+      "max_leaves_per_pool": 512,
+      "merkle_depth_source": "SUY RA tu nPrvInputs = 2 + 2*depth (student_id, rho, siblings[depth], directions[depth]) — doc tu build/withdraw.r1cs, KHONG ghi cung.",
+      "public_inputs": [
+        "root",
+        "nullifier",
+        "amount"
+      ],
+      "trusted_setup": "Powers of Tau cong khai + phase 2 rieng cho MACH NAY. Groth16 doi hoi ceremony RIENG cho TUNG mach — day la truc danh doi chinh so voi hai nhanh cua bai. Entropy co dinh \"baseline-groth16-2026\" de tai lap duoc => du cho thuc nghiem, KHONG du de tuyen bo soundness."
+    },
+    "solidity": {
+      "builds": [
+        {
+          "solc": "0.8.20",
+          "evm_version": "paris",
+          "optimizer": "off",
+          "optimizer_runs": 200,
+          "contracts": [
+            "Groth16Verifier.sol",
+            "ShieldedPoolGroth16.sol"
+          ]
+        }
+      ],
+      "note": "Doc tu artifacts/build-info — thiet lap solc THAT SU dung, khong chep tay tu hardhat.config.js."
+    },
+    "chain": {
+      "rpc": "Ganache http://127.0.0.1:8546",
+      "startup_command": "ganache --wallet.mnemonic \"test test test test test test test test test test test junk\" --wallet.totalAccounts 501",
+      "port_note": "Mac dinh cua baseline la 8546 de KHONG dung do voi ADV/ONC (ca hai dung 8545 va account[0]). Luot do bao cao 2026-09-07 chay tren 8545 — Ganache duy nhat cua nguoi dung — bang bien moi truong RPC_URL, KHONG sua code. Hop le vi luc do khong nhanh nao khac dang chay; ky luat \"khong hai nhanh cung luc\" cua CLAUDE.md duoc mo rong cho ca ba.",
+      "hardfork": "Ganache mac dinh — phai khop evm_version o tren",
+      "opcodes_used_by_this_system": "SLOAD, SSTORE, CALL, STATICCALL, bo nho, calldata — gia cua chung doi lan cuoi o Berlin/London, DEU TRUOC `paris`. Shanghai va Cancun chi THEM opcode, khong dinh gia lai opcode cu => cac so gas nay van dung tren mainnet hien tai.",
+      "gas_is_a_counted_quantity": "Gas do DAC TA EVM an dinh, KHONG do may khach => mang sang mainnet duoc mien la hardfork khop. Thoi gian treo tuong thi KHONG mang sang duoc."
+    }
+  },
+  "verifier_contract": {
+    "source_bytes": 8228,
+    "deployed_bytecode_bytes": 1816,
+    "creation_bytecode_bytes": 1848,
+    "eip170_limit_bytes": 24576,
+    "eip170_usage_percent": 7.4
+  },
+  "pool_contract": {
+    "source_bytes": 14807,
+    "deployed_bytecode_bytes": 9207,
+    "creation_bytecode_bytes": 9983,
+    "eip170_limit_bytes": 24576,
+    "eip170_usage_percent": 37.5,
+    "note": "EIP-170 gioi han TUNG hop dong rieng. KHONG cong hai so nay roi so voi 24 576."
+  },
+  "withdraw_calldata": {
+    "function_signature": "withdraw(uint256[2],uint256[2][2],uint256[2],uint256[4],bytes32,bytes32,address,uint256)",
+    "verify_record_signature": "verifyAndRecord(uint256[2],uint256[2][2],uint256[2],uint256[4],bytes32,bytes32,address,uint256)",
+    "settle_signature": "settle(bytes32)",
+    "selector_bytes": 4,
+    "total_args": 8,
+    "dynamic_args": 0,
+    "calldata_bytes": 384,
+    "proof_blob_bytes": null,
+    "proof_blob_padded_bytes": null,
+    "proof_blob_note": "Khong ap dung: verifier snarkjs nhan bon mang co kieu (uint[2], uint[2][2], uint[2], uint[3]), khong nhan blob `bytes` nhu ONC. Chinh khac biet giao dien nay giai thich offset 22 gas o phep kiem K1.",
+    "calldata_bytes_min": 384,
+    "calldata_bytes_max": 384,
+    "note": "Chu ky KHAC ONC: snarkjs sinh verifier nhan BON mang CO KIEU, ONC nhan mot blob `bytes`. Day la khac biet GIAO DIEN, khong phai khac biet he chung minh — no giai thich vi sao selector va vi tri dispatch lech, keo theo update_root_gas lech ~22 gas so voi ONC."
+  },
+  "block_gas": {
+    "block_gas_limit": 30000000,
+    "withdraw": {
+      "mean": 286634,
+      "min": 286547,
+      "max": 286667,
+      "samples": 1054,
+      "block_gas_percent": 0.96
+    },
+    "verify_record": {
+      "mean": 321810,
+      "min": 321723,
+      "max": 321843,
+      "samples": 1054,
+      "block_gas_percent": 1.07
+    },
+    "settle": {
+      "mean": 69624,
+      "min": 69602,
+      "max": 69626,
+      "samples": 1054,
+      "block_gas_percent": 0.23
+    },
+    "deploy_pool": {
+      "mean": 2109494,
+      "min": 2109494,
+      "max": 2109494,
+      "samples": 1054,
+      "block_gas_percent": 7.03
+    },
+    "deploy_verifier": {
+      "mean": 445503,
+      "min": 445503,
+      "max": 445503,
+      "samples": 1054,
+      "block_gas_percent": 1.49
+    },
+    "whole_system": {
+      "total_gas": 2554997,
+      "block_gas_percent": 8.52,
+      "consists_of": "deploy_verifier_gas + deploy_pool_gas",
+      "second_pool_onward": 2109494,
+      "second_pool_note": "neu dung lai verifier — mot verifier phuc vu nhieu pool"
+    },
+    "note": "block_gas_limit la GIA DINH ve mainnet (30M), KHONG phai phep do. Cac so gas moi la phep do that tren Ganache. `withdraw` la chi phi LAP LAI moi giao dich; `whole_system` la chi phi MOT LAN — hai cau hoi khac nhau, dung gop."
+  },
+  "bytecode_vs_deploy_gas": {
+    "g_codedeposit_per_byte": 200,
+    "g_codedeposit_source": "Yellow Paper — hang so EVM, KHONG phai phep do",
+    "verifier": {
+      "deployed_bytecode_bytes": 1816,
+      "code_deposit_gas": 363200,
+      "deploy_gas_measured": 445503,
+      "remainder": 82303,
+      "gas_per_byte_measured": 245.32
+    },
+    "pool": {
+      "deployed_bytecode_bytes": 9207,
+      "code_deposit_gas": 1841400,
+      "deploy_gas_measured": 2109494,
+      "remainder": 268094,
+      "gas_per_byte_measured": 229.12
+    },
+    "measured_slope_gas_per_byte": 245.32,
+    "remainder_consists_of": "21 000 phi giao dich + 32 000 phi tao hop dong + ma khoi tao gui kem duoi dang calldata + constructor chay",
+    "slope_explanation": "200 (ma luu len chuoi) + phan du: ma khoi tao CON phai gui kem giao dich duoi dang calldata => tra tien HAI LAN cho gan nhu cung luong byte, cong 21 000 phi giao dich + 32 000 phi tao hop dong + constructor chay."
+  },
+  "proof_calldata": {
+    "note": "So byte calldata that nam o cot calldata_bytes trong gas_groth16_raw.csv. Cac so duoi day la kich thuoc JSON cua proof, KHONG phai calldata — dung nham hai thu.",
+    "per_scenario": {
+      "n1": {
+        "records": 1,
+        "proof_json_bytes_min": 725,
+        "proof_json_bytes_max": 725
+      },
+      "n10": {
+        "records": 10,
+        "proof_json_bytes_min": 720,
+        "proof_json_bytes_max": 724
+      },
+      "n30": {
+        "records": 30,
+        "proof_json_bytes_min": 720,
+        "proof_json_bytes_max": 726
+      },
+      "n60": {
+        "records": 60,
+        "proof_json_bytes_min": 719,
+        "proof_json_bytes_max": 726
+      },
+      "n100": {
+        "records": 100,
+        "proof_json_bytes_min": 718,
+        "proof_json_bytes_max": 726
+      },
+      "n500": {
+        "records": 500,
+        "proof_json_bytes_min": 717,
+        "proof_json_bytes_max": 727
+      }
+    }
+  }
+}

@@ -60,15 +60,36 @@ smaller `K` has been tried and failed. Every attempt is recorded in
 ```bash
 cd backend
 npm run experiment:lap20:tonghop                   # rebuild the tables
-THI_NGHIEM=theo_n npm run experiment:lap20         # ~2 h
-THI_NGHIEM=theo_d npm run experiment:lap20         # ~1.5 h
+CHE_DO=nong THI_NGHIEM=theo_n npm run experiment:lap20   # ~2 h
+CHE_DO=nong THI_NGHIEM=theo_d npm run experiment:lap20   # ~1.5 h
 npm run experiment:quantitative                    # single-run lot; KICH_BAN=1,10 restricts it
 npm run experiment:artifacts
 npm run experiment:qualitative -- ./experiment.config.json
 ```
 
+`experiment:lap20` writes one directory per run under `experiments/results/quantitative/lap_20/<theo_n|theo_d>/<nN|dD>/luotNN/`, and
+`experiment:lap20:tonghop` writes the summary tables next to those runs. `THU_MUC_LAP` overrides the
+root directory.
+
 Output: `experiments/results/quantitative/performance_offchain_n*.csv`, `proofs_offchain_n*.json`,
 `gas_offchain_raw.csv`.
+
+## Which files the paper quotes
+
+Every Mode A figure in the paper comes from one of these. The runners overwrite results in place, so a test
+run must be redirected with `THU_MUC_LAP` (see the root README §4, Level 2).
+
+| Figure in the paper | File | Where in it |
+|---|---|---|
+| Withdrawal gas, proof generation time and verification time per pool size `n` | `experiments/results/quantitative/lap20_1509/theo_n/bang_bai_bao_theo_n.csv` | columns `withdraw_gas`, `proof_generation_ms`, `verify_native_ms`; one row per `n` |
+| The same per Merkle depth `d`, with `k` | `experiments/results/quantitative/lap20_1509/theo_d/bang_bai_bao_theo_d.csv` | one row per `d`; the `k` probe behind each row is `theo_d/dD/k.json` |
+| Full statistics behind both tables | `.../theo_n/tong_hop_theo_n.csv`, `.../theo_d/tong_hop_theo_d.csv` | mean, SD, min, max, `R`, `N`, `cach_dem` per metric |
+| Per-run means | `.../theo_n/nN/theo_luot.csv`, `.../theo_d/dD/theo_luot.csv` | one row per run |
+| How the lot was run | `.../lap20_1509/cau_hinh_chay.json` | runs per configuration, warm-up count, shuffle seed, round order, machine, prover binary hash |
+| Pool deployment gas 968 565 and pool bytecode 4 121 B | `experiments/results/quantitative/artifact_sizes.json` | `block_gas.deploy_pool.mean`, `pool_contract.deployed_bytecode_bytes` |
+| Totals per scholarship round | `experiments/results/quantitative/luot_bao_cao/` | the single-run lot of 12 Sep 2026 |
+| Sepolia deployment and withdrawals | `experiments/results/sepolia/kiem_nghiem_sepolia_2026-09-12T06-10-28.json` | addresses, gas, transaction hashes; the `.csv` beside it is the same run |
+| Qualitative criteria | `experiments/results/qualitative/qualitative-n500-2026-09-12T22-07-43-781Z-tieuchi.csv` | one row per criterion and evidence item, with its verdict |
 
 ## End-to-end flow
 

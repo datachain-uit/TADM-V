@@ -8,8 +8,9 @@
   "k": 9,
   "warmup": 3,
   "so_lan_do": 500,
-  "tien_trinh": "mỗi proof và mỗi lần verify là một tiến trình prover mới",
-  "bat_dau": "2026-09-14T12:16:35.565Z",
-  "ket_thuc": "2026-09-14T12:20:52.280Z",
-  "thoi_gian_ms": 256714.7
+  "che_do": "nong",
+  "tien_trinh": "mot tien trinh prove-batch cho ca luot: keygen 1 lan, warm-up, roi n proof, verify trong cung tien trinh",
+  "bat_dau": "2026-09-17T04:47:17.782Z",
+  "ket_thuc": "2026-09-17T04:49:35.905Z",
+  "thoi_gian_ms": 138122.8
 }
