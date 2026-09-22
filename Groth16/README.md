@@ -56,7 +56,7 @@ cd contracts && npx hardhat compile && cd ..
 
 **Running this chain produces different keys.** snarkjs adds machine entropy to each contribution, so a new
 ceremony yields a different `withdraw_final.zkey`, a different verification key and therefore a different
-`Groth16Verifier.sol` — measured, not assumed. A proof made with one ceremony does not verify against
+`Groth16Verifier.sol`. A proof made with one ceremony does not verify against
 another ceremony's verifier, so keep the proving key and the verifier from the same run together.
 
 What does not change is the size: a regenerated verifier still compiles to **1 816 bytes** of deployed
@@ -64,9 +64,6 @@ bytecode, the figure the paper reports.
 
 To reproduce the published gas figures, use the `build/withdraw_final.zkey` and the
 `contracts/contracts/Groth16Verifier.sol` that ship with this artifact, and skip this section.
-
-Groth16 needs one such ceremony per circuit, and a new one after any change to it. Mode A and Mode B need
-no equivalent step.
 
 The `.ptau` files are not shipped — they are 31 MB and `setup:ptau` regenerates them.
 
@@ -154,12 +151,3 @@ Then compare:
 | verifier deployed bytecode | 1 816 B | 1 816 B |
 
 Gas is deterministic, so these must match exactly. Timing figures will not, and are not compared.
-
-## What this baseline does and does not show
-
-It isolates the proof system. Everything else — the students, the commitments, the Merkle depth, the split
-withdrawal, the gas accounting — is held fixed, so the gas and size differences are attributable to Groth16
-versus Halo2/KZG and to nothing else.
-
-It is a re-implementation by the same authors, not an independent published benchmark, and it carries the
-per-circuit trusted setup described above.

@@ -60,19 +60,28 @@ smaller `K` has been tried and failed. Every attempt is recorded in
 ```bash
 cd backend
 npm run experiment:lap20:tonghop                   # rebuild the tables
-CHE_DO=nong THI_NGHIEM=theo_n npm run experiment:lap20   # ~2 h
+CHE_DO=nong THI_NGHIEM=theo_n npm run experiment:lap20   # ~2 h, writes to quantitative/lap_20/
 CHE_DO=nong THI_NGHIEM=theo_d npm run experiment:lap20   # ~1.5 h
+THU_MUC_LAP=experiments/results/quantitative/lap_20 npm run experiment:lap20:tonghop   # tables of that re-run
 npm run experiment:quantitative                    # single-run lot; KICH_BAN=1,10 restricts it
 npm run experiment:artifacts
 npm run experiment:qualitative -- ./experiment.config.json
 ```
 
-`experiment:lap20` writes one directory per run under `experiments/results/quantitative/lap_20/<theo_n|theo_d>/<nN|dD>/luotNN/`, and
-`experiment:lap20:tonghop` writes the summary tables next to those runs. `THU_MUC_LAP` overrides the
-root directory.
+Where each command writes, under `experiments/results/`:
 
-Output: `experiments/results/quantitative/performance_offchain_n*.csv`, `proofs_offchain_n*.json`,
-`gas_offchain_raw.csv`.
+| Command | Output |
+|---|---|
+| `CHE_DO=nong … experiment:lap20` | `quantitative/lap_20/<theo_n\|theo_d>/<nN\|dD>/luotNN/`, one directory per run |
+| `experiment:lap20:tonghop` | `quantitative/lap20_1509/` — the published lot |
+| `THU_MUC_LAP=…/lap_20 … experiment:lap20:tonghop` | `quantitative/lap_20/`, next to the re-run |
+| `experiment:quantitative` | `quantitative/gas_offchain_n*.csv`, `gas_offchain_raw.csv`, `performance_offchain_n*.csv`, `proofs_offchain_n*.json` |
+| `experiment:artifacts` | `quantitative/artifact_sizes.json`, in place; the sizes are deterministic, only `metadata.measured_at` changes |
+| `experiment:qualitative` | `qualitative/qualitative-n<N>-<timestamp>.json` and six CSVs with the same prefix: `-tieuchi`, `-A-minhbach`, `-B-riengtu`, `-C3-rangbuoc-amount`, `-dieukiendo`, `-sinhvien`. With `studentCount` 1 the `-n<N>` part and the `-A-`, `-B-`, `-sinhvien` files are omitted. A new set per run; the published one is never touched |
+
+`THU_MUC_LAP` redirects both `experiment:lap20` and `experiment:lap20:tonghop`. Without `CHE_DO=nong`,
+`experiment:lap20` targets `quantitative/lap20_1509/`, where every run already has `xong.json`, and skips
+them all.
 
 ## Which files the paper quotes
 

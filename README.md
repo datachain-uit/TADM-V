@@ -15,6 +15,9 @@ withdrawal. Public inputs, in order: `[root, nullifier, amount, recipient]`. Pri
 | Proof size | 3 104 B | 4 224 B (calldata 4 352 B) |
 | Per-mode guide | [`Mode A/README.md`](Mode%20A/README.md) | [`Mode B/README.md`](Mode%20B/README.md) |
 
+`Groth16/` holds a baseline of the same relation as Mode B, proved with Groth16 (Circom + SnarkJS); its
+guide is [`Groth16/README.md`](Groth16/README.md).
+
 ## 1. Layout
 
 ```
@@ -34,9 +37,11 @@ Mode A/ , Mode B/
         ├── quantitative/artifact_sizes.json   bytecode sizes
         ├── qualitative/               qualitative criteria run, n = 500
         └── sepolia/                   public-testnet validation
+
+Groth16/                   baseline of the same relation, proved with Groth16; own package.json, chain on port 8546
 ```
 
-Both modes read the same datasets (identical content; three files differ in line endings only).
+Both modes read the same datasets; the six files are byte-identical between `Mode A/` and `Mode B/`.
 
 ## 2. Requirements
 
@@ -130,20 +135,20 @@ A one-run check must land inside the gas spread above. Times are machine- and lo
 ```bash
 cd backend
 
-# Mode A
+# Mode A — writes to quantitative/lap_20/
 CHE_DO=nong THI_NGHIEM=theo_n npm run experiment:lap20   # d = 9, n ∈ {1, 10, 30, 60, 100, 500}
 CHE_DO=nong THI_NGHIEM=theo_d npm run experiment:lap20   # d ∈ {1 … 8}, n = 2^d
+THU_MUC_LAP=experiments/results/quantitative/lap_20 npm run experiment:lap20:tonghop
 
-# Mode B
-THI_NGHIEM=theo_n npm run experiment:lap20
-THI_NGHIEM=theo_d npm run experiment:lap20
-
-npm run experiment:lap20:tonghop
+# Mode B — writes to quantitative/lap20_rerun/
+THU_MUC_LAP=experiments/results/quantitative/lap20_rerun THI_NGHIEM=theo_n npm run experiment:lap20
+THU_MUC_LAP=experiments/results/quantitative/lap20_rerun THI_NGHIEM=theo_d npm run experiment:lap20
+THU_MUC_LAP=experiments/results/quantitative/lap20_rerun npm run experiment:lap20:tonghop
 ```
 
-Results land in `experiments/results/quantitative/`: the Mode B commands write into `lap20_1509/`, the
-Mode A commands into `lap_20/`. Set `THU_MUC_LAP` to send them somewhere else instead; the published lot is
-never overwritten either way.
+The tables of the re-run are written next to its runs, in `lap_20/` and `lap20_rerun/`. The published lot in
+`lap20_1509/` is not touched. Mode B needs `THU_MUC_LAP` because `lap20_1509/` already holds its 280
+completed runs, and completed runs are skipped.
 
 Duration on the machine in §2 — `theo_n`: Mode A ≈ 2 h, Mode B ≈ 27 h. `theo_d`: Mode A ≈ 1.5 h,
 Mode B ≈ 24 h. Run Mode A and Mode B one after the other, never together.
@@ -169,8 +174,9 @@ npm run experiment:qualitative -- ./experiment.config.json # Ganache + IPFS + Mo
 npm run experiment:sepolia                                 # needs a funded Sepolia key in .env
 ```
 
-They write, respectively, `experiments/results/quantitative/artifact_sizes.json`,
-`experiments/results/qualitative/qualitative-<timestamp>.json` plus three `.csv` beside it, and
+They write, respectively, `experiments/results/quantitative/artifact_sizes.json`; a new
+`experiments/results/qualitative/qualitative[-onchain]-n<N>-<timestamp>.json` with six `.csv` beside it
+(`-onchain` in Mode B only; see the per-mode README for the file list); and
 `experiments/results/sepolia/kiem_nghiem_<network>_<timestamp>.json` plus its `.csv`.
 
 The qualitative runner with `"resetDatabase": true` only accepts a database whose name contains
@@ -189,7 +195,8 @@ Our Sepolia run of 12 Sep 2026, verifiable on Etherscan:
 
 ## 5. End-to-end run
 
-The runners in §4 drive the contracts directly and never touch IPFS or MongoDB. The full protocol — issue a
+The measurement runners of §4 — Levels 1–3 and `experiment:artifacts` — drive the contracts directly and
+never touch IPFS or MongoDB; `experiment:qualitative` needs both. The full protocol — issue a
 note, encrypt it to IPFS, publish the root, decrypt, prove, withdraw, and have a replayed nullifier
 rejected — is the command sequence in each per-mode README. It needs Ganache, IPFS and MongoDB, and writes
 to the database, so point `MONGODB_URI` at a scratch database.
@@ -218,6 +225,8 @@ Two environment facts when scripting it:
 | Totals per scholarship round | single-run lot, 12 Sep 2026 | `quantitative/luot_bao_cao/` |
 | Qualitative criteria | `experiment:qualitative` | `qualitative/` |
 | Sepolia validation | `experiment:sepolia` | `sepolia/kiem_nghiem_sepolia_*.json` / `.csv` |
+| Groth16 withdrawal gas at `n = 500` | `Groth16`: `experiment:gas` | `Groth16/experiments/results/quantitative/gas_groth16_n500.csv`, mean of `verify_record_gas` + `settle_gas` |
+| Groth16 verifier size | `Groth16`: `experiment:artifacts` | `Groth16/experiments/results/quantitative/artifact_sizes_groth16.json`, `verifier_contract.deployed_bytecode_bytes` |
 
 ## 7. Vietnamese names in the data
 
@@ -275,6 +284,7 @@ Vietnamese, and the runners read them, so they are part of the data format.
 | `nguon` | source lot (`lap20` or `luot_bao_cao_12_09`) |
 | `don_vi` | unit |
 | `tach_gas` | Mode B: `verify_record_gas` + `settle_gas` |
+| `meaning` in the `-A-minhbach` and `-B-riengtu` CSVs | written in Vietnamese; `condition_name`, `standard_quote` and `verdict` carry the criterion, the quoted clause and the result in English |
 
 ## 8. Notes
 

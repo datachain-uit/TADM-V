@@ -61,8 +61,9 @@ verifier. Measured at `d = 1`: `K = 10` has enough rows but yields a 31 110 B ve
 ```bash
 cd backend
 npm run experiment:lap20:tonghop                   # rebuild the tables
-THI_NGHIEM=theo_n npm run experiment:lap20         # ~27 h
-THI_NGHIEM=theo_d npm run experiment:lap20         # ~24 h
+THU_MUC_LAP=experiments/results/quantitative/lap20_rerun THI_NGHIEM=theo_n npm run experiment:lap20   # ~27 h
+THU_MUC_LAP=experiments/results/quantitative/lap20_rerun THI_NGHIEM=theo_d npm run experiment:lap20   # ~24 h
+THU_MUC_LAP=experiments/results/quantitative/lap20_rerun npm run experiment:lap20:tonghop               # tables of that re-run
 npm run experiment:proofs                          # regenerates proofs AND rewrites Halo2Verifier.sol
 npm run experiment:gas                             # ~5–7 min, Ganache only
 npm run experiment:artifacts
@@ -73,12 +74,20 @@ Run `npm run compile` and redeploy between `experiment:proofs` and `experiment:g
 measured against the previous verifier. `generateAllProofs.ts` checks `EXPECTED_CALLDATA_BYTES` (4 352); a
 stale value makes it skip every scenario.
 
-`experiment:lap20` writes one directory per run under `experiments/results/quantitative/lap20_1509/<theo_n|theo_d>/<nN|dD>/luotNN/`, and
-`experiment:lap20:tonghop` writes the summary tables next to those runs. `THU_MUC_LAP` overrides the
-root directory.
+Where each command writes, under `experiments/results/`:
 
-Output: `experiments/results/quantitative/performance_onchain_n*.csv`, `proofs_n*.json`,
-`gas_onchain_raw.csv`, and `lap20_1509/**/luotNN/prover.log`.
+| Command | Output |
+|---|---|
+| `THU_MUC_LAP=…/lap20_rerun … experiment:lap20` | `quantitative/lap20_rerun/<theo_n\|theo_d>/<nN\|dD>/luotNN/`, one directory per run, with that run's `prover.log` |
+| `THU_MUC_LAP=…/lap20_rerun … experiment:lap20:tonghop` | `quantitative/lap20_rerun/`, next to the re-run |
+| `experiment:lap20:tonghop` | `quantitative/lap20_1509/` — the published lot |
+| `experiment:proofs` | `quantitative/proofs_n*.json`, `performance_onchain_n*.csv`, and rewrites `contracts/contracts/Halo2Verifier.sol` |
+| `experiment:gas` | `quantitative/gas_onchain_n*.csv`, `gas_onchain_raw.csv` |
+| `experiment:artifacts` | `quantitative/artifact_sizes.json`, in place; the sizes are deterministic, only `metadata.measured_at` changes |
+| `experiment:qualitative` | `qualitative/qualitative-onchain-n<N>-<timestamp>.json` and six CSVs with the same prefix: `-tieuchi`, `-A-minhbach`, `-B-riengtu`, `-C3-rangbuoc-amount`, `-dieukiendo`, `-sinhvien`. With `studentCount` 1 the `-n<N>` part and the `-A-`, `-B-`, `-sinhvien` files are omitted. A new set per run; the published one is never touched |
+
+`THU_MUC_LAP` redirects both `experiment:lap20` and `experiment:lap20:tonghop`. Without it, `experiment:lap20`
+targets `quantitative/lap20_1509/`, where every run already has `xong.json`, and skips them all.
 
 ## Which files the paper quotes
 
