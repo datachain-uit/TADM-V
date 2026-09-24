@@ -87,8 +87,9 @@ exists to build them in the first place. Each record it writes carries a fresh `
 IPFS and that note's CID, which is why it refuses to overwrite — Mode A holds byte-identical copies of the
 same six files and has no such command.
 
-Run `npm run compile` and redeploy between `experiment:proofs` and `experiment:gas`, otherwise gas is
-measured against the previous verifier. `generateAllProofs.ts` checks `EXPECTED_CALLDATA_BYTES` (4 352); a
+Run `npm run compile` after `experiment:proofs`, before anything that touches the verifier:
+`experiment:gas`, or gas is measured against the previous verifier, and `experiment:lap20` with
+`theo_d`, which compares the compiled artifact against the git HEAD version and stops if they disagree. `generateAllProofs.ts` checks `EXPECTED_CALLDATA_BYTES` (4 352); a
 stale value makes it skip every scenario.
 
 Where each command writes, under `experiments/results/`:
