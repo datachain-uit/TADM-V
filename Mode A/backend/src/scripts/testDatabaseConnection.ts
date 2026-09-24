@@ -12,7 +12,7 @@ async function testDatabaseConnection() {
         );
 
         console.log(
-            "MONGODB ATLAS CONNECTION TEST"
+            "MONGODB CONNECTION TEST"
         );
 
         console.log(
@@ -27,6 +27,20 @@ async function testDatabaseConnection() {
                 "MongoDB database object is unavailable"
             );
         }
+
+        console.log(
+            JSON.stringify(
+                {
+                    database:
+                        connection.db.databaseName,
+
+                    host:
+                        connection.host
+                },
+                null,
+                2
+            )
+        );
 
         const pingResult =
             await connection.db
@@ -59,15 +73,15 @@ async function testDatabaseConnection() {
         await collection.updateOne(
             {
                 name:
-                    "atlas-backend-test"
+                    "backend-connection-test"
             },
             {
                 $set: {
                     name:
-                        "atlas-backend-test",
+                        "backend-connection-test",
 
                     message:
-                        "MongoDB Atlas connection works",
+                        "MongoDB connection works",
 
                     checkedAt:
                         new Date()
@@ -82,7 +96,7 @@ async function testDatabaseConnection() {
         const document =
             await collection.findOne({
                 name:
-                    "atlas-backend-test"
+                    "backend-connection-test"
             });
 
         if (!document) {
@@ -108,7 +122,7 @@ async function testDatabaseConnection() {
         );
 
         console.log(
-            "MONGODB ATLAS TEST SUCCESS"
+            "MONGODB TEST SUCCESS"
         );
 
         console.log(
@@ -132,7 +146,7 @@ if (
                     any
             ) => {
                 console.error(
-                    "\nMONGODB ATLAS TEST FAILED"
+                    "\nMONGODB TEST FAILED"
                 );
 
                 console.error(

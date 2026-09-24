@@ -41,9 +41,16 @@ setup | check-k | rho | commitment | nullifier | root | prove | verify
 | `check-k` | runs `keygen_vk` on a shape-only circuit; exits non-zero on `NotEnoughRowsAvailable` |
 | `rho` | one field element, rejection-sampled on `OsRng` |
 
-Run the prover from `backend/`: its parameter paths are relative to that directory
-(`../shared/params.bin`, `../target/params_k<K>.bin`). `commitment` and `nullifier` read
-`{student_id, amount, rho}` on stdin; `root` also needs `commitments` and `merkle_index`.
+The prover's parameter paths are relative to `backend/`, so run it from there:
+
+```bash
+cd backend
+echo '{}' | ../target/release/prover rho
+echo '{"student_id":24560003,"amount":"100000000000000000","rho":"12345678901234567890"}' | ../target/release/prover commitment
+```
+
+`commitment` and `nullifier` read `{student_id, amount, rho}` on stdin; `root` also needs `commitments`
+and `merkle_index`.
 
 `MERKLE_DEPTH` and `HALO2_K` override `d` and `K` (defaults 9, 9). A `K` other than 9 writes its parameters
 to `target/params_k<K>.bin`. `setup` regenerates `shared/params.bin` byte-identically; `check-k` answers
@@ -102,11 +109,33 @@ run must be redirected with `THU_MUC_LAP` (see the root README §4, Level 2).
 
 ## End-to-end flow
 
-From `backend/`, with Ganache + IPFS + MongoDB running. `accounts[0]` = university, `accounts[1]` = sponsor,
-`accounts[2]` = student. `university:create` seeds the two staff accounts `CTSV-01` (student affairs) and
-`KHTC-01` (finance); each `<…>` comes from the previous command's output.
+Start the three services first, each in its own terminal:
 
 ```bash
+ganache --wallet.totalAccounts 501 --wallet.mnemonic "test test test test test test test test test test test junk"
+ipfs daemon
+mongod --dbpath <your data directory>     # or any MongoDB reachable from this machine
+```
+
+MongoDB Community installs as a service that already listens on 27017, so the `mongod` line above is only
+for a manual instance: `winget install MongoDB.Server` on Windows, `brew install mongodb-community` on
+macOS, or the distribution package on Linux.
+
+`backend/.env`, copied from `.env.example`, points at `mongodb://127.0.0.1:27017/`, `http://127.0.0.1:8545`
+and `127.0.0.1:5001`. Edit `MONGODB_URI` if your MongoDB is somewhere else. No private keys are needed: the
+wallets come from the Ganache mnemonic above. Check the database connection before starting:
+
+```bash
+cd backend
+npm run db:test      # prints the database and host it reached
+```
+
+`accounts[0]` = university, `accounts[1]` = sponsor, `accounts[2]` = student. `university:create` seeds the
+two staff accounts `CTSV-01` (student affairs) and `KHTC-01` (finance); each `<…>` comes from the previous
+command's output.
+
+```bash
+cd backend
 npm run flow:reset
 
 npm run university:create   -- "Demo University" <universityAddress>

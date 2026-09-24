@@ -37,13 +37,24 @@ wallet, and when the root was never approved. Two of them read
 public inputs, `K`. Regenerate only when one of those changes:
 
 ```bash
-./target/release/prover export-verifier                              # → contracts/contracts/Halo2Verifier.sol
-./target/release/prover export-verifier-from-dataset <dataset.json>  # same, at that file's merkle_depth
-cd contracts && npm run compile                                      # then redeploy; the pool deploys its verifier
+cd backend
+../target/release/prover export-verifier                                       # → contracts/contracts/Halo2Verifier.sol
+../target/release/prover export-verifier-from-dataset ../experiments/data/dataset_n10.json   # same, at that file's merkle_depth
+cd ../contracts && npm run compile && cd ..                                    # then redeploy, see below
 ```
 
-Run these from `backend/`; the paths above are relative to it. Re-exporting at `d = 9` reproduces the
-committed `Halo2Verifier.sol` byte-for-byte. A verifier built for another depth rejects every proof. Before measuring, the LAP20 runner compares the file
+Deploying is one command, which deploys a fresh `Halo2Verifier` and then a `ShieldedPool` bound to that
+verifier's address, and returns both:
+
+```bash
+cd backend
+npm run pool:deploy -- <poolId> KHTC-01 <fundingWei>
+```
+
+The experiment runners deploy their own pair the same way, so they pick up a regenerated verifier without
+any extra step.
+
+Re-exporting at `d = 9` reproduces the committed `Halo2Verifier.sol` byte-for-byte. A verifier built for another depth rejects every proof. Before measuring, the LAP20 runner compares the file
 on disk with the version in git HEAD, so the working copy must be a git checkout (`git init` is enough); on a
 mismatch it stops before measuring. The `theo_d` sweep regenerates one verifier per depth, then restores the
 `d = 9` verifier and checks its bytecode is byte-identical to the original.
@@ -64,11 +75,17 @@ npm run experiment:lap20:tonghop                   # rebuild the tables
 THU_MUC_LAP=experiments/results/quantitative/lap20_rerun THI_NGHIEM=theo_n npm run experiment:lap20   # ~27 h
 THU_MUC_LAP=experiments/results/quantitative/lap20_rerun THI_NGHIEM=theo_d npm run experiment:lap20   # ~24 h
 THU_MUC_LAP=experiments/results/quantitative/lap20_rerun npm run experiment:lap20:tonghop               # tables of that re-run
+npm run experiment:prepare                         # regenerates experiments/data/dataset_n*.json; needs IPFS
 npm run experiment:proofs                          # regenerates proofs AND rewrites Halo2Verifier.sol
 npm run experiment:gas                             # ~5–7 min, Ganache only
 npm run experiment:artifacts
 npm run experiment:qualitative -- ./experiment.config.json
 ```
+
+The six datasets ship with the artifact, so `experiment:prepare` is not part of reproducing anything: it
+exists to build them in the first place. Each record it writes carries a fresh `rho`, a note encrypted to
+IPFS and that note's CID, which is why it refuses to overwrite — Mode A holds byte-identical copies of the
+same six files and has no such command.
 
 Run `npm run compile` and redeploy between `experiment:proofs` and `experiment:gas`, otherwise gas is
 measured against the previous verifier. `generateAllProofs.ts` checks `EXPECTED_CALLDATA_BYTES` (4 352); a
@@ -81,6 +98,7 @@ Where each command writes, under `experiments/results/`:
 | `THU_MUC_LAP=…/lap20_rerun … experiment:lap20` | `quantitative/lap20_rerun/<theo_n\|theo_d>/<nN\|dD>/luotNN/`, one directory per run, with that run's `prover.log` |
 | `THU_MUC_LAP=…/lap20_rerun … experiment:lap20:tonghop` | `quantitative/lap20_rerun/`, next to the re-run |
 | `experiment:lap20:tonghop` | `quantitative/lap20_1509/` — the published lot |
+| `experiment:prepare` | `../experiments/data/dataset_n<n>.json`, one per scenario. It **skips any file that already exists**, so the six shipped datasets are never rewritten |
 | `experiment:proofs` | `quantitative/proofs_n*.json`, `performance_onchain_n*.csv`, and rewrites `contracts/contracts/Halo2Verifier.sol` |
 | `experiment:gas` | `quantitative/gas_onchain_n*.csv`, `gas_onchain_raw.csv` |
 | `experiment:artifacts` | `quantitative/artifact_sizes.json`, in place; the sizes are deterministic, only `metadata.measured_at` changes |
@@ -108,12 +126,33 @@ run must be redirected with `THU_MUC_LAP` (see the root README §4, Level 2).
 
 ## End-to-end flow
 
-`npm run flow:full` runs all of it in one command. Step by step, from `backend/`, with Ganache + IPFS +
-MongoDB running. `accounts[0]` = university, `accounts[1]` = sponsor, `accounts[2]` = student.
-`university:create` seeds the two staff accounts `CTSV-01` (student affairs) and `KHTC-01` (finance); each
-`<…>` comes from the previous command's output.
+Start the three services first, each in its own terminal:
 
 ```bash
+ganache --wallet.totalAccounts 501 --wallet.mnemonic "test test test test test test test test test test test junk"
+ipfs daemon
+mongod --dbpath <your data directory>     # or any MongoDB reachable from this machine
+```
+
+MongoDB Community installs as a service that already listens on 27017, so the `mongod` line above is only
+for a manual instance: `winget install MongoDB.Server` on Windows, `brew install mongodb-community` on
+macOS, or the distribution package on Linux.
+
+`backend/.env`, copied from `.env.example`, points at `mongodb://127.0.0.1:27017/`, `http://127.0.0.1:8545`
+and `127.0.0.1:5001`. Edit `MONGODB_URI` if your MongoDB is somewhere else. No private keys are needed: the
+wallets come from the Ganache mnemonic above. Check the database connection before starting:
+
+```bash
+cd backend
+npm run db:test      # prints the database and host it reached
+```
+
+`accounts[0]` = university, `accounts[1]` = sponsor, `accounts[2]` = student. `university:create` seeds the
+two staff accounts `CTSV-01` (student affairs) and `KHTC-01` (finance); each `<…>` comes from the previous
+command's output.
+
+```bash
+cd backend
 npm run flow:reset
 
 npm run university:create   -- "CLI University" <universityAddress>

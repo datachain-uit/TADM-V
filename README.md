@@ -30,7 +30,7 @@ Mode A/ , Mode B/
 │   └── .env.example       copy to .env
 ├── shared/params.bin      Mode A only: IPA parameters for K = 9
 └── experiments/
-    ├── data/              dataset_n{1,10,30,60,100,500}.json — inputs
+    ├── data/              dataset_n{1,10,30,60,100,500}.json — inputs, shipped; built by Mode B's experiment:prepare
     └── results/
         ├── quantitative/lap20_1509/   20-run lot: the numbers in the paper
         ├── quantitative/luot_bao_cao/ single-run lot, 12 Sep 2026: per-round totals
@@ -51,7 +51,7 @@ Both modes read the same datasets; the six files are byte-identical between `Mod
 | Node.js | 20 LTS or 22 (measured on 22.13.0) |
 | Ganache | 7.9.2 |
 | IPFS (Kubo) | 0.41.0 — only for §5 and the qualitative runner |
-| MongoDB | any instance — only for §5 and the qualitative runner |
+| MongoDB | any instance — only for §5 and the qualitative runner. MongoDB Community (`winget install MongoDB.Server`, `brew install mongodb-community`, or the distribution package) installs a service on port 27017, which is what `.env.example` points at |
 | Measured on | Windows 11, Intel Core i5-1135G7 (4C/8T), 7.7 GB RAM |
 
 On Linux/macOS the Mode A backend still looks for `target/release/prover.exe`; copy or symlink the built
@@ -86,6 +86,18 @@ cargo test --workspace --locked                  # Mode A only, 3 tests, generat
 These run without IPFS or MongoDB, with `.env` left at its example values.
 
 ## 4. Reproducing the measurements
+
+Three levels. Each writes to its own directory, so the published lot in `lap20_1509/` is never overwritten.
+All paths are under `experiments/results/` inside `Mode A/` or `Mode B/`.
+
+| | What it does | Time | Writes to |
+|---|---|---|---|
+| Level 1 | recompute the tables from the published runs | seconds | `quantitative/lap20_1509/` — rewrites the same files, which must come out unchanged |
+| Level 2 | re-measure one configuration, `n = 10`, one run | minutes | `quantitative/check/` |
+| Level 3 | re-measure everything, 20 runs per configuration | hours to days | Mode A `quantitative/lap_20/`, Mode B `quantitative/lap20_rerun/` |
+
+To compare, open `<directory>/theo_n/bang_bai_bao_theo_n.csv` and the file of the same name in
+`quantitative/lap20_1509/`, which holds the figures the paper reports.
 
 ### Level 1 — rebuild every table from the raw data (seconds, no services)
 
