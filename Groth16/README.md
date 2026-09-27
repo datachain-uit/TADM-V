@@ -79,7 +79,18 @@ npm run experiment:artifacts    # contract sizes → artifact_sizes_groth16.json
 Scenarios are `n ∈ {1, 10, 30, 60, 100, 500}`, the same set as the two modes. `experiment:gas` needs the
 chain from `npm run chain`; the other three do not.
 
-Output lands in `experiments/results/quantitative/`.
+Where each command writes:
+
+| Command | Output | Redirectable |
+|---|---|---|
+| `experiment:prepare` | `experiments/data/inputs_n*.json`, in place | **no** — it rewrites the shipped inputs. The values are deterministic; only the embedded `thoiGian` timings change |
+| `experiment:proofs` | `experiments/results/quantitative/proofs_groth16_n*.json`, `performance_groth16_n*.csv` | yes, `THU_MUC_KQ` |
+| `experiment:gas` | `experiments/results/quantitative/gas_groth16_n*.csv`, `gas_groth16_raw.csv` | yes, `THU_MUC_KQ` |
+| `experiment:artifacts` | `experiments/results/quantitative/artifact_sizes_groth16.json` | yes, `THU_MUC_KQ` |
+
+Without `THU_MUC_KQ` the last three overwrite the published lot in place. With it, they write under the
+directory it names, for example `experiments/results/quantitative/check/`, and the published files are left
+alone.
 
 ## Expected output
 
