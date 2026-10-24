@@ -1,6 +1,6 @@
 # Mode A — off-chain verification
 
-Shared setup, experiment method and the glossary of Vietnamese names inside the data files:
+Shared setup and experiment method:
 [`../README.md`](../README.md).
 
 | | |
@@ -110,7 +110,7 @@ run must be redirected with `RUNS_DIR` (see the root README §4, Level 2).
 |---|---|---|
 | Withdrawal gas, proof generation time and verification time per pool size `n` | `experiments/results/quantitative/repeated_runs/by_n/paper_table_by_n.csv` | columns `withdraw_gas`, `proof_generation_ms`, `verify_native_ms`; one row per `n` |
 | The same per Merkle depth `d`, with `k` | `experiments/results/quantitative/repeated_runs/by_depth/paper_table_by_depth.csv` | one row per `d`; the `k` probe behind each row is `by_depth/dD/k.json` |
-| Full statistics behind both tables | `.../by_n/summary_by_n.csv`, `.../by_depth/summary_by_depth.csv` | mean, SD, min, max, `R`, `N`, `cach_dem` per metric |
+| Full statistics behind both tables | `.../by_n/summary_by_n.csv`, `.../by_depth/summary_by_depth.csv` | mean, SD, min, max, `R`, `N` and the counting rule per metric |
 | Per-run means | `.../by_n/nN/per_run.csv`, `.../by_depth/dD/per_run.csv` | one row per run and metric |
 | How the lot was run | `.../repeated_runs/run_config.json` | runs per configuration, warm-up count, shuffle seed, round order, machine, prover binary hash |
 | Pool deployment gas 968 565 and pool bytecode 4 121 B | `experiments/results/quantitative/artifact_sizes.json` | `block_gas.deploy_pool.mean`, `pool_contract.deployed_bytecode_bytes` |
@@ -121,11 +121,8 @@ run must be redirected with `RUNS_DIR` (see the root README §4, Level 2).
 | University insider *(added after the paper)* | `experiments/results/insider/insider_offchain.csv` | one row per step; `payouts: 5` in the `summary` row |
 | Sepolia, 500 withdrawals *(added after the paper)* | `experiments/results/sepolia/validation_sepolia.json`, `sepolia/run_sepolia/withdrawals.csv` | the run of 23 Oct 2026 |
 
-The published tables keep the column names and labels they were written with (`thi_nghiem`, `cau_hinh`,
-`cach_dem`, `nguon`, `theo_n` / `theo_d`, …); the root README §7 translates them.
-
 The deployment gas 968 565 was measured before the comments were removed from `ShieldedPool.sol`. The contract
-compiled from this repository differs only in its metadata hash and deploys for 12 gas less (root README §8);
+compiled from this repository differs only in its metadata hash and deploys for 12 gas less (root README §7);
 its bytecode size and the withdrawal gas are unchanged.
 
 ## End-to-end flow

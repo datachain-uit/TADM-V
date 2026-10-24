@@ -130,9 +130,8 @@ cd backend && npm run experiment:repeated:summary
 ```
 
 Reads every run under `experiments/results/quantitative/repeated_runs/` and rewrites the `summary_*.csv` and
-`paper_table_*.csv` files. Expected: every number is unchanged, and `git diff` shows one change only — the first
-column, the experiment label, reads `by_n` / `by_depth` where the published tables say `theo_n` / `theo_d` (the
-names in use when the lot was measured, see §7). The `per_run.csv` files come out byte-identical.
+`paper_table_*.csv` files. Expected: every number is unchanged; only the experiment label in the first column
+may differ from the committed tables. The `per_run.csv` files come out byte-identical.
 `git checkout -- experiments/results` restores the published tables.
 
 ### Level 2 — re-measure one configuration (minutes, Ganache)
@@ -161,7 +160,7 @@ Compare `check/by_n/paper_table_by_n.csv` with row `n10` of
 
 | Mode B, `n = 10` | published lot, 20 runs, N = 200 |
 |---|---|
-| `tach_gas` | 685 269 ± 56 |
+| withdrawal gas (`verify_record_gas` + `settle_gas`) | 685 269 ± 56 |
 | `verify_record_gas` | 615 643 ± 56 |
 | `settle_gas` | 69 626 ± 0 |
 | `proof_generation_ms` | 1 229.3 ± 91.6 |
@@ -198,7 +197,7 @@ Protocol of one run: Ganache snapshot → 3 warm-up iterations (`warmup = true`,
 iterations → revert. 20 runs per configuration; the order of configurations is shuffled each round with
 seed `20260915`. Reported values are mean ± sample SD over `N = 20 · n` iterations, except quantities that
 are constant within a run (`update_root_gas`, deployment gas, Mode B `setup_ms`), counted once per run
-(`N = 20`); the `cach_dem` column states which rule applies. `by_depth` fills the tree at each depth
+(`N = 20`); a column of `summary_*.csv` states which rule applies. `by_depth` fills the tree at each depth
 (`n = 2^d`) and takes the first `n` students of `dataset_n500.json`; `d = 9` is not re-measured there, it is
 the `n = 500` configuration of `by_n`. The rule for choosing `K` per depth differs between the modes —
 see the per-mode README.
@@ -380,111 +379,16 @@ is written last), `per_run.csv` (per-run means) and `summary_<nN|dD>.csv` (mean,
 `Halo2Verifier.sol` / `Halo2Verifier.artifact.json` (the verifier compiled for that depth) and
 `dataset_n<n>_d<d>.json` (the input at that depth).
 
-## 7. Vietnamese names inside the data files
-
-File and folder names were translated to English on 2026-10-20 without touching any file's contents, so some
-JSON keys, CSV columns and values inside the published files are still Vietnamese. Regenerating every summary
-table from the raw runs (§4, Level 1) reproduces every published number; only the experiment label column
-differs (`theo_n` / `theo_d` in the published tables, `by_n` / `by_depth` in new output). The old file, folder, script and
-variable names are listed in §9.
-
-| Name | Where | Meaning |
-|---|---|---|
-| `thi_nghiem` | CSV column, `done.json` | experiment: `theo_n` = by pool size, `theo_d` = by depth (`by_n` / `by_depth` in runs made now) |
-| `cau_hinh` | CSV column, `done.json`, `run_config.json` | configuration (`nN` or `dD`) |
-| `cach_dem` | `summary_*.csv` | counting rule: `moi_lan_do` = one value per iteration; `moi_luot` = one value per run |
-| `don_vi` | `summary_*.csv` | unit |
-| `nguon` | `summary_*.csv`, `paper_table_*.csv` | source lot: `lap20` = the 20-run lot; `luot_bao_cao_12_09` = the single-run lot in `report_run/`, used only when a `by_n` lot lacks `n = 500` |
-| `tach_gas` | Mode B tables | the split withdrawal, `verify_record_gas` + `settle_gas` |
-| `k_thieu_hang` | Mode A `paper_table_by_depth.csv`, `k.json` | the largest `K` without enough rows |
-| `k_toi_thieu`, `k_toi_thieu_du_hang` | `k.json`, Mode B `verifier.json` | the smallest `K` with enough rows |
-| `cac_lan_thu`, `du_hang`, `lot_eip170`, `phep_thu`, `tieu_chi` | `k.json`, Mode B `verifier.json` | attempts, enough rows, fits EIP-170, the test applied, the selection rule |
-| `do_luc`, `xuat_luc`, `bat_dau`, `ket_thuc`, `thoi_gian_ms` | JSON files | measured at, exported at, started, finished, duration |
-| `so_lan_do`, `che_do`, `tien_trinh` | `done.json` | measured iterations; Mode A prover mode (`nong` = `warm`, `nguoi` = `cold`); process description |
-| `theo_n`, `theo_d` (top-level keys), `so_luot`, `hat_giong`, `k_theo_cau_hinh`, `tim_k`, `dinh_nghia_luot` | `run_config.json` | one entry per experiment: runs per configuration, shuffle seed, `K` per configuration, `K` search, definition of a run; Mode B also `tieu_chi_chon_k` (rule for choosing `K`) and, inside `cau_hinh`, `thiNghiem` / `ten` (experiment / name) |
-| `lan_khoi_chay`, `luot_chon`, `thu_tu`, `luot`, `may`, `so_luong_cpu`, `he_dieu_hanh`, `so_tep_sua_ngoai_ket_qua`, `tep_sua`, `duong_dan`, `kich_thuoc`, `sua_luc` | `run_config.json` | each launch: runs chosen, shuffled order, run number; machine, CPU count, operating system; number and list of files modified outside the results; prover binary path, size, modification time |
-| `loai`, `buoc`, `ghi_chu` | `sepolia/*.csv` | row kind (`trien_khai` deploy, `duyet_root` root approval, `rut` withdrawal, `dung_lai` replay, `tieu_chi` criterion, `tong_hop` summary), step, note; `ĐẠT` / `DAT` = met |
-| `meaning` | `qualitative/*-A-transparency.csv`, `*-B-privacy.csv` | partly Vietnamese; `condition_name`, `standard_quote` and `verdict` carry the criterion, the quoted clause and the result in English |
-| `viTriNop`, `viTriChuoi`; Mode B `soCalldataDaSoi`, `verifierCalldataSinhVienKhac` | `qualitative/*.json` | submission position, position on chain; calldata blobs inspected, verifier calldata of another student |
-| `thoiGian`, `ghiChu`, `nguon_dataset` | `Groth16/experiments/data/inputs_n*.json` | timings, note, source dataset |
-
-Mode B's `by_depth/d7/k_remeasured_0917.json` is a re-measurement of the `K` attempts at `d = 7` written entirely
-in Vietnamese; its result is the `cac_lan_thu` list (K = 11 and 12 fail, K = 13 builds).
-
-## 8. Notes
+## 7. Notes
 
 - Mode A is cheaper per withdrawal because its contract does not verify the proof; the two modes differ in
   trust model, and the proving stacks differ as well (IPA/Pasta vs. KZG/BN254).
 - Mode B KZG parameters come from the fixed seed `ChaCha20Rng::from_seed([42u8; 32])`. This is reproducible
   but is not a trusted setup. Mode A (IPA) needs no setup.
-- The published numbers were measured before the code was refactored into the form shipped here (commit
-  `4bae81a` holds the same results with the pre-refactor code). The refactor renamed files and removed comments,
-  including from `ShieldedPool.sol`, `MockHalo2Verifier.sol` and the generated `Halo2Verifier.sol`; the prover's
-  modes, JSON keys and output are unchanged. The compiled bytecode differs only in the Solidity metadata hash,
-  which moves deployment gas slightly: Mode A `ShieldedPool` deploys for 12 gas less, Mode B `Halo2Verifier` for
+- The published deployment gas was measured with comments still in `ShieldedPool.sol`, `MockHalo2Verifier.sol`
+  and the generated `Halo2Verifier.sol`; the contracts shipped here carry none. The compiled bytecode differs
+  only in the Solidity metadata hash, which moves deployment gas slightly: Mode A `ShieldedPool` deploys for 12 gas less, Mode B `Halo2Verifier` for
   4 554 499 gas instead of the published 4 554 511, Mode B `ShieldedPool` is unchanged. Withdrawal gas is unchanged.
 - Every key in this repository is a test key; dataset `private_key` fields are Ganache accounts of the
   mnemonic above.
 - The contracts are a research prototype and have not been audited.
-
-## 9. Names before the refactor
-
-Commit `4bae81a` is the code the paper was written against; the refactor of 2026-10-20 renamed the items below
-and kept their behaviour. Use this table when reading `4bae81a`, older notes, or a path quoted from it.
-
-**Result folders and files** (under `<mode>/experiments/results/`; contents unchanged):
-
-| Before | Now |
-|---|---|
-| `quantitative/luot_bao_cao/` | `quantitative/report_run/` |
-| `quantitative/lap20_1509/` | `quantitative/repeated_runs/` |
-| `theo_n/`, `theo_d/` | `by_n/`, `by_depth/` |
-| `luotNN/` | `runNN/` |
-| `xong.json`, `cau_hinh_chay.json`, `theo_luot.csv` | `done.json`, `run_config.json`, `per_run.csv` |
-| `tong_hop_*.csv`, `bang_bai_bao_theo_n.csv`, `bang_bai_bao_theo_d.csv` | `summary_*.csv`, `paper_table_by_n.csv`, `paper_table_by_depth.csv` |
-| `by_depth/d7/k_do_bu_1709.json` (Mode B) | `by_depth/d7/k_remeasured_0917.json` |
-| `sepolia/kiem_nghiem_*` | `sepolia/validation_*` |
-| qualitative suffixes `-A-minhbach`, `-B-riengtu`, `-C3-rangbuoc-amount`, `-dieukiendo`, `-sinhvien`, `-tieuchi` | `-A-transparency`, `-B-privacy`, `-C3-amount-binding`, `-measurement-conditions`, `-students`, `-criteria` |
-
-**Runners and scripts:**
-
-| Before | Now |
-|---|---|
-| `backend/src/experiments/lap20Experiment.ts`, `npm run experiment:lap20` | `repeatedRunsExperiment.ts`, `npm run experiment:repeated` |
-| `backend/src/experiments/summarizeLap20.ts`, `npm run experiment:lap20:tonghop` | `summarizeRepeatedRuns.ts`, `npm run experiment:repeated:summary` |
-| `backend/src/experiments/tinhChatChuanCsv.ts` | `standardPropertyCsv.ts` |
-| Groth16 `npm run tonghop` / `sosanh` / `kiemdauvao` (`backend/src/scripts/tongHopKetQua.ts`, `soSanhBaNhanh.ts`, `kiemDauVao.ts`) | `npm run summary` / `compare` / `check-inputs` (`summarizeResults.ts`, `compareThreeBranches.ts`, `checkInputs.ts`) |
-
-Every other `npm run` name is unchanged. New ones: `api:start` / `start` (web server), `student:password`,
-`pool:fund-record`, `format`, `format:check`.
-
-**Environment variables:**
-
-| Before | Now |
-|---|---|
-| `KICH_BAN` | `SCENARIOS` |
-| `THI_NGHIEM` (`theo_n` / `theo_d`) | `EXPERIMENT` (`by_n` / `by_depth`) |
-| `DO_SAU`, `N_THEO_D` | `DEPTHS`, `N_PER_DEPTH` |
-| `SO_LUOT`, `LUOT`, `HAT_GIONG` | `RUNS`, `ONLY_RUNS`, `SEED` |
-| `THU_MUC_LAP`, `CHI_IN_KE_HOACH`, `LAM_LAI` | `RUNS_DIR`, `PLAN_ONLY`, `RERUN` |
-| `CHE_DO` (`nong` / `nguoi`) | `PROVER_MODE` (`warm` / `cold`) |
-| `KIEM_NGHIEM_RPC_URL`, `KIEM_NGHIEM_PRIVATE_KEY`, `KIEM_NGHIEM_PROOFS` | `SEPOLIA_RPC_URL`, `SEPOLIA_PRIVATE_KEY`, `SEPOLIA_PROOFS` |
-| Groth16 `THU_MUC_KQ`, `EP_CHAY_LAI` | `RESULTS_DIR`, `FORCE_RERUN` |
-
-**Rust files** (both modes now use the same names):
-
-| Before | Now |
-|---|---|
-| Mode A `circuits/src/main_circuit.rs` + `config.rs` | `circuits/src/circuit.rs` |
-| Mode A `circuits/src/nullifier.rs` | merged into `circuits/src/commitment.rs` |
-| `prover/src/inputs_builder.rs` | `prover/src/flow_inputs.rs` (flow requests) + `prover/src/experiment.rs` (batch / benchmark modes) |
-| Mode A `prover/src/utils.rs` + `transfer_address.rs` | `prover/src/field.rs` |
-| Mode A `prover/src/export_verifier.rs` | removed — it was not listed in `lib.rs`, so it was never compiled |
-
-The prover's modes, JSON keys and output are unchanged, except the `prove-batch` key `so_sinh_vien`, now
-`student_count`.
-
-**Backend layout:** `backend/src/` keeps the layer folders `cli/`, `clients/`, `config/`, `models/`,
-`repositories/`, `services/`, `utils/`, but files now follow the `<entity>.model.ts` / `<entity>.repo.ts` /
-`<domain>.service.ts` / `<domain>.cli.ts` pattern; the old `controllers/*Controller.ts` wrappers and the singular
-`client/` folder are gone (the web layer uses `routes/` → `controllers/` → `services/`).

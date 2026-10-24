@@ -1,6 +1,6 @@
 # Mode B — on-chain verification
 
-Shared setup, experiment method and the glossary of Vietnamese names inside the data files:
+Shared setup and experiment method:
 [`../README.md`](../README.md).
 
 | | |
@@ -134,9 +134,9 @@ run must be redirected with `RUNS_DIR` (see the root README §4, Level 2).
 
 | Figure in the paper | File | Where in it |
 |---|---|---|
-| Withdrawal gas, proof generation time and verification time per pool size `n` | `experiments/results/quantitative/repeated_runs/by_n/paper_table_by_n.csv` | `tach_gas` is the withdrawal (`verify_record_gas` + `settle_gas`); also `proof_generation_ms`, `verify_onchain_ms` |
+| Withdrawal gas, proof generation time and verification time per pool size `n` | `experiments/results/quantitative/repeated_runs/by_n/paper_table_by_n.csv` | withdrawal gas = `verify_record_gas` + `settle_gas`; also `proof_generation_ms`, `verify_onchain_ms` |
 | The same per Merkle depth `d`, with `k` and the verifier size | `experiments/results/quantitative/repeated_runs/by_depth/paper_table_by_depth.csv` | one row per `d`; the chosen `k`, its bytecode size and every attempt are in `by_depth/dD/verifier.json` |
-| Full statistics behind both tables | `.../by_n/summary_by_n.csv`, `.../by_depth/summary_by_depth.csv` | mean, SD, min, max, `R`, `N`, `cach_dem` per metric |
+| Full statistics behind both tables | `.../by_n/summary_by_n.csv`, `.../by_depth/summary_by_depth.csv` | mean, SD, min, max, `R`, `N` and the counting rule per metric |
 | Per-run means | `.../by_n/nN/per_run.csv`, `.../by_depth/dD/per_run.csv` | one row per run and metric |
 | How the lot was run | `.../repeated_runs/run_config.json` | runs per configuration, warm-up count, shuffle seed, round order, machine, prover binary hash |
 | Pool deployment 1 979 758, verifier deployment 4 554 511, verifier 20 834 B, pool 8 697 B | `experiments/results/quantitative/artifact_sizes.json` | `block_gas.deploy_pool.mean`, `block_gas.deploy_verifier.mean`, `verifier_contract.deployed_bytecode_bytes`, `pool_contract.deployed_bytecode_bytes` |
@@ -147,13 +147,10 @@ run must be redirected with `RUNS_DIR` (see the root README §4, Level 2).
 | University insider *(added after the paper)* | `experiments/results/insider/insider_onchain.csv` | one row per step; `payouts: 1` in the `summary` row |
 | Sepolia, 500 withdrawals *(added after the paper)* | `experiments/results/sepolia/validation_sepolia.json`, `sepolia/run_sepolia/withdrawals.csv` | the run of 23 Oct 2026 |
 
-The published tables keep the column names and labels they were written with (`thi_nghiem`, `cau_hinh`,
-`cach_dem`, `nguon`, `tach_gas`, `theo_n` / `theo_d`, …); the root README §7 translates them.
-
 The deployment figures were measured before the comments were removed from the contracts. Compiled from this
 repository, `Halo2Verifier` differs only in its metadata hash and deploys for 4 554 499 gas instead of 4 554 511;
 `ShieldedPool` deploys for the same gas as published. Bytecode sizes and withdrawal gas are unchanged (root
-README §8).
+README §7).
 
 ## End-to-end flow
 

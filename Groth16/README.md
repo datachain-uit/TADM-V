@@ -4,7 +4,7 @@ The same relation as Mode B, proved with Groth16 instead of Halo2/KZG. It exists
 comparison the paper draws in its Results section, and it changes exactly one variable: the proof system.
 Same students, same Merkle depth `d = 9`, same gas accounting.
 
-Shared conventions and the glossary of Vietnamese names inside the data files: [`../README.md`](../README.md).
+Shared conventions: [`../README.md`](../README.md).
 
 | | Groth16 baseline | Mode B, for reference |
 |---|---|---|
