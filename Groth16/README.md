@@ -101,7 +101,7 @@ Groth16 inputs against the datasets of `Mode A/` and `Mode B/`), `npm run summar
 
 ## Expected output
 
-The committed lot was measured on 7 Sep 2026, on the machine in the root README §2, as **one run per
+The committed lot was measured on the machine in the root README §2, as **one run per
 scenario** in which every student withdraws once. Each figure below is the mean over the `n` withdrawals of
 that run.
 

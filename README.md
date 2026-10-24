@@ -35,7 +35,7 @@ Mode A/ , Mode B/
     ├── data/              dataset_n{1,10,30,60,100,500}.json — inputs, shipped; built by Mode B's experiment:prepare
     └── results/
         ├── quantitative/repeated_runs/   20-run lot: the numbers in the paper
-        ├── quantitative/report_run/      single-run lot, 12 Sep 2026: per-round totals
+        ├── quantitative/report_run/      single-run lot: per-round totals
         ├── quantitative/artifact_sizes.json   bytecode sizes
         ├── quantitative/depth_sweep_n100/     depth sweep d = 9, 16 … 24 with n = 100, 20 runs (added after the paper)
         ├── qualitative/               qualitative criteria run, n = 500
@@ -245,7 +245,7 @@ cd ../contracts && npx hardhat run scripts/insiderExperiment.js   # insider step
 They write, respectively, `experiments/results/quantitative/artifact_sizes.json`; a new
 `experiments/results/qualitative/qualitative[-onchain]-n<N>-<timestamp>.json` with six `.csv` beside it
 (`-onchain` in Mode B only; see the per-mode README for the file list); `experiments/results/anonymity/`
-(below); and `experiments/results/sepolia/validation_<network>.json` plus its `.csv` (fixed name, overwritten by the next run; the 12 Sep 2026 files keep their dated names).
+(below); and `experiments/results/sepolia/validation_<network>.json` plus its `.csv` (fixed name, overwritten by the next run).
 `experiment:sepolia-fresh-proofs` writes `sepolia/fresh_recipients_n500.json` (addresses only, no keys) and
 `sepolia/proofs_fresh_recipients_n500.json`; `experiment:insider-proof` writes `insider/diverted_proof_n1.json`;
 `insiderExperiment.js` writes `insider/insider_offchain.csv` (Mode A) or `insider/insider_onchain.csv` (Mode B).
@@ -277,7 +277,7 @@ setup receipts) and `withdrawals.jsonl` / `withdrawals.csv`, appended as each wi
 receipt block, blocks waited, confirmation time). If it stops — out of funds, network error — rerun with
 `SEPOLIA_RUN=<that folder>`: it reuses the pool, skips spent nullifiers and, in Mode B, settles a claim recorded
 before the stop; a second fresh run refuses while that folder exists. The wallet balance is checked before every withdrawal. Optional: `SEPOLIA_PRIORITY_GWEI` (fixed
-tip), `SEPOLIA_TX_TIMEOUT_MS` (default 600 000). Budget on 2026-10-21: about 168 000 gas per Mode A withdrawal and
+tip), `SEPOLIA_TX_TIMEOUT_MS` (default 600 000). Budget: about 168 000 gas per Mode A withdrawal and
 about 1.07 million per Mode B withdrawal (`verifyAndRecord` + `settle`), so 500 + 500 withdrawals need about
 630 million gas — 0.63 SepETH per gwei of gas price.
 
@@ -290,7 +290,7 @@ The qualitative runner with `"resetDatabase": true` only accepts a database whos
 `qualitative` or `experiment`. Its verdicts (`pass` / `partial` / `by_design_not_met`) must match
 `experiments/results/qualitative/qualitative-*n500-2026-09-12T*`.
 
-Our Sepolia run of 12 Sep 2026, verifiable on Etherscan:
+The Sepolia run quoted in the paper, verifiable on Etherscan:
 
 | Contract | Address |
 |---|---|
@@ -298,7 +298,7 @@ Our Sepolia run of 12 Sep 2026, verifiable on Etherscan:
 | Mode B `ShieldedPool` | `0xB222C4f161F486A1860a29BAF83f74F952115359` |
 | Mode B `Halo2Verifier` | `0xf6D276CB65E3040719aF610bc771941C6715340D` |
 
-Our Sepolia run of 23 Oct 2026, 500 withdrawals per mode to fresh recipient wallets, all five criteria met
+The Sepolia run with 500 withdrawals per mode to fresh recipient wallets, all five criteria met
 (`sepolia/validation_sepolia.json`, per-withdrawal log in `sepolia/run_sepolia/`):
 
 | Contract | Address |
@@ -364,9 +364,9 @@ decrypts it in the browser and submits `{cid, note}`.
 | Gas and time vs. depth `d` | `experiment:repeated` (`by_depth`) | `quantitative/repeated_runs/by_depth/paper_table_by_depth.csv`, `dD/k.json`, `dD/verifier.json` |
 | Gas and time at `d = 16 … 24` (`n = 100`) | `experiment:repeated` (`by_depth`, `N_PER_DEPTH=100`) | `quantitative/depth_sweep_n100/by_depth/paper_table_by_depth.csv`, same layout as above |
 | Deployment gas, bytecode vs. EIP-170 | `experiment:artifacts` | `quantitative/artifact_sizes.json` |
-| Totals per scholarship round | single-run lot, 12 Sep 2026 | `quantitative/report_run/` |
+| Totals per scholarship round | single-run lot | `quantitative/report_run/` |
 | Qualitative criteria | `experiment:qualitative` | `qualitative/` |
-| Sepolia validation | `experiment:sepolia` | 23 Oct 2026: `sepolia/validation_sepolia.json` / `.csv`, per-withdrawal log in `sepolia/run_sepolia/`; 12 Sep 2026: `sepolia/validation_sepolia_2026-09-12T*.json` |
+| Sepolia validation | `experiment:sepolia` | 500 withdrawals per mode: `sepolia/validation_sepolia.json` / `.csv`, per-withdrawal log in `sepolia/run_sepolia/`; the run quoted in the paper: `sepolia/validation_sepolia_2026-09-12T*.json` |
 | University insider | `insiderExperiment.js`, `InsiderTrust.js`, `InsiderDiversion.js` | `insider/insider_offchain.csv` (Mode A), `insider/insider_onchain.csv` (Mode B), `insider/hardhat_insider.txt` |
 | Anonymity by amount tier, wallet reuse | `experiment:anonymity` | `anonymity/anonymity_*.csv`, `anonymity_summary.json`, `wallet_reuse_n*.csv` |
 | Groth16 withdrawal gas at `n = 500` | `Groth16`: `experiment:gas` | `Groth16/experiments/results/quantitative/gas_groth16_n500.csv`, mean of `verify_record_gas` + `settle_gas` |
