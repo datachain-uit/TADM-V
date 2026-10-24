@@ -37,8 +37,10 @@ Mode A/ , Mode B/
         ├── quantitative/repeated_runs/   20-run lot: the numbers in the paper
         ├── quantitative/report_run/      single-run lot, 12 Sep 2026: per-round totals
         ├── quantitative/artifact_sizes.json   bytecode sizes
+        ├── quantitative/depth_sweep_n100/     depth sweep d = 9, 16 … 24 with n = 100, 20 runs (added after the paper)
         ├── qualitative/               qualitative criteria run, n = 500
         ├── anonymity/                 anonymity by amount tier and the wallet-reuse probe (added after the paper)
+        ├── insider/                   what a university insider can withdraw, step by step (added after the paper)
         └── sepolia/                   public-testnet validation
 
 Groth16/                   baseline of the same relation, proved with Groth16; own package.json, chain on port 8546
@@ -208,6 +210,25 @@ and `PLAN_ONLY=1` (print the plan and exit). `experiment:repeated:summary` reads
 
 To resume after a stop: restart Ganache, then rerun the same command. Runs holding `done.json` are skipped.
 
+### Depth sweep d = 16 … 24 (added after the paper)
+
+```bash
+cd backend
+# Mode A
+EXPERIMENT=by_depth DEPTHS=9,16,17,18,19,20,21,22,23,24 N_PER_DEPTH=100 RUNS=20 PROVER_MODE=warm RUNS_DIR=experiments/results/quantitative/depth_sweep_n100 npm run experiment:repeated
+# Mode B
+EXPERIMENT=by_depth DEPTHS=9,16,17,18,19,20,21,22,23,24 N_PER_DEPTH=100 RUNS=20 RUNS_DIR=experiments/results/quantitative/depth_sweep_n100 npm run experiment:repeated
+RUNS_DIR=experiments/results/quantitative/depth_sweep_n100 npm run experiment:repeated:summary   # in each mode
+```
+
+Same protocol as Level 3 (20 runs, 3 warm-up iterations, shuffled order, seed `20260915`). A full tree is not
+possible at these depths — it needs `2^d` proofs per run (65 536 at `d = 16`) — so every depth holds the first
+100 students of `dataset_n500.json`; the per-withdrawal values depend on `d`, not on `n`. `d = 9` is measured
+in the same sweep as an anchor and must agree with row `n100` of `repeated_runs/by_n/` (same `K`, same proof
+size, gas and times within one SD). `K` chosen: Mode A 10 for `d = 16 … 21`, 11 for `d = 22 … 24`; Mode B 14
+for every `d = 16 … 24`, with a verifier of at most 22 320 B (90.8 % of EIP-170). Duration on the machine in
+§2: Mode A ≈ 2.6 h, Mode B ≈ 42 h.
+
 ### Other runners
 
 ```bash
@@ -217,12 +238,26 @@ cp experiment.config.example.json experiment.config.json   # fill in wallets fro
 npm run experiment:qualitative -- ./experiment.config.json # Ganache + IPFS + MongoDB
 npm run experiment:anonymity -- ./anonymity.config.json   # Ganache + IPFS + MongoDB
 npm run experiment:sepolia                                 # needs SEPOLIA_RPC_URL and a funded SEPOLIA_PRIVATE_KEY in .env
+npm run experiment:sepolia-fresh-proofs                    # 500 fresh recipient wallets and their proofs, for experiment:sepolia
+npm run experiment:insider-proof                           # Mode B only: a real proof of the n = 1 note paid to the university wallet
+cd ../contracts && npx hardhat run scripts/insiderExperiment.js   # insider steps on Hardhat's in-process chain → insider/*.csv
 ```
 
 They write, respectively, `experiments/results/quantitative/artifact_sizes.json`; a new
 `experiments/results/qualitative/qualitative[-onchain]-n<N>-<timestamp>.json` with six `.csv` beside it
 (`-onchain` in Mode B only; see the per-mode README for the file list); `experiments/results/anonymity/`
 (below); and `experiments/results/sepolia/validation_<network>.json` plus its `.csv` (fixed name, overwritten by the next run; the 12 Sep 2026 files keep their dated names).
+`experiment:sepolia-fresh-proofs` writes `sepolia/fresh_recipients_n500.json` (addresses only, no keys) and
+`sepolia/proofs_fresh_recipients_n500.json`; `experiment:insider-proof` writes `insider/diverted_proof_n1.json`;
+`insiderExperiment.js` writes `insider/insider_offchain.csv` (Mode A) or `insider/insider_onchain.csv` (Mode B).
+
+**Insider.** One row per attempted step, with its outcome, revert reason and gas. Mode A: the university pays
+itself with fabricated nullifiers under an approved root (5 payouts against 1 published commitment); only the
+root, nullifier reuse, the pool balance and `onlySchool` stop it. Mode B: a fabricated nullifier, a changed
+recipient and a modified proof are all rejected; a university that knows `rho` can still prove the student's
+note again to its own wallet (1 payout), after which the student's own claim is rejected with
+`claim already recorded`. The contract tests `InsiderTrust.js` (Mode A) and `InsiderDiversion.js` (Mode B)
+check the same behaviour; `insider/hardhat_insider.txt` is their log.
 
 **Anonymity runner.** It drives the real flow for every scenario in the config and then plays a chain observer
 who knows every student's approved amount and reads only the `Withdraw` events. `anonymity.config.json` holds
@@ -247,6 +282,11 @@ tip), `SEPOLIA_TX_TIMEOUT_MS` (default 600 000). Budget on 2026-10-21: about 168
 about 1.07 million per Mode B withdrawal (`verifyAndRecord` + `settle`), so 500 + 500 withdrawals need about
 630 million gas — 0.63 SepETH per gwei of gas price.
 
+The default proofs pay the Ganache mnemonic's public wallets, and on Sepolia most of those addresses have been
+delegated to contracts by third parties (EIP-7702) and reject ETH. `experiment:sepolia-fresh-proofs` therefore
+draws 500 fresh recipient addresses and re-proves every note for them with the same root and nullifier; pass
+the result with `SEPOLIA_PROOFS=experiments/results/sepolia/proofs_fresh_recipients_n500.json`.
+
 The qualitative runner with `"resetDatabase": true` only accepts a database whose name contains
 `qualitative` or `experiment`. Its verdicts (`pass` / `partial` / `by_design_not_met`) must match
 `experiments/results/qualitative/qualitative-*n500-2026-09-12T*`.
@@ -258,6 +298,15 @@ Our Sepolia run of 12 Sep 2026, verifiable on Etherscan:
 | Mode A `ShieldedPool` | `0xb5dB57aBc6e8F99907db4D7b7511a6A1F7BCaaC1` |
 | Mode B `ShieldedPool` | `0xB222C4f161F486A1860a29BAF83f74F952115359` |
 | Mode B `Halo2Verifier` | `0xf6D276CB65E3040719aF610bc771941C6715340D` |
+
+Our Sepolia run of 23 Oct 2026, 500 withdrawals per mode to fresh recipient wallets, all five criteria met
+(`sepolia/validation_sepolia.json`, per-withdrawal log in `sepolia/run_sepolia/`):
+
+| Contract | Address |
+|---|---|
+| Mode A `ShieldedPool` | `0x367DeBF01d08C429DDC8F68BbFa9894f148f3068` |
+| Mode B `ShieldedPool` | `0xe953a5a9027Ce55E9dCc9557C09CaaCF2Bc5d4AD` |
+| Mode B `Halo2Verifier` | `0x644f5112Dd508AE8917a35fA31377A2D8912F3E0` |
 
 `updateRoot` costs more there than on Ganache: Sepolia applies the EIP-7623 calldata floor.
 
@@ -314,10 +363,12 @@ decrypts it in the browser and submits `{cid, note}`.
 |---|---|---|
 | Gas and time vs. pool size `n` | `experiment:repeated` (`by_n`) | `quantitative/repeated_runs/by_n/paper_table_by_n.csv`; full statistics in `summary_by_n.csv` |
 | Gas and time vs. depth `d` | `experiment:repeated` (`by_depth`) | `quantitative/repeated_runs/by_depth/paper_table_by_depth.csv`, `dD/k.json`, `dD/verifier.json` |
+| Gas and time at `d = 16 … 24` (`n = 100`) | `experiment:repeated` (`by_depth`, `N_PER_DEPTH=100`) | `quantitative/depth_sweep_n100/by_depth/paper_table_by_depth.csv`, same layout as above |
 | Deployment gas, bytecode vs. EIP-170 | `experiment:artifacts` | `quantitative/artifact_sizes.json` |
 | Totals per scholarship round | single-run lot, 12 Sep 2026 | `quantitative/report_run/` |
 | Qualitative criteria | `experiment:qualitative` | `qualitative/` |
-| Sepolia validation | `experiment:sepolia` | `sepolia/validation_sepolia_*.json` / `.csv`; per-withdrawal log in `sepolia/run_sepolia/` |
+| Sepolia validation | `experiment:sepolia` | 23 Oct 2026: `sepolia/validation_sepolia.json` / `.csv`, per-withdrawal log in `sepolia/run_sepolia/`; 12 Sep 2026: `sepolia/validation_sepolia_2026-09-12T*.json` |
+| University insider | `insiderExperiment.js`, `InsiderTrust.js`, `InsiderDiversion.js` | `insider/insider_offchain.csv` (Mode A), `insider/insider_onchain.csv` (Mode B), `insider/hardhat_insider.txt` |
 | Anonymity by amount tier, wallet reuse | `experiment:anonymity` | `anonymity/anonymity_*.csv`, `anonymity_summary.json`, `wallet_reuse_n*.csv` |
 | Groth16 withdrawal gas at `n = 500` | `Groth16`: `experiment:gas` | `Groth16/experiments/results/quantitative/gas_groth16_n500.csv`, mean of `verify_record_gas` + `settle_gas` |
 | Groth16 verifier size | `Groth16`: `experiment:artifacts` | `Groth16/experiments/results/quantitative/artifact_sizes_groth16.json`, `verifier_contract.deployed_bytecode_bytes` |

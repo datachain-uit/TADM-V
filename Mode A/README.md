@@ -81,6 +81,8 @@ RUNS_DIR=experiments/results/quantitative/repeated_runs_warm npm run experiment:
 npm run experiment:quantitative                    # single-run lot; SCENARIOS=1,10 restricts it
 npm run experiment:artifacts
 npm run experiment:qualitative -- ./experiment.config.json
+EXPERIMENT=by_depth DEPTHS=9,16,17,18,19,20,21,22,23,24 N_PER_DEPTH=100 RUNS=20 PROVER_MODE=warm RUNS_DIR=experiments/results/quantitative/depth_sweep_n100 npm run experiment:repeated   # ~2.6 h
+cd ../contracts && npx hardhat run scripts/insiderExperiment.js   # → experiments/results/insider/insider_offchain.csv
 ```
 
 Where each command writes, under `experiments/results/`:
@@ -115,6 +117,9 @@ run must be redirected with `RUNS_DIR` (see the root README §4, Level 2).
 | Totals per scholarship round | `experiments/results/quantitative/report_run/` | the single-run lot of 12 Sep 2026 |
 | Sepolia deployment and withdrawals | `experiments/results/sepolia/validation_sepolia_2026-09-12T06-10-28.json` | addresses, gas, transaction hashes; the `.csv` beside it is the same run |
 | Qualitative criteria | `experiments/results/qualitative/qualitative-n500-2026-09-12T22-07-43-781Z-criteria.csv` | one row per criterion and evidence item, with its verdict |
+| Depth sweep `d = 16 … 24`, `n = 100` *(added after the paper)* | `experiments/results/quantitative/depth_sweep_n100/by_depth/paper_table_by_depth.csv` | one row per `d`, `d9` is the anchor; `K` = 10 for `d = 16 … 21`, 11 for `d = 22 … 24` |
+| University insider *(added after the paper)* | `experiments/results/insider/insider_offchain.csv` | one row per step; `payouts: 5` in the `summary` row |
+| Sepolia, 500 withdrawals *(added after the paper)* | `experiments/results/sepolia/validation_sepolia.json`, `sepolia/run_sepolia/withdrawals.csv` | the run of 23 Oct 2026 |
 
 The published tables keep the column names and labels they were written with (`thi_nghiem`, `cau_hinh`,
 `cach_dem`, `nguon`, `theo_n` / `theo_d`, …); the root README §7 translates them.

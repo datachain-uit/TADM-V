@@ -79,7 +79,8 @@ verifier. Measured at `d = 1`: `K = 10` has enough rows but yields a 31 110 B ve
 `K = 11` yields 20 806 B. Every attempt is recorded in
 `experiments/results/quantitative/repeated_runs/by_depth/dD/verifier.json`. At `d = 7` the sweep started
 directly at `K = 13`; `by_depth/d7/k_remeasured_0917.json` records the follow-up measurement in which `K = 11`
-and `K = 12` both fail.
+and `K = 12` both fail. In the sweep `d = 16 … 24` every depth needs `K = 14`: at `K = 13` the verifier for
+`d = 16` is 25 255 B, over the limit.
 
 ## Runners
 
@@ -94,6 +95,9 @@ npm run experiment:proofs                          # regenerates proofs AND rewr
 npm run experiment:gas                             # ~5–7 min, Ganache only; SCENARIOS=1,10 restricts it
 npm run experiment:artifacts
 npm run experiment:qualitative -- ./experiment.config.json
+EXPERIMENT=by_depth DEPTHS=9,16,17,18,19,20,21,22,23,24 N_PER_DEPTH=100 RUNS=20 RUNS_DIR=experiments/results/quantitative/depth_sweep_n100 npm run experiment:repeated   # ~42 h
+npm run experiment:insider-proof                  # → experiments/results/insider/diverted_proof_n1.json
+cd ../contracts && npx hardhat run scripts/insiderExperiment.js   # → experiments/results/insider/insider_onchain.csv
 ```
 
 The six datasets ship with the artifact, so `experiment:prepare` is not part of reproducing anything: it
@@ -139,6 +143,9 @@ run must be redirected with `RUNS_DIR` (see the root README §4, Level 2).
 | Totals per scholarship round | `experiments/results/quantitative/report_run/` | the single-run lot of 12 Sep 2026 |
 | Sepolia deployment and withdrawals | `experiments/results/sepolia/validation_sepolia_2026-09-12T06-08-05.json` | addresses, gas, transaction hashes; the `.csv` beside it is the same run |
 | Qualitative criteria | `experiments/results/qualitative/qualitative-onchain-n500-2026-09-12T23-03-03-358Z-criteria.csv` | one row per criterion and evidence item, with its verdict |
+| Depth sweep `d = 16 … 24`, `n = 100` *(added after the paper)* | `experiments/results/quantitative/depth_sweep_n100/by_depth/paper_table_by_depth.csv` | one row per `d`, `d9` is the anchor; `K` = 14 for `d = 16 … 24`, verifier sizes in `dD/verifier.json` |
+| University insider *(added after the paper)* | `experiments/results/insider/insider_onchain.csv` | one row per step; `payouts: 1` in the `summary` row |
+| Sepolia, 500 withdrawals *(added after the paper)* | `experiments/results/sepolia/validation_sepolia.json`, `sepolia/run_sepolia/withdrawals.csv` | the run of 23 Oct 2026 |
 
 The published tables keep the column names and labels they were written with (`thi_nghiem`, `cau_hinh`,
 `cach_dem`, `nguon`, `tach_gas`, `theo_n` / `theo_d`, …); the root README §7 translates them.
