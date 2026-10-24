@@ -1,89 +1,44 @@
-const {
-    connectDatabase,
-    disconnectDatabase
-} = require("../config/database");
+import { connectDatabase, disconnectDatabase } from '../config/db';
+import { WithdrawalRequest } from '../models/withdrawalRequest.model';
+import { StudentScholarship } from '../models/studentScholarship.model';
+import { ScholarshipPool } from '../models/scholarshipPool.model';
+import { UniversityStudent } from '../models/universityStudent.model';
+import { UniversityStaff } from '../models/universityStaff.model';
+import { University } from '../models/university.model';
+import { MerkleNode } from '../models/merkleNode.model';
+import { printJson } from '../utils/serviceOutput';
 
-const {
-    University
-} = require("../models/University");
-
-const {
-    UniversityStudent
-} = require("../models/UniversityStudent");
-
-const {
-    ScholarshipPool
-} = require("../models/ScholarshipPool");
-
-const {
-    StudentScholarship
-} = require("../models/StudentScholarship");
-
-const {
-    WithdrawalRequest
-} = require("../models/WithdrawalRequest");
-
-const {
-    MerkleNode
-} = require("../models/MerkleNode");
+const MODELS = [
+  WithdrawalRequest,
+  StudentScholarship,
+  ScholarshipPool,
+  UniversityStudent,
+  UniversityStaff,
+  University,
+  MerkleNode,
+];
 
 async function resetDatabase() {
-    const connection = await connectDatabase();
+  const connection = await connectDatabase();
 
-    console.error(
-        "RESETTING DATABASE:",
-        connection.name
-    );
+  console.error('RESETTING DATABASE:', connection.name);
 
-    const withdrawalRequests =
-        await WithdrawalRequest.deleteMany({});
+  const deletedDocuments: Record<string, number> = {};
 
-    const studentScholarships =
-        await StudentScholarship.deleteMany({});
+  for (const model of MODELS) {
+    deletedDocuments[model.collection.name] = (await model.deleteMany({})).deletedCount;
+  }
 
-    const scholarshipPools =
-        await ScholarshipPool.deleteMany({});
-
-    const universityStudents =
-        await UniversityStudent.deleteMany({});
-
-    const universities =
-        await University.deleteMany({});
-
-    /*
-     * K10 — cay Merkle da luu. Khong xoa thi cac nut cu con lai
-     * mo coi (khoa theo pool._id cu) va phinh dan qua moi lan reset.
-     */
-    const merkleNodes =
-        await MerkleNode.deleteMany({});
-
-    return {
-        reset: true,
-        storage: "MongoDB",
-        database: connection.name,
-        deletedDocuments: {
-            withdrawalrequests: withdrawalRequests.deletedCount,
-            studentscholarships: studentScholarships.deletedCount,
-            scholarshippools: scholarshipPools.deletedCount,
-            universitystudents: universityStudents.deletedCount,
-            universities: universities.deletedCount,
-            merklenodes: merkleNodes.deletedCount
-        }
-    };
+  return {
+    reset: true,
+    storage: 'MongoDB',
+    database: connection.name,
+    deletedDocuments,
+  };
 }
 
-module.exports = {
-    resetDatabase
-};
+export { resetDatabase };
 
 if (require.main === module) {
-    resetDatabase()
-        .then((result: any) => {
-            console.log(JSON.stringify(result, null, 2));
-        })
-        .catch((error: any) => {
-            console.error(error);
-            process.exitCode = 1;
-        })
-        .finally(disconnectDatabase);
+  resetDatabase().then(printJson).catch(require('../cli/errorHandler').handleCliError).finally(disconnectDatabase);
 }

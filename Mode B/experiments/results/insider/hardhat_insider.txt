@@ -1,0 +1,29 @@
+
+
+
+
+  ShieldedPool - university insider with a REAL proof (Mode B)
+    ✔ the diverted proof is for the SAME note: same root, nullifier and amount, recipient = university wallet (44ms)
+    ✔ INSIDER: the university records and settles the diverted proof and the money goes to its own wallet (168ms)
+    ✔ INSIDER: afterwards the student cannot withdraw the scholarship with the genuine proof (107ms)
+    ✔ the same note cannot be paid twice: a second settle is rejected (112ms)
+    ✔ payouts never exceed the published commitments (1 note -> at most 1 payout) (102ms)
+
+  ShieldedPool.withdraw - the require checks that bind arguments to the proof
+    ✔ accepts when the arguments match the public inputs in the proof (94ms)
+    ✔ reverts when ROOT differs from the public input in the proof
+    ✔ reverts when NULLIFIER differs from the public input in the proof
+    ✔ reverts when AMOUNT differs from the public input in the proof
+    ✔ reverts when RECIPIENT differs from the wallet in the proof (A25 - proof copied to another wallet)
+    ✔ reverts when the root was not approved by the university (validRoot) (96ms)
+
+  Halo2Verifier (the REAL verifier) is a gate
+    ✔ accepts genuine calldata (62ms)
+    ✔ rejects when 1 byte of a PUBLIC INPUT (nullifier) is changed (83ms)
+    ✔ rejects when 1 byte of a PUBLIC INPUT (amount) is changed (73ms)
+    ✔ rejects when 1 byte of a PUBLIC INPUT (recipient - A25) is changed (86ms)
+    ✔ rejects when 1 byte of the PROOF is changed
+
+
+  16 passing (3s)
+

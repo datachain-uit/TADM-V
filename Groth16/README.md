@@ -4,7 +4,7 @@ The same relation as Mode B, proved with Groth16 instead of Halo2/KZG. It exists
 comparison the paper draws in its Results section, and it changes exactly one variable: the proof system.
 Same students, same Merkle depth `d = 9`, same gas accounting.
 
-Shared conventions and the glossary of Vietnamese names: [`../README.md`](../README.md).
+Shared conventions and the glossary of Vietnamese names inside the data files: [`../README.md`](../README.md).
 
 | | Groth16 baseline | Mode B, for reference |
 |---|---|---|
@@ -64,6 +64,7 @@ bytecode, the figure the paper reports.
 
 To reproduce the published gas figures, use the `build/withdraw_final.zkey` and the
 `contracts/contracts/Groth16Verifier.sol` that ship with this artifact, and skip this section.
+`Groth16Verifier.sol` is kept exactly as `setup:verifier` (snarkjs) generated it, including its GPL-3.0 notice.
 
 The `.ptau` files are not shipped — they are 31 MB and `setup:ptau` regenerates them.
 
@@ -76,21 +77,27 @@ npm run experiment:gas          # deploys, withdraws, records gas → gas_groth1
 npm run experiment:artifacts    # contract sizes → artifact_sizes_groth16.json
 ```
 
-Scenarios are `n ∈ {1, 10, 30, 60, 100, 500}`, the same set as the two modes. `experiment:gas` needs the
-chain from `npm run chain`; the other three do not.
+Scenarios are `n ∈ {1, 10, 30, 60, 100, 500}`, the same set as the two modes; `SCENARIOS=10` (or `1,10`)
+restricts `experiment:proofs` and `experiment:gas`. `experiment:gas` needs the chain from `npm run chain`
+(`RPC_URL` overrides `http://127.0.0.1:8546`); the other three do not. `experiment:proofs` skips a scenario whose
+proof file is newer than the proving key and its input; `FORCE_RERUN=1` regenerates it anyway.
 
 Where each command writes:
 
 | Command | Output | Redirectable |
 |---|---|---|
-| `experiment:prepare` | `experiments/data/inputs_n*.json`, in place | **no** — it rewrites the shipped inputs. The values are deterministic; only the embedded `thoiGian` timings change |
-| `experiment:proofs` | `experiments/results/quantitative/proofs_groth16_n*.json`, `performance_groth16_n*.csv` | yes, `THU_MUC_KQ` |
-| `experiment:gas` | `experiments/results/quantitative/gas_groth16_n*.csv`, `gas_groth16_raw.csv` | yes, `THU_MUC_KQ` |
-| `experiment:artifacts` | `experiments/results/quantitative/artifact_sizes_groth16.json` | yes, `THU_MUC_KQ` |
+| `experiment:prepare` | `experiments/data/inputs_n*.json`, in place, from `../Mode B/experiments/data/dataset_n*.json` | **no** — it rewrites the shipped inputs. The values are deterministic; only the embedded `thoiGian` timings and the wording of the `hash`, `nguon_dataset` and `thoiGian.ghiChu` notes change (English, and the dataset path of this repository) |
+| `experiment:proofs` | `experiments/results/quantitative/proofs_groth16_n*.json`, `performance_groth16_n*.csv` | yes, `RESULTS_DIR` |
+| `experiment:gas` | `experiments/results/quantitative/gas_groth16_n*.csv`, `gas_groth16_raw.csv` | yes, `RESULTS_DIR` |
+| `experiment:artifacts` | `experiments/results/quantitative/artifact_sizes_groth16.json` | yes, `RESULTS_DIR` |
 
-Without `THU_MUC_KQ` the last three overwrite the published lot in place. With it, they write under the
+Without `RESULTS_DIR` the last three overwrite the published lot in place. With it, they write under the
 directory it names, for example `experiments/results/quantitative/check/`, and the published files are left
 alone.
+
+Three helper scripts only read results and print a Markdown report on stdout: `npm run check-inputs` (the
+Groth16 inputs against the datasets of `Mode A/` and `Mode B/`), `npm run summary` (this lot) and
+`npm run compare` (gas of the three branches, from `Mode A/` and `Mode B/` `gas_*_raw.csv` and this lot).
 
 ## Expected output
 
@@ -140,23 +147,23 @@ The rest of the lot — `gas_groth16_n{1,10,30,60,100}.csv`, `performance_groth1
 
 ## Reproducing a single scenario
 
-Set `THU_MUC_KQ` so the run writes somewhere else and the published lot stays untouched. Without it, the
+Set `RESULTS_DIR` so the run writes somewhere else and the published lot stays untouched. Without it, the
 runners overwrite the files above.
 
 ```bash
 npm run chain                                                        # one terminal, port 8546
-THU_MUC_KQ=experiments/results/quantitative/check npm run experiment:artifacts
-THU_MUC_KQ=experiments/results/quantitative/check KICH_BAN=10 npm run experiment:gas
+RESULTS_DIR=experiments/results/quantitative/check npm run experiment:artifacts
+RESULTS_DIR=experiments/results/quantitative/check SCENARIOS=10 npm run experiment:gas
 ```
 
-PowerShell: `$env:THU_MUC_KQ = "experiments/results/quantitative/check"`, and so on.
+PowerShell: `$env:RESULTS_DIR = "experiments/results/quantitative/check"`, and so on.
 
 `experiment:gas` reads its proofs from `check/` when they are there and from the published lot otherwise, so
 the command above works without regenerating proofs first.
 
 Then compare:
 
-| | Published lot | A `KICH_BAN=10` run |
+| | Published lot | A `SCENARIOS=10` run |
 |---|---|---|
 | `verify_record_gas` + `settle_gas` | 391 440 | 391 440 |
 | verifier deployed bytecode | 1 816 B | 1 816 B |

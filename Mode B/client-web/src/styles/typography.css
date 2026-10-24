@@ -1,0 +1,9 @@
+body {
+  font: 14px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+h1 { font-size: 22px; margin: 0 0 4px; }
+h2 { font-size: 16px; margin: 0 0 12px; }
+code { font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; font-size: 12px; }
+.muted { color: var(--muted); }
+.center { text-align: center; margin-top: 20vh; }

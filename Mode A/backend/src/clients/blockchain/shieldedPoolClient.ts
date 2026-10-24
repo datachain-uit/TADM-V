@@ -1,542 +1,307 @@
-const {
-    Web3
-} = require(
-    "web3"
-);
+import { Web3 } from 'web3';
+import { getBlockchainRpcUrl } from '../../config/env';
+import { retryChainRead } from '../../utils/chainRead';
 
-const {
-    getBlockchainRpcUrl
-} = require("../../config/environment");
+const artifact = require('../../../../contracts/artifacts/' + 'contracts/ShieldedPool.sol/' + 'ShieldedPool.json');
 
-const artifact =
-    require(
-        "../../../../contracts/artifacts/" +
-        "contracts/ShieldedPool.sol/" +
-        "ShieldedPool.json"
-    );
-
-let web3Instance:
-    any;
+let web3Instance: any;
 
 function getWeb3() {
-    if (!web3Instance) {
-        web3Instance =
-            new Web3(
-                getBlockchainRpcUrl()
-            );
-    }
+  if (!web3Instance) {
+    web3Instance = new Web3(getBlockchainRpcUrl());
+  }
 
-    return web3Instance;
+  return web3Instance;
 }
 
-function normalizeAddress(
-    address:
-        string
-) {
-    const web3 =
-        getWeb3();
+function normalizeAddress(address: string) {
+  const web3 = getWeb3();
 
-    if (
-        !address
-        ||
-        !web3.utils.isAddress(
-            address
-        )
-    ) {
-        throw new Error(
-            `Invalid Ethereum address: ${address}`
-        );
-    }
+  if (!address || !web3.utils.isAddress(address)) {
+    throw new Error(`Invalid Ethereum address: ${address}`);
+  }
 
-    return address.toLowerCase();
+  return address.toLowerCase();
 }
 
-function normalizePrivateKey(
-    privateKey:
-        string
-) {
-    const normalized =
-        privateKey.startsWith(
-            "0x"
-        )
-            ?
-            privateKey
-            :
-            "0x" + privateKey;
+function normalizePrivateKey(privateKey: string) {
+  const normalized = privateKey.startsWith('0x') ? privateKey : '0x' + privateKey;
 
-    if (
-        !/^0x[0-9a-fA-F]{64}$/.test(
-            normalized
-        )
-    ) {
-        throw new Error(
-            "Private key must contain exactly 32 bytes"
-        );
-    }
+  if (!/^0x[0-9a-fA-F]{64}$/.test(normalized)) {
+    throw new Error('Private key must contain exactly 32 bytes');
+  }
 
-    return normalized;
+  return normalized;
 }
 
 function assertUnsignedWei(
-    value:
-        string,
+  value: string,
 
-    fieldName:
-        string
+  fieldName: string,
 ) {
-    if (
-        !/^[0-9]+$/.test(
-            value
-        )
-    ) {
-        throw new Error(
-            `${fieldName} must be an unsigned decimal wei string`
-        );
-    }
+  if (!/^[0-9]+$/.test(value)) {
+    throw new Error(`${fieldName} must be an unsigned decimal wei string`);
+  }
 
-    return BigInt(
-        value
-    ).toString();
+  return BigInt(value).toString();
 }
 
-function addPrivateKeyAccount(
-    privateKey:
-        string
-) {
-    const web3 =
-        getWeb3();
+function addPrivateKeyAccount(privateKey: string) {
+  const web3 = getWeb3();
 
-    const account =
-        web3.eth.accounts
-            .privateKeyToAccount(
-                normalizePrivateKey(
-                    privateKey
-                )
-            );
+  const account = web3.eth.accounts.privateKeyToAccount(normalizePrivateKey(privateKey));
 
-    web3.eth.accounts.wallet.add(
-        account
-    );
+  web3.eth.accounts.wallet.add(account);
 
-    return account;
+  return account;
 }
 
 async function resolveSender(
-    expectedAddress:
-        string,
+  expectedAddress: string,
 
-    privateKey?:
-        string
+  privateKey?: string,
 ) {
-    const web3 =
-        getWeb3();
+  const web3 = getWeb3();
 
-    const expected =
-        normalizeAddress(
-            expectedAddress
-        );
+  const expected = normalizeAddress(expectedAddress);
 
-    if (privateKey) {
-        const account =
-            addPrivateKeyAccount(
-                privateKey
-            );
+  if (privateKey) {
+    const account = addPrivateKeyAccount(privateKey);
 
-        if (
-            normalizeAddress(
-                account.address
-            )
-            !==
-            expected
-        ) {
-            throw new Error(
-                "Private key does not belong to the expected wallet address"
-            );
-        }
-
-        return account.address;
+    if (normalizeAddress(account.address) !== expected) {
+      throw new Error('Private key does not belong to the expected wallet address');
     }
 
-    const unlockedAccounts =
-        await web3.eth
-            .getAccounts();
+    return account.address;
+  }
 
-    const unlocked =
-        unlockedAccounts.find(
-            (
-                address:
-                    string
-            ) =>
-                address.toLowerCase()
-                ===
-                expected
-        );
+  const unlockedAccounts = await web3.eth.getAccounts();
 
-    if (!unlocked) {
-        throw new Error(
-            "Expected wallet is not unlocked by the RPC node. " +
-            "Provide its private key through the documented environment variable."
-        );
-    }
+  const unlocked = unlockedAccounts.find((address: string) => address.toLowerCase() === expected);
 
-    return unlocked;
-}
-
-function getShieldedPoolContract(
-    contractAddress:
-        string
-) {
-    const web3 =
-        getWeb3();
-
-    return new web3.eth.Contract(
-        artifact.abi,
-        normalizeAddress(
-            contractAddress
-        )
+  if (!unlocked) {
+    throw new Error(
+      'Expected wallet is not unlocked by the RPC node. ' +
+        'Provide its private key through the documented environment variable.',
     );
+  }
+
+  return unlocked;
 }
 
-function withGasBuffer(
-    estimatedGas:
-        bigint
-) {
-    return (
-        estimatedGas
-        *
-        120n
-        /
-        100n
-    ).toString();
+function getShieldedPoolContract(contractAddress: string) {
+  const web3 = getWeb3();
+
+  return new web3.eth.Contract(artifact.abi, normalizeAddress(contractAddress));
+}
+
+function schoolAddressOf(pool: any): string {
+  return String(pool.universityAddress);
+}
+
+function withGasBuffer(estimatedGas: bigint) {
+  return ((estimatedGas * 120n) / 100n).toString();
 }
 
 async function deployShieldedPool(
-    universityAddress:
-        string,
+  universityAddress: string,
 
-    initialFundingWei:
-        string,
+  initialFundingWei: string,
 
-    universityPrivateKey?:
-        string,
+  universityPrivateKey?: string,
 
-    /*
-     * V1(b) — menh gia co dinh cua pool. "0" = KHONG cuong che.
-     *
-     * Dat cuoi va co mac dinh, nen moi loi goi cu van chay y nhu truoc.
-     * Pool that nen truyen menh gia thuc; de "0" thi hop dong khong chan
-     * duoc mot lan trien khai cap moi sinh vien mot muc — luc do tap an
-     * danh tut ve 1 ma khong ai bao loi.
-     */
-    denominationWei: string = "0"
+  denominationWei: string = '0',
 ) {
-    const web3 =
-        getWeb3();
+  const web3 = getWeb3();
 
-    const fundingWei =
-        assertUnsignedWei(
-            initialFundingWei,
-            "initialFundingWei"
-        );
+  const fundingWei = assertUnsignedWei(initialFundingWei, 'initialFundingWei');
 
-    const sender =
-        await resolveSender(
-            universityAddress,
-            universityPrivateKey
-        );
+  const sender = await resolveSender(universityAddress, universityPrivateKey);
 
-    const deployment =
-        new web3.eth.Contract(
-            artifact.abi
-        ).deploy({
-            data:
-                artifact.bytecode,
+  const deployment = new web3.eth.Contract(artifact.abi).deploy({
+    data: artifact.bytecode,
 
-            // V1(b) — tham so constructor `poolDenomination`.
-            arguments: [
-                assertUnsignedWei(
-                    denominationWei,
-                    "denominationWei"
-                )
-            ]
-        });
+    arguments: [assertUnsignedWei(denominationWei, 'denominationWei')],
+  });
 
-    const estimatedGas =
-        BigInt(
-            await deployment
-                .estimateGas({
-                    from: sender,
-                    value: fundingWei
-                })
-        );
+  const estimatedGas = BigInt(
+    await deployment.estimateGas({
+      from: sender,
+      value: fundingWei,
+    }),
+  );
 
-    let transactionHash =
-        "";
+  let transactionHash = '';
 
-    /*
-     * Gas thực tế của giao dịch deploy.
-     * Đây là số liệu cho cột off-chain
-     * của bảng gas trong bài báo.
-     */
-    let gasUsed =
-        "0";
+  let gasUsed = '0';
 
-    const deployedContract =
-        await deployment
-            .send({
-                from: sender,
-                value: fundingWei,
-                gas:
-                    withGasBuffer(
-                        estimatedGas
-                    )
-            })
-            .on(
-                "transactionHash",
-                (
-                    hash:
-                        string
-                ) => {
-                    transactionHash =
-                        hash;
-                }
-            )
-            .on(
-                "receipt",
-                (
-                    receipt:
-                        any
-                ) => {
-                    transactionHash =
-                        String(
-                            receipt.transactionHash
-                        );
+  let deployBlock = 0n;
 
-                    gasUsed =
-                        BigInt(
-                            receipt.gasUsed
-                        ).toString();
-                }
-            );
+  const deployedContract = await deployment
+    .send({
+      from: sender,
+      value: fundingWei,
+      gas: withGasBuffer(estimatedGas),
+    })
+    .on('transactionHash', (hash: string) => {
+      transactionHash = hash;
+    })
+    .on('receipt', (receipt: any) => {
+      transactionHash = String(receipt.transactionHash);
 
-    const contractAddress =
-        normalizeAddress(
-            deployedContract
-                .options
-                .address
-        );
+      gasUsed = BigInt(receipt.gasUsed).toString();
+      deployBlock = BigInt(receipt.blockNumber);
+    });
 
-    if (!transactionHash) {
-        throw new Error(
-            "Deployment completed without a transaction hash"
-        );
-    }
+  const contractAddress = normalizeAddress(deployedContract.options.address);
 
-    const contract =
-        getShieldedPoolContract(
-            contractAddress
-        );
+  if (!transactionHash) {
+    throw new Error('Deployment completed without a transaction hash');
+  }
 
-    const storedUniversity =
-        normalizeAddress(
-            String(
-                await contract.methods
-                    .school()
-                    .call()
-            )
-        );
+  const contract = getShieldedPoolContract(contractAddress);
 
-    if (
-        storedUniversity
-        !==
-        normalizeAddress(
-            universityAddress
-        )
-    ) {
-        throw new Error(
-            "Deployed pool stored an unexpected university address"
-        );
-    }
+  const storedUniversity = normalizeAddress(
+    String(await retryChainRead(() => contract.methods.school().call({}, deployBlock))),
+  );
 
-    return {
-        contractAddress,
-        universityAddress:
-            storedUniversity,
-        chainId:
-            BigInt(
-                await web3.eth
-                    .getChainId()
-            ).toString(),
-        transactionHash:
-            transactionHash.toLowerCase(),
-        gasUsed,
-        balanceWei:
-            BigInt(
-                await web3.eth
-                    .getBalance(
-                        contractAddress
-                    )
-            ).toString()
-    };
+  if (storedUniversity !== normalizeAddress(universityAddress)) {
+    throw new Error('Deployed pool stored an unexpected university address');
+  }
+
+  return {
+    contractAddress,
+    universityAddress: storedUniversity,
+    chainId: BigInt(await web3.eth.getChainId()).toString(),
+    transactionHash: transactionHash.toLowerCase(),
+    gasUsed,
+    balanceWei: await getPoolBalance(contractAddress, deployBlock),
+  };
 }
 
 async function assertPoolUniversity(
-    contractAddress:
-        string,
+  contractAddress: string,
 
-    expectedUniversityAddress:
-        string,
+  expectedUniversityAddress: string,
 
-    expectedChainId?:
-        string
+  expectedChainId?: string,
 ) {
-    const web3 =
-        getWeb3();
+  const web3 = getWeb3();
 
-    if (
-        expectedChainId
-        &&
-        BigInt(
-            await web3.eth
-                .getChainId()
-        ).toString()
-        !==
-        BigInt(
-            expectedChainId
-        ).toString()
-    ) {
-        throw new Error(
-            "RPC chainId does not match the scholarship pool chainId"
-        );
-    }
+  if (expectedChainId && BigInt(await web3.eth.getChainId()).toString() !== BigInt(expectedChainId).toString()) {
+    throw new Error('RPC chainId does not match the scholarship pool chainId');
+  }
 
-    const contract =
-        getShieldedPoolContract(
-            contractAddress
-        );
+  const contract = getShieldedPoolContract(contractAddress);
 
-    const onChainUniversity =
-        normalizeAddress(
-            String(
-                await contract.methods
-                    .school()
-                    .call()
-            )
-        );
+  const onChainUniversity = normalizeAddress(String(await contract.methods.school().call()));
 
-    if (
-        onChainUniversity
-        !==
-        normalizeAddress(
-            expectedUniversityAddress
-        )
-    ) {
-        throw new Error(
-            "Pool universityAddress does not match contract.school()"
-        );
-    }
+  if (onChainUniversity !== normalizeAddress(expectedUniversityAddress)) {
+    throw new Error('Pool universityAddress does not match contract.school()');
+  }
 
-    return onChainUniversity;
+  return onChainUniversity;
 }
 
-async function getPoolBalance(
-    contractAddress:
-        string
-) {
-    const web3 =
-        getWeb3();
+async function getPoolBalance(contractAddress: string, blockNumber: bigint | 'latest' = 'latest') {
+  const web3 = getWeb3();
 
-    return BigInt(
-        await web3.eth
-            .getBalance(
-                normalizeAddress(
-                    contractAddress
-                )
-            )
-    ).toString();
+  const address = normalizeAddress(contractAddress);
+
+  return BigInt(await retryChainRead(() => web3.eth.getBalance(address, blockNumber))).toString();
 }
 
 async function fundScholarshipPool(
-    contractAddress:
-        string,
+  contractAddress: string,
 
-    amountWei:
-        string,
+  amountWei: string,
 
-    sponsorAddress:
-        string
+  sponsorAddress: string,
 ) {
-    const web3 =
-        getWeb3();
+  const web3 = getWeb3();
 
-    const amount =
-        assertUnsignedWei(
-            amountWei,
-            "amountWei"
-        );
+  const amount = assertUnsignedWei(amountWei, 'amountWei');
 
-    if (
-        BigInt(
-            amount
-        )
-        <=
-        0n
-    ) {
-        throw new Error(
-            "Sponsor amount must be greater than zero"
-        );
-    }
+  if (BigInt(amount) <= 0n) {
+    throw new Error('Sponsor amount must be greater than zero');
+  }
 
-    const sponsor = await resolveSender(sponsorAddress)
-        // addPrivateKeyAccount(
-        //     sponsorAddress
-        // );
+  const sponsor = await resolveSender(sponsorAddress);
 
-    const receipt =
-        await web3.eth
-            .sendTransaction({
-                from:
-                    sponsor,
-                to:
-                    normalizeAddress(
-                        contractAddress
-                    ),
-                value:
-                    amount,
-                gas:
-                    "50000"
-            });
+  const receipt = await web3.eth.sendTransaction({
+    from: sponsor,
+    to: normalizeAddress(contractAddress),
+    value: amount,
+    gas: '50000',
+  });
 
-    return {
-        sponsorAddress:
-            normalizeAddress(
-                sponsor
-            ),
-        transactionHash:
-            String(
-                receipt.transactionHash
-            ).toLowerCase(),
-        gasUsed:
-            BigInt(
-                receipt.gasUsed
-            ).toString(),
-        balanceWei:
-            await getPoolBalance(
-                contractAddress
-            )
-    };
+  return {
+    sponsorAddress: normalizeAddress(sponsor),
+    transactionHash: String(receipt.transactionHash).toLowerCase(),
+    gasUsed: BigInt(receipt.gasUsed).toString(),
+    balanceWei: await getPoolBalance(contractAddress, BigInt(receipt.blockNumber)),
+  };
 }
 
-module.exports = {
-    artifact,
-    getWeb3,
-    normalizeAddress,
-    assertUnsignedWei,
-    resolveSender,
-    getShieldedPoolContract,
-    deployShieldedPool,
-    assertPoolUniversity,
-    getPoolBalance,
-    fundScholarshipPool,
-    withGasBuffer
+async function readSponsorFunding(
+  contractAddress: string,
+
+  transactionHash: string,
+) {
+  const web3 = getWeb3();
+
+  if (!/^0x[0-9a-fA-F]{64}$/.test(transactionHash || '')) {
+    throw new Error('transactionHash must be a 0x-prefixed 32-byte hex string');
+  }
+
+  const hash = transactionHash.toLowerCase();
+
+  let transaction: any;
+  let receipt: any;
+
+  try {
+    [transaction, receipt] = await retryChainRead(() =>
+      Promise.all([web3.eth.getTransaction(hash), web3.eth.getTransactionReceipt(hash)]),
+    );
+  } catch {
+    throw new Error('Transaction not found or not mined yet');
+  }
+
+  if (BigInt(receipt.status) !== 1n) {
+    throw new Error('Funding transaction reverted');
+  }
+
+  if (String(transaction.to || '').toLowerCase() !== normalizeAddress(contractAddress)) {
+    throw new Error('Funding transaction was not sent to this pool');
+  }
+
+  const amountWei = BigInt(transaction.value).toString();
+
+  if (BigInt(amountWei) <= 0n) {
+    throw new Error('Funding transaction carries no ETH');
+  }
+
+  return {
+    sponsorAddress: String(transaction.from).toLowerCase(),
+    amountWei,
+    transactionHash: hash,
+    blockNumber: String(receipt.blockNumber),
+    balanceWei: await getPoolBalance(contractAddress, BigInt(receipt.blockNumber)),
+  };
+}
+
+export {
+  artifact,
+  getWeb3,
+  normalizeAddress,
+  assertUnsignedWei,
+  resolveSender,
+  getShieldedPoolContract,
+  deployShieldedPool,
+  assertPoolUniversity,
+  getPoolBalance,
+  fundScholarshipPool,
+  readSponsorFunding,
+  withGasBuffer,
+  schoolAddressOf,
 };

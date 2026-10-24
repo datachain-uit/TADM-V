@@ -1,0 +1,824 @@
+{
+  "by_depth": {
+    "mechanism": "offchain",
+    "so_luot": 20,
+    "warmup": 3,
+    "hat_giong": 20260915,
+    "che_do": "warm",
+    "cau_hinh": [
+      {
+        "experiment": "by_depth",
+        "name": "d9",
+        "n": 100,
+        "d": 9
+      },
+      {
+        "experiment": "by_depth",
+        "name": "d16",
+        "n": 100,
+        "d": 16
+      },
+      {
+        "experiment": "by_depth",
+        "name": "d17",
+        "n": 100,
+        "d": 17
+      },
+      {
+        "experiment": "by_depth",
+        "name": "d18",
+        "n": 100,
+        "d": 18
+      },
+      {
+        "experiment": "by_depth",
+        "name": "d19",
+        "n": 100,
+        "d": 19
+      },
+      {
+        "experiment": "by_depth",
+        "name": "d20",
+        "n": 100,
+        "d": 20
+      },
+      {
+        "experiment": "by_depth",
+        "name": "d21",
+        "n": 100,
+        "d": 21
+      },
+      {
+        "experiment": "by_depth",
+        "name": "d22",
+        "n": 100,
+        "d": 22
+      },
+      {
+        "experiment": "by_depth",
+        "name": "d23",
+        "n": 100,
+        "d": 23
+      },
+      {
+        "experiment": "by_depth",
+        "name": "d24",
+        "n": 100,
+        "d": 24
+      }
+    ],
+    "k_theo_cau_hinh": {
+      "d9": 9,
+      "d16": 10,
+      "d17": 10,
+      "d18": 10,
+      "d19": 10,
+      "d20": 10,
+      "d21": 10,
+      "d22": 11,
+      "d23": 11,
+      "d24": 11
+    },
+    "tim_k": [
+      {
+        "d": 9,
+        "k_toi_thieu": 9,
+        "k_thieu_hang": 8,
+        "phep_thu": "keygen_vk on the witness-free circuit (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": true,
+            "check_ms": 74.25519999999999
+          }
+        ],
+        "do_luc": "2026-10-23T08:15:22.586Z"
+      },
+      {
+        "d": 16,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk on the witness-free circuit (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true,
+            "check_ms": 124.6945
+          }
+        ],
+        "do_luc": "2026-10-23T08:15:22.806Z"
+      },
+      {
+        "d": 17,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk on the witness-free circuit (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true,
+            "check_ms": 121.0624
+          }
+        ],
+        "do_luc": "2026-10-23T08:15:23.022Z"
+      },
+      {
+        "d": 18,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk on the witness-free circuit (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true,
+            "check_ms": 111.1933
+          }
+        ],
+        "do_luc": "2026-10-23T08:15:23.228Z"
+      },
+      {
+        "d": 19,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk on the witness-free circuit (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true,
+            "check_ms": 115.6441
+          }
+        ],
+        "do_luc": "2026-10-23T08:15:23.443Z"
+      },
+      {
+        "d": 20,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk on the witness-free circuit (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true,
+            "check_ms": 114.2056
+          }
+        ],
+        "do_luc": "2026-10-23T08:15:23.651Z"
+      },
+      {
+        "d": 21,
+        "k_toi_thieu": 10,
+        "k_thieu_hang": 9,
+        "phep_thu": "keygen_vk on the witness-free circuit (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": true,
+            "check_ms": 124.8635
+          }
+        ],
+        "do_luc": "2026-10-23T08:15:23.869Z"
+      },
+      {
+        "d": 22,
+        "k_toi_thieu": 11,
+        "k_thieu_hang": 10,
+        "phep_thu": "keygen_vk on the witness-free circuit (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": false
+          },
+          {
+            "k": 11,
+            "du_hang": true,
+            "check_ms": 218.9921
+          }
+        ],
+        "do_luc": "2026-10-23T08:15:24.274Z"
+      },
+      {
+        "d": 23,
+        "k_toi_thieu": 11,
+        "k_thieu_hang": 10,
+        "phep_thu": "keygen_vk on the witness-free circuit (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": false
+          },
+          {
+            "k": 11,
+            "du_hang": true,
+            "check_ms": 202.18140000000002
+          }
+        ],
+        "do_luc": "2026-10-23T08:15:24.606Z"
+      },
+      {
+        "d": 24,
+        "k_toi_thieu": 11,
+        "k_thieu_hang": 10,
+        "phep_thu": "keygen_vk on the witness-free circuit (mode check-k)",
+        "cac_lan_thu": [
+          {
+            "k": 4,
+            "du_hang": false
+          },
+          {
+            "k": 5,
+            "du_hang": false
+          },
+          {
+            "k": 6,
+            "du_hang": false
+          },
+          {
+            "k": 7,
+            "du_hang": false
+          },
+          {
+            "k": 8,
+            "du_hang": false
+          },
+          {
+            "k": 9,
+            "du_hang": false
+          },
+          {
+            "k": 10,
+            "du_hang": false
+          },
+          {
+            "k": 11,
+            "du_hang": true,
+            "check_ms": 206.73520000000002
+          }
+        ],
+        "do_luc": "2026-10-23T08:15:24.955Z"
+      }
+    ],
+    "dinh_nghia_luot": "one run = chain snapshot → warm-up → n measurements → revert; ONE prove-batch process for the whole run (keygen once, verify in the same process); configuration order reshuffled every round",
+    "lan_khoi_chay": [
+      {
+        "bat_dau": "2026-10-23T08:15:24.959Z",
+        "luot_chon": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "thu_tu": [
+          {
+            "luot": 1,
+            "cau_hinh": [
+              "d22",
+              "d18",
+              "d16",
+              "d17",
+              "d9",
+              "d24",
+              "d20",
+              "d23",
+              "d19",
+              "d21"
+            ]
+          },
+          {
+            "luot": 2,
+            "cau_hinh": [
+              "d22",
+              "d24",
+              "d17",
+              "d19",
+              "d23",
+              "d20",
+              "d18",
+              "d9",
+              "d16",
+              "d21"
+            ]
+          },
+          {
+            "luot": 3,
+            "cau_hinh": [
+              "d19",
+              "d20",
+              "d24",
+              "d23",
+              "d9",
+              "d21",
+              "d18",
+              "d22",
+              "d16",
+              "d17"
+            ]
+          },
+          {
+            "luot": 4,
+            "cau_hinh": [
+              "d24",
+              "d20",
+              "d19",
+              "d16",
+              "d17",
+              "d22",
+              "d21",
+              "d9",
+              "d18",
+              "d23"
+            ]
+          },
+          {
+            "luot": 5,
+            "cau_hinh": [
+              "d20",
+              "d21",
+              "d22",
+              "d18",
+              "d9",
+              "d19",
+              "d24",
+              "d23",
+              "d17",
+              "d16"
+            ]
+          },
+          {
+            "luot": 6,
+            "cau_hinh": [
+              "d19",
+              "d18",
+              "d21",
+              "d22",
+              "d23",
+              "d17",
+              "d24",
+              "d20",
+              "d16",
+              "d9"
+            ]
+          },
+          {
+            "luot": 7,
+            "cau_hinh": [
+              "d16",
+              "d19",
+              "d9",
+              "d21",
+              "d24",
+              "d18",
+              "d17",
+              "d22",
+              "d20",
+              "d23"
+            ]
+          },
+          {
+            "luot": 8,
+            "cau_hinh": [
+              "d16",
+              "d24",
+              "d23",
+              "d18",
+              "d19",
+              "d21",
+              "d22",
+              "d20",
+              "d9",
+              "d17"
+            ]
+          },
+          {
+            "luot": 9,
+            "cau_hinh": [
+              "d22",
+              "d18",
+              "d19",
+              "d9",
+              "d24",
+              "d16",
+              "d17",
+              "d23",
+              "d21",
+              "d20"
+            ]
+          },
+          {
+            "luot": 10,
+            "cau_hinh": [
+              "d24",
+              "d17",
+              "d16",
+              "d23",
+              "d9",
+              "d20",
+              "d22",
+              "d21",
+              "d18",
+              "d19"
+            ]
+          },
+          {
+            "luot": 11,
+            "cau_hinh": [
+              "d23",
+              "d24",
+              "d17",
+              "d9",
+              "d16",
+              "d19",
+              "d21",
+              "d22",
+              "d18",
+              "d20"
+            ]
+          },
+          {
+            "luot": 12,
+            "cau_hinh": [
+              "d16",
+              "d21",
+              "d19",
+              "d24",
+              "d18",
+              "d22",
+              "d9",
+              "d23",
+              "d17",
+              "d20"
+            ]
+          },
+          {
+            "luot": 13,
+            "cau_hinh": [
+              "d9",
+              "d21",
+              "d19",
+              "d18",
+              "d22",
+              "d23",
+              "d17",
+              "d20",
+              "d16",
+              "d24"
+            ]
+          },
+          {
+            "luot": 14,
+            "cau_hinh": [
+              "d20",
+              "d19",
+              "d9",
+              "d22",
+              "d23",
+              "d24",
+              "d16",
+              "d17",
+              "d21",
+              "d18"
+            ]
+          },
+          {
+            "luot": 15,
+            "cau_hinh": [
+              "d21",
+              "d17",
+              "d9",
+              "d18",
+              "d19",
+              "d16",
+              "d20",
+              "d24",
+              "d23",
+              "d22"
+            ]
+          },
+          {
+            "luot": 16,
+            "cau_hinh": [
+              "d22",
+              "d19",
+              "d23",
+              "d24",
+              "d21",
+              "d9",
+              "d18",
+              "d16",
+              "d17",
+              "d20"
+            ]
+          },
+          {
+            "luot": 17,
+            "cau_hinh": [
+              "d18",
+              "d9",
+              "d21",
+              "d19",
+              "d17",
+              "d16",
+              "d24",
+              "d22",
+              "d20",
+              "d23"
+            ]
+          },
+          {
+            "luot": 18,
+            "cau_hinh": [
+              "d23",
+              "d24",
+              "d9",
+              "d18",
+              "d16",
+              "d19",
+              "d20",
+              "d17",
+              "d22",
+              "d21"
+            ]
+          },
+          {
+            "luot": 19,
+            "cau_hinh": [
+              "d20",
+              "d24",
+              "d22",
+              "d23",
+              "d18",
+              "d16",
+              "d19",
+              "d21",
+              "d9",
+              "d17"
+            ]
+          },
+          {
+            "luot": 20,
+            "cau_hinh": [
+              "d22",
+              "d18",
+              "d9",
+              "d21",
+              "d24",
+              "d16",
+              "d23",
+              "d20",
+              "d19",
+              "d17"
+            ]
+          }
+        ],
+        "may": {
+          "cpu": "11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz",
+          "so_luong_cpu": 8,
+          "ram_gb": 7.7,
+          "he_dieu_hanh": "win32 10.0.26300",
+          "node": "v22.13.0"
+        },
+        "git": {
+          "commit": "9c8b81da8b499e923f0aab99210a9d970e0b2bdb",
+          "so_tep_sua_ngoai_ket_qua": 2,
+          "tep_sua": [
+            " M \"Mode A/backend/src/experiments/repeatedRunsExperiment.ts\"",
+            " M \"Mode B/backend/src/experiments/repeatedRunsExperiment.ts\""
+          ]
+        },
+        "prover": {
+          "duong_dan": "target\\release\\prover.exe",
+          "kich_thuoc": 1655808,
+          "sua_luc": "2026-10-19T15:23:27.894Z",
+          "sha256": "ebdd5fe4ca480d95798748cdde5a1600475af336255411ede7b3ab892f8ef772"
+        }
+      }
+    ]
+  }
+}

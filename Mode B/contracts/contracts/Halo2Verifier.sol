@@ -6,7 +6,6 @@ pragma solidity 0.8.19;
 contract Halo2Verifier {
     fallback(bytes calldata) external returns (bytes memory) {
         assembly ("memory-safe") {
-            // Enforce that Solidity memory layout is respected
             let data := mload(0x40)
             if iszero(eq(data, 0x80)) {
                 revert(0, 0)
@@ -1861,10 +1860,8 @@ mstore(0x9120, 0x19169df8210ec4ba6b01e936d8b2c7a7d3a199e427a45eefce881b4464dd54d
 success := and(eq(staticcall(gas(), 0x8, 0x9020, 0x180, 0x9020, 0x20), 1), success)
 success := and(eq(mload(0x9020), 1), success)
 
-            // Revert if anything fails
             if iszero(success) { revert(0, 0) }
 
-            // Return empty bytes on success
             return(0, 0)
 
         }

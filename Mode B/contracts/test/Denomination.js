@@ -1,277 +1,160 @@
-/*
- * ===================================================================
- * V1(b) — HOP DONG CUONG CHE MOT MENH GIA (nhanh on-chain)
- * ===================================================================
- *
- * VI SAO CO FILE NAY. `RFC 6973 muc 3.3` dinh nghia tap an danh la mot
- * tap ca the "have the same attributes, making them indistinguishable".
- * Thuoc tinh quan sat vien thay tren chuoi o he nay la SO TIEN.
- *
- * Truoc 2026-09-02, dieu kien "cung menh gia" chi dat NHO DU LIEU tinh
- * co dong nhat: hop dong co truong `denomination` nhung MOI luot deploy
- * deu de gia tri 0, ma `require(denomination == 0 || ...)` thi ve dau
- * dung nen require LUON QUA. Nhanh cuong che CHUA TUNG CHAY, va khong
- * file test nao dong toi no.
- *
- * KHAC BAN OFF-CHAIN: o day `withdraw` doc so tien tu PUBLIC INPUT cua
- * proof (`proofAmount`), khong phai tu tham so. Nen phep chan menh gia
- * rang buoc vao chinh proof — chat hon mot bac.
- *
- * Dung `MockHalo2Verifier` (nhan moi proof) vi muc tieu o day la kiem
- * NHANH CUONG CHE MENH GIA, khong phai kiem verifier. Phep kiem verifier
- * that nam o `Halo2VerifierGate.js`.
- */
+const assert = require('assert');
 
-const assert = require("assert");
+const { ethers } = require('hardhat');
 
-const {
-    ethers
-} = require("hardhat");
+function buildCalldata(root, nullifier, amount, recipient) {
+  const w = (v) => ethers.utils.hexZeroPad(ethers.BigNumber.from(v).toHexString(), 32).replace(/^0x/, '');
 
-/*
- * Dung blob calldata tong hop: 32 byte root + 32 byte nullifier +
- * 32 byte amount + 32 byte recipient (A25), roi mot khuc dem cho giong
- * proof that. `decodePublicInputs` doc 128 byte dau va doi do dai >= 128.
- */
-function dungCalldata(root, nullifier, amount, recipient) {
-    const w = (v) => ethers.utils.hexZeroPad(
-        ethers.BigNumber.from(v).toHexString(),
-        32
-    ).replace(/^0x/, "");
-
-    return "0x"
-        + w(root)
-        + w(nullifier)
-        + w(amount)
-        + w(recipient)
-        + "00".repeat(64);
+  return '0x' + w(root) + w(nullifier) + w(amount) + w(recipient) + '00'.repeat(64);
 }
 
 async function expectRevert(action, message) {
-    try {
-        await action();
-        assert.fail(
-            `Giao dich PHAI revert voi "${message}" nhung lai thanh cong`
-        );
-    } catch (error) {
-        assert.match(
-            String(error.message),
-            new RegExp(message),
-            `Revert sai ly do. Mong doi "${message}", nhan: ${error.message}`
-        );
-    }
+  try {
+    await action();
+    assert.fail(`The transaction MUST revert with "${message}" but it succeeded`);
+  } catch (error) {
+    assert.match(
+      String(error.message),
+      new RegExp(message),
+      `Reverted for the wrong reason. Expected "${message}", got: ${error.message}`,
+    );
+  }
 }
 
-describe(
-    "ShieldedPool - V1(b) denomination (on-chain)",
-    function () {
-        let university;
-        let student;
-        let studentTwo;
-        let verifier;
+describe('ShieldedPool - V1(b) denomination (on-chain)', function () {
+  let university;
+  let student;
+  let studentTwo;
+  let verifier;
 
-        const MENH_GIA = ethers.utils.parseEther("0.1");
+  const DENOMINATION = ethers.utils.parseEther('0.1');
 
-        const ROOT = ethers.utils.hexZeroPad("0xabcd", 32);
+  const ROOT = ethers.utils.hexZeroPad('0xabcd', 32);
 
-        async function trienKhai(denomination) {
-            const Pool = await ethers.getContractFactory(
-                "ShieldedPool",
-                university
-            );
+  async function deployPool(denomination) {
+    const Pool = await ethers.getContractFactory('ShieldedPool', university);
 
-            const pool = await Pool.deploy(
-                verifier.address,
-                denomination,
-                {
-                    value: ethers.utils.parseEther("1")
-                }
-            );
+    const pool = await Pool.deploy(verifier.address, denomination, {
+      value: ethers.utils.parseEther('1'),
+    });
 
-            await pool.deployed();
-            await (await pool.updateRoot(ROOT, [])).wait();
+    await pool.deployed();
+    await (await pool.updateRoot(ROOT, [])).wait();
 
-            return pool;
-        }
+    return pool;
+  }
 
-        beforeEach(
-            async function () {
-                [
-                    university,
-                    student,
-                    studentTwo
-                ] = await ethers.getSigners();
+  beforeEach(async function () {
+    [university, student, studentTwo] = await ethers.getSigners();
 
-                const Verifier = await ethers.getContractFactory(
-                    "MockHalo2Verifier",
-                    university
-                );
+    const Verifier = await ethers.getContractFactory('MockHalo2Verifier', university);
 
-                verifier = await Verifier.deploy();
-                await verifier.deployed();
-            }
-        );
+    verifier = await Verifier.deploy();
+    await verifier.deployed();
+  });
 
-        it(
-            "ghi lai menh gia luc deploy, doc nguoc duoc tu chuoi",
-            async function () {
-                const pool = await trienKhai(MENH_GIA);
+  it('stores the denomination at deploy time and exposes it on-chain', async function () {
+    const pool = await deployPool(DENOMINATION);
 
-                /*
-                 * Doc nguoc duoc la dieu kien de runner dinh tinh ghi
-                 * `denomination` vao bang chung cua `R1`. Khong co getter
-                 * cong khai thi khong chung minh duoc gi.
-                 */
-                assert.strictEqual(
-                    (await pool.denomination()).toString(),
-                    MENH_GIA.toString()
-                );
-            }
-        );
+    assert.strictEqual((await pool.denomination()).toString(), DENOMINATION.toString());
+  });
 
-        it(
-            "TU CHOI lan rut sai menh gia",
-            async function () {
-                const pool = await trienKhai(MENH_GIA);
+  it('REJECTS a withdrawal with the wrong denomination', async function () {
+    const pool = await deployPool(DENOMINATION);
 
-                // Lech dung 1 wei — du de bi tu choi.
-                const sai = MENH_GIA.add(1);
+    const wrongAmount = DENOMINATION.add(1);
 
-                await expectRevert(
-                    () => pool.withdraw(
-                        dungCalldata(ROOT, 1, sai, student.address),
-                        ROOT,
-                        ethers.utils.hexZeroPad("0x01", 32),
-                        student.address,
-                        sai
-                    ),
-                    "wrong denomination"
-                );
-            }
-        );
+    await expectRevert(
+      () =>
+        pool.withdraw(
+          buildCalldata(ROOT, 1, wrongAmount, student.address),
+          ROOT,
+          ethers.utils.hexZeroPad('0x01', 32),
+          student.address,
+          wrongAmount,
+        ),
+      'wrong denomination',
+    );
+  });
 
-        it(
-            "CHO QUA lan rut dung menh gia",
-            async function () {
-                const pool = await trienKhai(MENH_GIA);
+  it('ACCEPTS a withdrawal with the right denomination', async function () {
+    const pool = await deployPool(DENOMINATION);
 
-                const truoc = await ethers.provider.getBalance(
-                    student.address
-                );
+    const before = await ethers.provider.getBalance(student.address);
 
-                await (
-                    await pool.withdraw(
-                        dungCalldata(ROOT, 2, MENH_GIA, student.address),
-                        ROOT,
-                        ethers.utils.hexZeroPad("0x02", 32),
-                        student.address,
-                        MENH_GIA
-                    )
-                ).wait();
+    await (
+      await pool.withdraw(
+        buildCalldata(ROOT, 2, DENOMINATION, student.address),
+        ROOT,
+        ethers.utils.hexZeroPad('0x02', 32),
+        student.address,
+        DENOMINATION,
+      )
+    ).wait();
 
-                const sau = await ethers.provider.getBalance(
-                    student.address
-                );
+    const after = await ethers.provider.getBalance(student.address);
 
-                assert.strictEqual(
-                    sau.sub(truoc).toString(),
-                    MENH_GIA.toString()
-                );
-            }
-        );
+    assert.strictEqual(after.sub(before).toString(), DENOMINATION.toString());
+  });
 
-        it(
-            "moi lan rut deu cung mot so tien => khong phan biet duoc",
-            async function () {
-                /*
-                 * DAY MOI LA DIEU `R1` CAN. Hai test tren chung minh co
-                 * che chan; test nay chung minh HE QUA: hai lan rut khac
-                 * nguoi phat ra `event Withdraw` co truong `amount`
-                 * GIONG HET nhau, nen so tien khong con la thuoc tinh
-                 * phan biet duoc hai ung vien.
-                 */
-                const pool = await trienKhai(MENH_GIA);
+  it('every withdrawal pays the same amount, so payouts cannot be told apart by amount', async function () {
+    const pool = await deployPool(DENOMINATION);
 
-                await (
-                    await pool.withdraw(
-                        dungCalldata(ROOT, 0x11, MENH_GIA, student.address),
-                        ROOT,
-                        ethers.utils.hexZeroPad("0x11", 32),
-                        student.address,
-                        MENH_GIA
-                    )
-                ).wait();
+    await (
+      await pool.withdraw(
+        buildCalldata(ROOT, 0x11, DENOMINATION, student.address),
+        ROOT,
+        ethers.utils.hexZeroPad('0x11', 32),
+        student.address,
+        DENOMINATION,
+      )
+    ).wait();
 
-                await (
-                    await pool.withdraw(
-                        dungCalldata(ROOT, 0x12, MENH_GIA, studentTwo.address),
-                        ROOT,
-                        ethers.utils.hexZeroPad("0x12", 32),
-                        studentTwo.address,
-                        MENH_GIA
-                    )
-                ).wait();
+    await (
+      await pool.withdraw(
+        buildCalldata(ROOT, 0x12, DENOMINATION, studentTwo.address),
+        ROOT,
+        ethers.utils.hexZeroPad('0x12', 32),
+        studentTwo.address,
+        DENOMINATION,
+      )
+    ).wait();
 
-                const suKien = await pool.queryFilter(
-                    pool.filters.Withdraw()
-                );
+    const events = await pool.queryFilter(pool.filters.Withdraw());
 
-                assert.strictEqual(suKien.length, 2);
+    assert.strictEqual(events.length, 2);
 
-                assert.strictEqual(
-                    suKien[0].args.amount.toString(),
-                    suKien[1].args.amount.toString()
-                );
+    assert.strictEqual(events[0].args.amount.toString(), events[1].args.amount.toString());
 
-                // Nguoi nhan van khac nhau — dung nhu thiet ke: `R1` noi
-                // ve "khong phan biet duoc BANG THUOC TINH", con dia chi
-                // vi la thu cong khai co chu y, va `A21` bao dam moi suat
-                // mot vi moi nen no khong noi nguoc ve sinh vien.
-                assert.notStrictEqual(
-                    suKien[0].args.recipient,
-                    suKien[1].args.recipient
-                );
-            }
-        );
+    assert.notStrictEqual(events[0].args.recipient, events[1].args.recipient);
+  });
 
-        it(
-            "denomination = 0 thi KHONG cuong che - giu duoc kich ban doi chung C-13",
-            async function () {
-                /*
-                 * Kich ban doi chung cua C-13 phai cap moi nguoi mot muc
-                 * KHAC nhau de cho thay tap an danh co lai. Bo mat duong
-                 * `denomination = 0` thi kich ban do khong chay duoc nua.
-                 */
-                const pool = await trienKhai(0);
+  it('denomination = 0 does NOT enforce an amount - keeps the C-13 control scenario possible', async function () {
+    const pool = await deployPool(0);
 
-                const mucMot = ethers.utils.parseEther("0.1");
-                const mucHai = ethers.utils.parseEther("0.2");
+    const firstAmount = ethers.utils.parseEther('0.1');
+    const secondAmount = ethers.utils.parseEther('0.2');
 
-                await (
-                    await pool.withdraw(
-                        dungCalldata(ROOT, 0x21, mucMot, student.address),
-                        ROOT,
-                        ethers.utils.hexZeroPad("0x21", 32),
-                        student.address,
-                        mucMot
-                    )
-                ).wait();
+    await (
+      await pool.withdraw(
+        buildCalldata(ROOT, 0x21, firstAmount, student.address),
+        ROOT,
+        ethers.utils.hexZeroPad('0x21', 32),
+        student.address,
+        firstAmount,
+      )
+    ).wait();
 
-                await (
-                    await pool.withdraw(
-                        dungCalldata(ROOT, 0x22, mucHai, studentTwo.address),
-                        ROOT,
-                        ethers.utils.hexZeroPad("0x22", 32),
-                        studentTwo.address,
-                        mucHai
-                    )
-                ).wait();
+    await (
+      await pool.withdraw(
+        buildCalldata(ROOT, 0x22, secondAmount, studentTwo.address),
+        ROOT,
+        ethers.utils.hexZeroPad('0x22', 32),
+        studentTwo.address,
+        secondAmount,
+      )
+    ).wait();
 
-                assert.strictEqual(
-                    (await pool.denomination()).toString(),
-                    "0"
-                );
-            }
-        );
-    }
-);
+    assert.strictEqual((await pool.denomination()).toString(), '0');
+  });
+});

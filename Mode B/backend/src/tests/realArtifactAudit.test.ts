@@ -1,208 +1,138 @@
-/*
- * ===================================================================
- * C-7 — SOI ARTIFACT THAT trong `npm test`, khong chi trong runner
- * ===================================================================
- *
- * CHO HO CUA C-7. `00_code_followups.md` giu C-7 o trang thai ☐ voi ly
- * do: *"phan soi artifact that van chi nam trong runner, khong nam
- * trong `npm test`"*. Muoi mot test cu trong `publicSurface.test.ts`
- * deu chay tren OBJECT TONG HOP VIET TAY — chung chung minh phep do
- * biet bat ro ri, nhung khong chung minh BAN CHAY THAT khong ro ri.
- *
- * FILE NAY LAP CHO DO. No mo file ket qua that, lay bi mat that tu
- * `dataset_n*.json`, roi TU DO LAI tren be mat cong khai da luu.
- *
- * VI SAO KHONG CHI DOC LAI `publicSurfaceAudit_K7.allClean`. Doc lai
- * ket luan cua runner thi chi chung minh "runner tu noi no sach" —
- * mot loi trong chinh runner se tu che giau. O day phep do duoc chay
- * LAI mot cach doc lap tu du lieu tho, nen mot loi nhu vay se lo ra.
- *
- * ⚠️ Test bo qua (khong bao loi) neu chua co file ket qua. Ban sao moi
- * clone ve chua chay thuc nghiem thi khong co gi de soi, va bat `npm
- * test` do o do la sai — no khong phai loi cua code.
- */
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'fs';
+import path from 'path';
+import { privateWitnessLeakageCheck } from '../experiments/publicSurfaceAudit';
 
-const test = require("node:test");
-const assert = require("node:assert/strict");
-const fs = require("fs");
-const path = require("path");
+const RESULTS_DIR = path.resolve(__dirname, '../../../experiments/results/qualitative');
 
-const {
-    privateWitnessLeakageCheck
-} = require("../experiments/publicSurfaceAudit");
+const DATASET_DIR = path.resolve(__dirname, '../../../experiments/data');
 
-const THU_MUC_KET_QUA = path.resolve(
-    __dirname,
-    "../../../experiments/results/qualitative"
-);
+function latestArtifact(): string | null {
+  if (!fs.existsSync(RESULTS_DIR)) {
+    return null;
+  }
 
-const THU_MUC_DATASET = path.resolve(
-    __dirname,
-    "../../../experiments/data"
-);
+  const files = fs
+    .readdirSync(RESULTS_DIR)
+    .filter((f: string) => f.endsWith('.json'))
+    .map((f: string) => path.join(RESULTS_DIR, f))
+    .sort((a: string, b: string) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs);
 
-function artifactMoiNhat(): string | null {
-    if (!fs.existsSync(THU_MUC_KET_QUA)) {
-        return null;
-    }
-
-    const files = fs.readdirSync(THU_MUC_KET_QUA)
-        .filter((f: string) => f.endsWith(".json"))
-        .map((f: string) => path.join(THU_MUC_KET_QUA, f))
-        .sort(
-            (a: string, b: string) =>
-                fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs
-        );
-
-    return files.length > 0 ? files[0] : null;
+  return files.length > 0 ? files[0]! : null;
 }
 
-function biMatTuDataset(studentCount: number) {
-    const duong = path.join(
-        THU_MUC_DATASET,
-        "dataset_n" + studentCount + ".json"
-    );
+function secretsFromDataset(studentCount: number) {
+  const filePath = path.join(DATASET_DIR, 'dataset_n' + studentCount + '.json');
 
-    if (!fs.existsSync(duong)) {
-        return null;
-    }
+  if (!fs.existsSync(filePath)) {
+    return null;
+  }
 
-    const dataset = JSON.parse(fs.readFileSync(duong, "utf8"));
+  const dataset = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-    return (dataset.students || []).map(
-        (sv: any) => ({
-            student_id: sv.student_id,
-            rho: sv.note ? sv.note.rho : sv.rho
-        })
-    );
+  return (dataset.students || []).map((student: any) => ({
+    student_id: student.student_id,
+    rho: student.note ? student.note.rho : student.rho,
+  }));
 }
 
-test("C-7 — artifact THAT khong lo private witness (do lai doc lap)", () => {
-    const duong = artifactMoiNhat();
+test('C-7 — the REAL artifact leaks no private witness (independent re-check)', () => {
+  const filePath = latestArtifact();
 
-    if (!duong) {
-        console.error(
-            "BO QUA: chua co file ket qua dinh tinh."
-            + " Chay `npm run experiment:qualitative` truoc."
-        );
-        return;
+  if (!filePath) {
+    console.error('SKIPPED: no qualitative result file yet.' + ' Run `npm run experiment:qualitative` first.');
+    return;
+  }
+
+  const artifact = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const surface = artifact?.privacy?.inspectedPublicArtifact;
+
+  assert.ok(surface, 'the artifact must contain `privacy.inspectedPublicArtifact` to re-inspect');
+
+  const numStudents = Number(artifact?.metadata?.studentCount || 0);
+  const secret = secretsFromDataset(numStudents);
+
+  if (!secret) {
+    console.error('SKIPPED: dataset_n' + numStudents + '.json not found');
+    return;
+  }
+
+  const exposed: number[] = [];
+
+  for (let i = 0; i < secret.length; i += 1) {
+    const result = privateWitnessLeakageCheck(surface, secret[i]);
+
+    if (!result.passed) {
+      exposed.push(i);
     }
+  }
 
-    const artifact = JSON.parse(fs.readFileSync(duong, "utf8"));
-    const beMat = artifact?.privacy?.inspectedPublicArtifact;
-
-    assert.ok(
-        beMat,
-        "artifact phai co `privacy.inspectedPublicArtifact` de soi lai"
-    );
-
-    const soSinhVien = Number(artifact?.metadata?.studentCount || 0);
-    const biMat = biMatTuDataset(soSinhVien);
-
-    if (!biMat) {
-        console.error(
-            "BO QUA: khong tim thay dataset_n" + soSinhVien + ".json"
-        );
-        return;
-    }
-
-    /*
-     * Soi TUNG sinh vien, khong chi sinh vien dau tien.
-     *
-     * Mot ro ri co the chi dinh dung mot nguoi — vi du mot ban ghi bi
-     * ghi nham vao event. Soi mot nguoi roi ket luan "sach" la dung
-     * kieu sai ma phep do sinh ra de bat.
-     */
-    const nguoiBiLo: number[] = [];
-
-    for (let i = 0; i < biMat.length; i += 1) {
-        const ketQua = privateWitnessLeakageCheck(beMat, biMat[i]);
-
-        if (!ketQua.passed) {
-            nguoiBiLo.push(i);
-        }
-    }
-
-    assert.deepEqual(
-        nguoiBiLo,
-        [],
-        "cac sinh vien bi lo tren be mat cong khai: "
-        + nguoiBiLo.slice(0, 10).join(", ")
-        + " (tong " + nguoiBiLo.length + "/" + biMat.length + ")"
-    );
+  assert.deepEqual(
+    exposed,
+    [],
+    'students exposed on the public surface: ' +
+      exposed.slice(0, 10).join(', ') +
+      ' (total ' +
+      exposed.length +
+      '/' +
+      secret.length +
+      ')',
+  );
 });
 
-test("C-7 — phep do co soi that, khong phai chay rong", () => {
-    /*
-     * CHOT CHAN. Neu `privateWitnessLeakageCheck` bo qua het moi thu vi
-     * chuoi qua ngan, no van tra `passed: true` — va test tren se DAT
-     * mot cach gia tao. Kiem rang no thuc su co dem phep do.
-     */
-    const duong = artifactMoiNhat();
+test('C-7 — the check really inspects something, it does not run empty', () => {
+  const filePath = latestArtifact();
 
-    if (!duong) {
-        return;
-    }
+  if (!filePath) {
+    return;
+  }
 
-    const artifact = JSON.parse(fs.readFileSync(duong, "utf8"));
-    const beMat = artifact?.privacy?.inspectedPublicArtifact;
-    const soSinhVien = Number(artifact?.metadata?.studentCount || 0);
-    const biMat = biMatTuDataset(soSinhVien);
+  const artifact = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const surface = artifact?.privacy?.inspectedPublicArtifact;
+  const numStudents = Number(artifact?.metadata?.studentCount || 0);
+  const secret = secretsFromDataset(numStudents);
 
-    if (!biMat) {
-        return;
-    }
+  if (!secret) {
+    return;
+  }
 
-    const ketQua = privateWitnessLeakageCheck(beMat, biMat[0]);
+  const result = privateWitnessLeakageCheck(surface, secret[0]);
 
-    assert.ok(
-        ketQua.coverage.checkedEncodingCount > 0,
-        "khong dem duoc phep do nao - phep kiem dang chay rong"
-    );
+  assert.ok(result.coverage.checkedEncodingCount > 0, 'no encoding was checked - the check is running empty');
 
-    assert.ok(
-        ketQua.coverage.serializedBytes > 1000,
-        "be mat cong khai qua nho (" + ketQua.coverage.serializedBytes
-        + " ky tu) - co ve khong phai artifact that"
-    );
+  assert.ok(
+    result.coverage.serializedBytes > 1000,
+    'public surface too small (' + result.coverage.serializedBytes + ' characters) - probably not a real artifact',
+  );
 });
 
-test("C-7 — nhet bi mat vao be mat THAT thi phai bat duoc", () => {
-    /*
-     * Day moi la thu bien hai test tren tu "khong tim thay gi" thanh
-     * "khong co gi de tim". Lay chinh be mat that, nhet mot bi mat vao,
-     * roi doi phep do phai bao lo.
-     *
-     * Khong co test nay thi `passed: true` chi chung minh "may khong
-     * tim", chu khong chung minh "khong co gi de tim".
-     */
-    const duong = artifactMoiNhat();
+test('C-7 — a secret planted in the REAL surface must be caught', () => {
+  const filePath = latestArtifact();
 
-    if (!duong) {
-        return;
-    }
+  if (!filePath) {
+    return;
+  }
 
-    const artifact = JSON.parse(fs.readFileSync(duong, "utf8"));
-    const beMat = artifact?.privacy?.inspectedPublicArtifact;
-    const soSinhVien = Number(artifact?.metadata?.studentCount || 0);
-    const biMat = biMatTuDataset(soSinhVien);
+  const artifact = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const surface = artifact?.privacy?.inspectedPublicArtifact;
+  const numStudents = Number(artifact?.metadata?.studentCount || 0);
+  const secret = secretsFromDataset(numStudents);
 
-    if (!biMat) {
-        return;
-    }
+  if (!secret) {
+    return;
+  }
 
-    const beMatBanDoc = {
-        ...beMat,
-        // ten truong vo hai, gia tri thi la bi mat that
-        auditTrailReference: String(biMat[0].rho)
-    };
+  const readableSurface = {
+    ...surface,
+    auditTrailReference: String(secret[0].rho),
+  };
 
-    const ketQua = privateWitnessLeakageCheck(beMatBanDoc, biMat[0]);
+  const result = privateWitnessLeakageCheck(readableSurface, secret[0]);
 
-    assert.equal(
-        ketQua.passed,
-        false,
-        "nhet `rho` vao be mat that ma phep do van bao sach"
-        + " - phep do khong dung duoc"
-    );
+  assert.equal(
+    result.passed,
+    false,
+    '`rho` planted in the real surface but the check still reports clean' + ' - the check cannot be trusted',
+  );
 });

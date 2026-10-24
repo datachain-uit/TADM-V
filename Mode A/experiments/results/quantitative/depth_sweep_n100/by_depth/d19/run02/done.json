@@ -1,0 +1,16 @@
+{
+  "mechanism": "offchain",
+  "thi_nghiem": "by_depth",
+  "cau_hinh": "d19",
+  "run_id": 2,
+  "n": 100,
+  "d": 19,
+  "k": 10,
+  "warmup": 3,
+  "so_lan_do": 100,
+  "che_do": "warm",
+  "tien_trinh": "one prove-batch process for the whole run: keygen once, warm-up, then n proofs, verify in the same process",
+  "bat_dau": "2026-10-23T08:25:17.700Z",
+  "ket_thuc": "2026-10-23T08:26:03.980Z",
+  "thoi_gian_ms": 46279.8
+}

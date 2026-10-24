@@ -1,0 +1,27 @@
+{
+  "network": "sepolia",
+  "chain_id": "11155111",
+  "school_address": "0x5bb6412Ad5809D73165EaE915ABee923d191655b",
+  "started_at": "2026-10-22T09:05:52.758Z",
+  "shielded_pool": "0x367DeBF01d08C429DDC8F68BbFa9894f148f3068",
+  "deploy_pool": {
+    "hash": "0xda86cff23d591bfdc5f3020decd213101ce9fc3ad0241985f53164b8740c2ecb",
+    "block": 11968543,
+    "gas_used": 6692777,
+    "status": 1
+  },
+  "update_root": {
+    "hash": "0x84693ee5b36a21f156947263d5ca1d8f0cfd5ce4834dadcd0096ebd44fc382d8",
+    "block": 11968544,
+    "gas_used": 1045400,
+    "status": 1
+  },
+  "update_root_calldata": {
+    "calldata_bytes": 16100,
+    "zero_bytes": 124,
+    "nonzero_bytes": 15976,
+    "tokens": 64028,
+    "standard_calldata_gas": 256112,
+    "eip7623_floor_gas": 661280
+  }
+}

@@ -1,0 +1,13 @@
+
+
+  ShieldedPool - university insider (Mode A trusts the university)
+    ✔ the published n = 1 pool commits to exactly one note
+    ✔ pays the genuine withdrawal of that note (control)
+    ✔ INSIDER: pays nullifiers that belong to no issued note, to the university own wallet (94ms)
+    ✔ INSIDER: the chain cannot tell a fabricated payout from a genuine one (46ms)
+    ✔ INSIDER: an amount that matches no note is paid as well when the pool has no denomination
+    ✔ the only on-chain limits: approved root, unused nullifier, pool balance, and the university as sender (48ms)
+
+
+  6 passing (4s)
+

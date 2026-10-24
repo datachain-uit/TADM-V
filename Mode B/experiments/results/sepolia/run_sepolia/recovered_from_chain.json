@@ -1,0 +1,58 @@
+[
+  {
+    "student_index": 0,
+    "step": "verifyAndRecord",
+    "recipient": "0xcEf731859f52A74ba46947172aEf4a013B6E4c74",
+    "nullifier": "0x0908cbf85e088d680fbd39fdb24b3cc3dd4a43f6c03cd816e06f24aad0ed40c9",
+    "tx_hash": "0xbebcfec2809f38a8a4b8f44eb62478001b30d45ca34555b7886ba4bc869ee8c1",
+    "block": 11970402,
+    "gas_used": 882036,
+    "status": 1,
+    "events_found": 1,
+    "recipient_matches_fresh_wallet": true,
+    "source": "ClaimVerified event on chain — sent before a network drop, settle done in a later attempt",
+    "explorer": "https://sepolia.etherscan.io/tx/0xbebcfec2809f38a8a4b8f44eb62478001b30d45ca34555b7886ba4bc869ee8c1"
+  },
+  {
+    "student_index": 224,
+    "step": "verifyAndRecord",
+    "recipient": "0xF293283D8e78506431aB85115CA43c7f20376B2d",
+    "nullifier": "0x04f16424a036c1c8b8b62ac3f6fbf1afe4161d95f2745ca23620b11c345ec204",
+    "tx_hash": "0x48b677d512c87a431e084f6d4f53d9629f9c93ff0a30c914b5b3de8cfe0fe424",
+    "block": 11971547,
+    "gas_used": 882048,
+    "status": 1,
+    "events_found": 1,
+    "recipient_matches_fresh_wallet": true,
+    "source": "ClaimVerified event on chain — sent before a network drop, settle done in a later attempt",
+    "explorer": "https://sepolia.etherscan.io/tx/0x48b677d512c87a431e084f6d4f53d9629f9c93ff0a30c914b5b3de8cfe0fe424"
+  },
+  {
+    "student_index": 369,
+    "step": "verifyAndRecord",
+    "recipient": "0xe89Fd740E3d5362ebA4DfB47D5A1001a58e89d1a",
+    "nullifier": "0x0c5a630d9f98b120bc544c96c47eec11640c6ab4b933c80d522151a3ff6adf8a",
+    "tx_hash": "0x084f28950236f20ec6dd125bbd31d01dbb2396ad8d1e9113bd5abafb7db6b69d",
+    "block": 11971923,
+    "gas_used": 882048,
+    "status": 1,
+    "events_found": 1,
+    "recipient_matches_fresh_wallet": true,
+    "source": "ClaimVerified event on chain — sent before a network drop, settle done in a later attempt",
+    "explorer": "https://sepolia.etherscan.io/tx/0x084f28950236f20ec6dd125bbd31d01dbb2396ad8d1e9113bd5abafb7db6b69d"
+  },
+  {
+    "student_index": 436,
+    "step": "verifyAndRecord",
+    "recipient": "0xD278f1a1fE0716A087d99D349936F622d9b5F781",
+    "nullifier": "0x11a1aa45758004aee4e35df3345be3240a16450e6c518e436a9fef029035717a",
+    "tx_hash": "0xb4d611cc9d562c4a8d7ba21ae667ba220819631b56be1090e1de929faa5dc2b3",
+    "block": 11972096,
+    "gas_used": 882000,
+    "status": 1,
+    "events_found": 1,
+    "recipient_matches_fresh_wallet": true,
+    "source": "ClaimVerified event on chain — sent before a network drop, settle done in a later attempt",
+    "explorer": "https://sepolia.etherscan.io/tx/0xb4d611cc9d562c4a8d7ba21ae667ba220819631b56be1090e1de929faa5dc2b3"
+  }
+]

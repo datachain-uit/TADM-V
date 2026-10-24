@@ -1,0 +1,50 @@
+[
+  {
+    "student_index": 453,
+    "recipient": "0xEa6A950c5eA80886dc224480afB194d714808046",
+    "nullifier": "0x07bf4654e53f195090b658f17474a3cf21b348ddd5f149a4047e6e6f76c73a7f",
+    "tx_hash": "0x7639228e8b3d80f54b705c32fcf1519d1a3e4ea0d4dc7c7ae609925364fd47c3",
+    "block": 11969831,
+    "gas_used": 332987,
+    "status": 1,
+    "nullifier_marked_used": true,
+    "source": "Withdraw event on chain — sent before a network drop, not in withdrawals.csv",
+    "explorer": "https://sepolia.etherscan.io/tx/0x7639228e8b3d80f54b705c32fcf1519d1a3e4ea0d4dc7c7ae609925364fd47c3"
+  },
+  {
+    "student_index": 463,
+    "recipient": "0x8B43af1aE61a32457AE0332642a939D2C694068D",
+    "nullifier": "0x3d7dfec478dc1325a14ebfdf2aed92a5490dd882f66b4c116c8f21772530f217",
+    "tx_hash": "0x4dcb1abcb050ab71f85b816e83c18ae0fd21dbb06307be5bc515ad78cd85380c",
+    "block": 11970437,
+    "gas_used": 332987,
+    "status": 1,
+    "nullifier_marked_used": true,
+    "source": "Withdraw event on chain — sent before a network drop, not in withdrawals.csv",
+    "explorer": "https://sepolia.etherscan.io/tx/0x4dcb1abcb050ab71f85b816e83c18ae0fd21dbb06307be5bc515ad78cd85380c"
+  },
+  {
+    "student_index": 464,
+    "recipient": "0x5a07fB7d98009e8df4558321cd85FDb4f06805E8",
+    "nullifier": "0x263189d5f8822b4f70311cbea099edda8b1e8b01abc0bb7f822b463751f99c62",
+    "tx_hash": "0x25c071717a20c691231c1cdb4c9f2434cbdbb87307860f66634ae044403ac522",
+    "block": 11970468,
+    "gas_used": 332975,
+    "status": 1,
+    "nullifier_marked_used": true,
+    "source": "Withdraw event on chain — sent before a network drop, not in withdrawals.csv",
+    "explorer": "https://sepolia.etherscan.io/tx/0x25c071717a20c691231c1cdb4c9f2434cbdbb87307860f66634ae044403ac522"
+  },
+  {
+    "student_index": 466,
+    "recipient": "0x5C5e160A983096AA13FD89D8975555b5acD6374A",
+    "nullifier": "0x19f1f8a613737783c05a78492a47dbd39bd2ff62f7e2e9bf45e7915ead23092d",
+    "tx_hash": "0x60c40db1eb54f8b18c724a841a08e8447ed3952d62c5ec104ee26b4280566dcf",
+    "block": 11970606,
+    "gas_used": 332987,
+    "status": 1,
+    "nullifier_marked_used": true,
+    "source": "Withdraw event on chain — sent before a network drop, not in withdrawals.csv",
+    "explorer": "https://sepolia.etherscan.io/tx/0x60c40db1eb54f8b18c724a841a08e8447ed3952d62c5ec104ee26b4280566dcf"
+  }
+]

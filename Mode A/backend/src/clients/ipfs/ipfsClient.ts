@@ -1,18 +1,15 @@
-const { create } = require("ipfs-http-client");
-const {
-    getIpfsConfiguration
-} = require("../../config/environment");
+/// <reference path="../../types/ipfs-http-client.d.ts" />
+import { create } from 'ipfs-http-client';
+import { getIpfsConfiguration } from '../../config/env';
 
 let ipfsClient: any;
 
 function getIpfsClient() {
-    if (!ipfsClient) {
-        ipfsClient = create(getIpfsConfiguration());
-    }
+  if (!ipfsClient) {
+    ipfsClient = create(getIpfsConfiguration());
+  }
 
-    return ipfsClient;
+  return ipfsClient;
 }
 
-module.exports = {
-    getIpfsClient
-};
+export { getIpfsClient };

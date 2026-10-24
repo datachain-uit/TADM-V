@@ -2,9 +2,11 @@
   "name": "groth16-verifier-baseline",
   "version": "1.0.0",
   "private": true,
-  "description": "Baseline Groth16 (circom/snarkjs) tren cung quan he chung minh cua bai — de doi chung gas xac thuc voi nhanh Halo2",
+  "description": "Groth16 (circom/snarkjs) baseline over the same proof relation as the paper, used to compare verification gas against the Halo2 branches",
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "format": "prettier --write backend/src",
+    "format:check": "prettier --check backend/src",
     "mkbuild": "node -e \"require('fs').mkdirSync('build',{recursive:true})\"",
     "circuit:compile": "npm run mkbuild && circom circuits/withdraw.circom --r1cs --wasm --sym -o build",
     "circuit:info": "snarkjs r1cs info build/withdraw.r1cs",
@@ -18,9 +20,9 @@
     "experiment:gas": "ts-node backend/src/experiments/benchmarkGas.ts",
     "experiment:artifacts": "ts-node backend/src/experiments/recordArtifactSizes.ts",
     "chain": "npx ganache --port 8546 --wallet.totalAccounts 501 --wallet.mnemonic \"test test test test test test test test test test test junk\"",
-    "tonghop": "ts-node backend/src/scripts/tongHopKetQua.ts",
-    "sosanh": "ts-node backend/src/scripts/soSanhBaNhanh.ts",
-    "kiemdauvao": "ts-node backend/src/scripts/kiemDauVao.ts"
+    "summary": "ts-node backend/src/scripts/summarizeResults.ts",
+    "compare": "ts-node backend/src/scripts/compareThreeBranches.ts",
+    "check-inputs": "ts-node backend/src/scripts/checkInputs.ts"
   },
   "dependencies": {
     "circomlib": "^2.0.5",
@@ -31,6 +33,7 @@
   "devDependencies": {
     "@types/node": "^20.14.0",
     "ganache": "^7.9.2",
+    "prettier": "^3.9.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   }

@@ -1,617 +1,615 @@
-/*
- * KIỂM NGHIỆM TRÊN MẠNG THẬT (bậc 2) — nhánh OFF-CHAIN
- * ======================================================
- *
- * Câu hỏi cần trả lời: hệ có deploy và chạy trọn luồng được trên một mạng
- * Ethereum thật hay không. Đây là câu hỏi CÓ/KHÔNG, nên chỉ cần:
- *
- *   1. deploy ShieldedPool
- *   2. duyệt root với ĐỦ 500 commitment — giao dịch nặng nhất, và là chỗ
- *      EIP-7623 có thể làm đổi số gas so với Ganache
- *   3. rút cho 3 sinh viên ở đầu / giữa / cuối cây: 0, 250, 499
- *   4. dùng lại nullifier của sinh viên 0 — PHẢI bị từ chối
- *   5. dựng lại cây từ log CommitmentsPublished trên chuỗi, so với root
- *
- * Bytecode deploy chính là artifact đã đo; proof lấy từ `luot_bao_cao`. Từ A25
- * (12/09/2026) public input gồm [root, nullifier, amount, recipient] — vẫn
- * không có địa chỉ hợp đồng, nên proof đo trên Ganache dùng lại được trên
- * Sepolia. Proof đo TRƯỚC A25 (3 public input) bị chốt bên dưới từ chối:
- * phải đo lại định lượng trước khi kiểm nghiệm.
- *
- * Gas là tất định, nên số gas trên mạng thật PHẢI trùng dòng tương ứng trong
- * gas_offchain_n500.csv, trừ hai ngoại lệ biết trước:
- *   - updateRoot: sàn phí calldata của EIP-7623 (Prague). Ganache dừng ở
- *     Shanghai nên không có sàn này.
- *   - withdrawOffChain: +25 000 gas nếu địa chỉ nhận CHƯA TỪNG TỒN TẠI trên
- *     mạng đó (phí tạo tài khoản). Trên Ganache mọi ví đều có sẵn.
- * Script ghi đủ dữ liệu để giải thích từng chênh lệch, không tự ý sửa số.
- *
- * Gas limit được ƯỚC LƯỢNG, không cố định như runner định lượng (500 000):
- * sàn EIP-7623 của updateRoot n = 500 cao hơn 500 000, đặt cố định thì giao
- * dịch bị từ chối ngay. Gas limit không ảnh hưởng gasUsed.
- *
- * Biến môi trường (backend/.env — đã bị git chặn):
- *   KIEM_NGHIEM_RPC_URL      mặc định http://127.0.0.1:8545 (chạy thử Ganache)
- *   KIEM_NGHIEM_PRIVATE_KEY  bắt buộc trên mạng thật; trên máy cục bộ bỏ trống
- *                            thì dùng accounts[0] của GANACHE_MNEMONIC
- *   KIEM_NGHIEM_PROOFS       trỏ tới tệp proof khác `luot_bao_cao` (đường dẫn
- *                            tính từ gốc repo). Dùng khi lượt báo cáo vẫn là
- *                            proof TRƯỚC A25 (3 public input).
- *
- * Chạy:  npm run experiment:sepolia
- * Ghi:   experiments/results/sepolia/kiem_nghiem_<mạng>_<thời-điểm>.json
- */
+require('http').globalAgent.keepAlive = false;
+require('https').globalAgent.keepAlive = false;
 
-// spawnSync lên prover chặn event loop — xem quantitativeExperiment.ts.
-require("http").globalAgent.keepAlive = false;
-require("https").globalAgent.keepAlive = false;
+import fs from 'fs';
+import path from 'path';
 
-const fs = require("fs");
-const path = require("path");
-
-require("dotenv").config({
-    path: path.resolve(__dirname, "..", "..", ".env")
+require('dotenv').config({
+  path: path.resolve(__dirname, '..', '..', '.env'),
 });
 
-const { ethers } = require("ethers");
+import { ethers } from 'ethers';
+import { runProver } from '../clients/prover/halo2ProverClient';
+import { writeCsv } from './sepoliaCsv';
+import { RunLog, affordable, describe, feeOverrides, parseStudentList, sendTimed } from './sepoliaRun';
 
-const {
-    runRust
-} = require("../clients/prover/halo2ProverClient");
-
-const {
-    ghiCsv
-} = require("./sepoliaCsv");
-
-// =========================
-// CẤU HÌNH
-// =========================
-
-const PROJECT_ROOT = path.resolve(__dirname, "..", "..", "..");
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
 
 const N = 500;
-const CHI_SO = [0, 250, 499];
+const STUDENT_INDEXES = parseStudentList(process.env.SEPOLIA_STUDENTS, N);
 
-const GANACHE_MNEMONIC =
-    process.env.GANACHE_MNEMONIC
-    || "test test test test test test test test test test test junk";
+const TX_TIMEOUT_MS = Number(process.env.SEPOLIA_TX_TIMEOUT_MS || 600_000);
 
-const RPC_URL =
-    process.env.KIEM_NGHIEM_RPC_URL
-    || "http://127.0.0.1:8545";
+const GANACHE_MNEMONIC = process.env.GANACHE_MNEMONIC || 'test test test test test test test test test test test junk';
 
-const PRIVATE_KEY =
-    process.env.KIEM_NGHIEM_PRIVATE_KEY
-    || "";
+const RPC_URL = process.env.SEPOLIA_RPC_URL || 'http://127.0.0.1:8545';
 
-/*
- * Chỉ cho chạy trên máy cục bộ và Sepolia. Mainnet và mọi mạng khác bị chặn:
- * script này tiêu ETH và deploy hợp đồng công khai.
- */
-const TEN_MANG: Record<string, string> = {
-    "1337": "ganache",
-    "31337": "hardhat",
-    "11155111": "sepolia"
+const PRIVATE_KEY = process.env.SEPOLIA_PRIVATE_KEY || '';
+
+const NETWORK_NAME: Record<string, string> = {
+  '1337': 'ganache',
+  '31337': 'hardhat',
+  '11155111': 'sepolia',
 };
 
 const EXPLORER: Record<string, string> = {
-    "11155111": "https://sepolia.etherscan.io"
+  '11155111': 'https://sepolia.etherscan.io',
 };
 
-const THU_MUC_DO =
-    path.join(PROJECT_ROOT, "experiments", "results", "quantitative", "luot_bao_cao");
+const MEASUREMENT_DIR = path.join(PROJECT_ROOT, 'experiments', 'results', 'quantitative', 'report_run');
 
-const THU_MUC_RA =
-    path.join(PROJECT_ROOT, "experiments", "results", "sepolia");
+const OUTPUT_DIR = path.join(PROJECT_ROOT, 'experiments', 'results', 'sepolia');
 
-/*
- * Nguồn proof. Mặc định là lượt báo cáo — cùng lô đo sinh ra gas_offchain_n500.csv,
- * nên số gas đối chiếu được trực tiếp. KIEM_NGHIEM_PROOFS trỏ tới tệp khác khi
- * lượt báo cáo còn là proof TRƯỚC A25. Hợp đồng ADV không đổi ở A25, nên gas vẫn
- * so được; cái đổi là proof, và script tự ghi rõ điều đó (xem baseline_note).
- */
-const TEP_PROOF =
-    process.env.KIEM_NGHIEM_PROOFS
-        ? path.resolve(PROJECT_ROOT, process.env.KIEM_NGHIEM_PROOFS)
-        : path.join(THU_MUC_DO, `proofs_offchain_n${N}.json`);
+const PROOF_FILE = process.env.SEPOLIA_PROOFS
+  ? path.resolve(PROJECT_ROOT, process.env.SEPOLIA_PROOFS)
+  : path.join(MEASUREMENT_DIR, `proofs_offchain_n${N}.json`);
 
-const PROOF_CUNG_LUOT_DO = !process.env.KIEM_NGHIEM_PROOFS;
+const SAME_LOT_PROOFS = !process.env.SEPOLIA_PROOFS;
 
-const POOL_ARTIFACT =
-    require(
-        path.join(PROJECT_ROOT, "contracts", "artifacts", "contracts", "ShieldedPool.sol", "ShieldedPool.json")
-    );
+const POOL_ARTIFACT = require(
+  path.join(PROJECT_ROOT, 'contracts', 'artifacts', 'contracts', 'ShieldedPool.sol', 'ShieldedPool.json'),
+);
 
-/*
- * Gas dự trù để kiểm số dư TRƯỚC khi tiêu: deploy pool + updateRoot ở mức
- * sàn EIP-7623 + 3 lượt rút + 1 giao dịch dùng lại nullifier, cộng biên 30 %.
- */
-const GAS_DU_TRU =
-    BigInt(Math.ceil((968_565 + 700_000 + 3 * 90_000 + 100_000) * 1.3));
+const SETUP_GAS_RESERVE = BigInt(Math.ceil((968_565 + 700_000) * 1.5));
 
-// =========================
-// TIỆN ÍCH
-// =========================
+const WITHDRAWAL_GAS_RESERVE = 250_000n;
 
-function laMayCucBo(url: string): boolean {
-    return /\/\/(127\.0\.0\.1|localhost)(:|\/|$)/.test(url);
+function isLocalMachine(url: string): boolean {
+  return /\/\/(127\.0\.0\.1|localhost)(:|\/|$)/.test(url);
 }
 
-function thoiDiem(): string {
-    const d = new Date();
-    const hai = (x: number) => String(x).padStart(2, "0");
-    return `${d.getFullYear()}-${hai(d.getMonth() + 1)}-${hai(d.getDate())}`
-        + `T${hai(d.getHours())}-${hai(d.getMinutes())}-${hai(d.getSeconds())}`;
+function timestamp(): string {
+  const d = new Date();
+  const pad2 = (x: number) => String(x).padStart(2, '0');
+  return (
+    `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}` +
+    `T${pad2(d.getHours())}-${pad2(d.getMinutes())}-${pad2(d.getSeconds())}`
+  );
 }
 
-function docCsv(file: string): any[] {
-    const dong =
-        fs.readFileSync(file, "utf8")
-            .split(/\r?\n/)
-            .filter((l: string) => l.trim() !== "");
+function readCsv(file: string): any[] {
+  const row = fs
+    .readFileSync(file, 'utf8')
+    .split(/\r?\n/)
+    .filter((l: string) => l.trim() !== '');
 
-    const tieuDe = String(dong[0]).split(",");
+  const header = String(row[0]).split(',');
 
-    return dong.slice(1).map((l: string) => {
-        const o: any = {};
-        l.split(",").forEach((v: string, i: number) => {
-            o[String(tieuDe[i])] = v;
-        });
-        return o;
+  return row.slice(1).map((l: string) => {
+    const cells: any = {};
+    l.split(',').forEach((v: string, i: number) => {
+      cells[String(header[i])] = v;
     });
+    return cells;
+  });
 }
 
-/*
- * EIP-7623 (Prague): gas của giao dịch >= 21 000 + 10 × token, với
- * token = số byte 0 + 4 × số byte khác 0 trong calldata.
- */
-function phanTichCalldata(data: string) {
-    const hex = data.startsWith("0x") ? data.slice(2) : data;
+function parseCalldata(data: string) {
+  const hex = data.startsWith('0x') ? data.slice(2) : data;
 
-    let khong = 0;
-    let khacKhong = 0;
+  let zero = 0;
+  let nonZero = 0;
 
-    for (let i = 0; i < hex.length; i += 2) {
-        if (hex.slice(i, i + 2) === "00") {
-            khong += 1;
-        } else {
-            khacKhong += 1;
-        }
+  for (let i = 0; i < hex.length; i += 2) {
+    if (hex.slice(i, i + 2) === '00') {
+      zero += 1;
+    } else {
+      nonZero += 1;
     }
+  }
 
-    const token = khong + 4 * khacKhong;
+  const token = zero + 4 * nonZero;
 
-    return {
-        calldata_bytes: khong + khacKhong,
-        zero_bytes: khong,
-        nonzero_bytes: khacKhong,
-        tokens: token,
-        standard_calldata_gas: 4 * khong + 16 * khacKhong,
-        eip7623_floor_gas: 21_000 + 10 * token
-    };
+  return {
+    calldata_bytes: zero + nonZero,
+    zero_bytes: zero,
+    nonzero_bytes: nonZero,
+    tokens: token,
+    standard_calldata_gas: 4 * zero + 16 * nonZero,
+    eip7623_floor_gas: 21_000 + 10 * token,
+  };
 }
 
-function lyDo(err: any): string {
-    return String(
-        err?.reason
-        || err?.shortMessage
-        || err?.info?.error?.message
-        || err?.message
-        || err
-    );
+function reasonOf(err: any): string {
+  return String(err?.reason || err?.shortMessage || err?.info?.error?.message || err?.message || err);
 }
 
-function lienKet(chainId: string, hash: string): string | null {
-    const goc = EXPLORER[chainId];
-    return goc ? `${goc}/tx/${hash}` : null;
+function explorerLink(chainId: string, hash: string): string | null {
+  const root = EXPLORER[chainId];
+  return root ? `${root}/tx/${hash}` : null;
 }
 
-/*
- * Địa chỉ đã "tồn tại" theo nghĩa của EVM thì chuyển tiền tới không mất phí
- * tạo tài khoản. Ghi lại để giải thích chênh lệch +25 000 gas nếu có.
- */
-async function trangThaiDiaChi(provider: any, diaChi: string) {
-    const [soDu, nonce, ma] = await Promise.all([
-        provider.getBalance(diaChi),
-        provider.getTransactionCount(diaChi),
-        provider.getCode(diaChi)
-    ]);
+async function addressState(provider: any, account: string) {
+  const [balance, nonce, errorCode] = await Promise.all([
+    provider.getBalance(account),
+    provider.getTransactionCount(account),
+    provider.getCode(account),
+  ]);
 
-    return {
-        balance_wei: soDu.toString(),
-        nonce: Number(nonce),
-        has_code: ma !== "0x",
-        existed: soDu > 0n || Number(nonce) > 0 || ma !== "0x"
-    };
+  return {
+    balance_wei: balance.toString(),
+    nonce: Number(nonce),
+    has_code: errorCode !== '0x',
+    existed: balance > 0n || Number(nonce) > 0 || errorCode !== '0x',
+  };
 }
 
-async function choBienNhan(tx: any) {
-    const bn = await tx.wait();
+async function waitForReceipt(tx: any) {
+  const receipt = await tx.wait();
 
-    return {
-        hash: String(tx.hash),
-        block: Number(bn.blockNumber),
-        gas_used: Number(bn.gasUsed),
-        status: Number(bn.status)
-    };
+  return {
+    hash: String(tx.hash),
+    block: Number(receipt.blockNumber),
+    gas_used: Number(receipt.gasUsed),
+    status: Number(receipt.status),
+  };
 }
 
-/*
- * Giao dịch PHẢI revert: trước hết staticCall để lấy lý do, rồi gửi thật
- * với gasLimit cố định (ước lượng sẽ thất bại vì revert) để có một giao dịch
- * thất bại NẰM TRÊN CHUỖI — ai có hash cũng tự tra được.
- */
-async function guiPhaiRevert(
-    ham: any,
-    doiSo: any[],
-    gasLimit: bigint,
-    provider: any
-) {
-    let staticRevert = false;
-    let lyDoRevert = "";
+async function sendExpectRevert(fn: any, args: any[], gasLimit: bigint, provider: any) {
+  let staticRevert = false;
+  let revertReason = '';
+
+  try {
+    await fn.staticCall(...args);
+  } catch (e: any) {
+    staticRevert = true;
+    revertReason = reasonOf(e);
+  }
+
+  let hash: string | null = null;
+  let receipt: any = null;
+  let sendError = '';
+
+  try {
+    const tx = await fn(...args, { gasLimit });
+    hash = String(tx.hash);
 
     try {
-        await ham.staticCall(...doiSo);
+      receipt = await tx.wait();
     } catch (e: any) {
-        staticRevert = true;
-        lyDoRevert = lyDo(e);
+      receipt = e?.receipt || (await provider.getTransactionReceipt(hash));
     }
+  } catch (e: any) {
+    sendError = reasonOf(e);
+  }
 
-    let hash: string | null = null;
-    let bn: any = null;
-    let loiGui = "";
-
-    try {
-        const tx = await ham(...doiSo, { gasLimit });
-        hash = String(tx.hash);
-
-        try {
-            bn = await tx.wait();
-        } catch (e: any) {
-            bn = e?.receipt || await provider.getTransactionReceipt(hash);
-        }
-    } catch (e: any) {
-        // Có node từ chối ngay ở bước gửi — vẫn là bị từ chối, ghi lại lý do.
-        loiGui = lyDo(e);
-    }
-
-    return {
-        static_call_reverted: staticRevert,
-        revert_reason: lyDoRevert,
-        send_error: loiGui || null,
-        hash,
-        block: bn ? Number(bn.blockNumber) : null,
-        status: bn ? Number(bn.status) : null,
-        gas_used: bn ? Number(bn.gasUsed) : null
-    };
+  return {
+    static_call_reverted: staticRevert,
+    revert_reason: revertReason,
+    send_error: sendError || null,
+    hash,
+    block: receipt ? Number(receipt.blockNumber) : null,
+    status: receipt ? Number(receipt.status) : null,
+    gas_used: receipt ? Number(receipt.gasUsed) : null,
+  };
 }
-
-// =========================
-// MAIN
-// =========================
 
 async function main() {
-    // ---------- 1. dữ liệu đã đo — tính cục bộ, KHÔNG tốn ETH ----------
-    const dataset =
-        JSON.parse(
-            fs.readFileSync(
-                path.join(PROJECT_ROOT, "experiments", "data", `dataset_n${N}.json`),
-                "utf8"
-            )
-        );
+  const dataset = JSON.parse(
+    fs.readFileSync(path.join(PROJECT_ROOT, 'experiments', 'data', `dataset_n${N}.json`), 'utf8'),
+  );
 
-    const proofs: any[] =
-        JSON.parse(
-            fs.readFileSync(TEP_PROOF, "utf8")
-        );
+  const proofs: any[] = JSON.parse(fs.readFileSync(PROOF_FILE, 'utf8'));
 
-    const moc: any[] =
-        docCsv(path.join(THU_MUC_DO, `gas_offchain_n${N}.csv`));
+  const baseline: any[] = readCsv(path.join(MEASUREMENT_DIR, `gas_offchain_n${N}.csv`));
 
-    const sinhVien: any[] = dataset.students;
+  const studentData: any[] = dataset.students;
 
-    console.error(`Tính ${sinhVien.length} commitment từ dataset ...`);
+  console.error(`Computing ${studentData.length} commitments from the dataset ...`);
 
-    const commitments: string[] =
-        sinhVien.map((sv: any) =>
-            String(
-                runRust("commitment", {
-                    student_id: sv.note.student_id,
-                    amount: String(sv.note.amount),
-                    rho: String(sv.note.rho)
-                }).commitment
-            )
-        );
+  const commitments: string[] = studentData.map((student: any) =>
+    String(
+      runProver('commitment', {
+        student_id: student.note.student_id,
+        amount: String(student.note.amount),
+        rho: String(student.note.rho),
+      }).commitment,
+    ),
+  );
 
-    const rootTinh = String(runRust("root", { commitments }).root).toLowerCase();
-    const rootProof = String(proofs[0]?.root).toLowerCase();
+  const computedRoot = String(runProver('root', { commitments }).root).toLowerCase();
+  const rootProof = String(proofs[0]?.root).toLowerCase();
 
-    if (rootTinh !== rootProof) {
-        throw new Error(
-            `root tính lại ${rootTinh} khác root của proof ${rootProof} — dừng trước khi tiêu ETH`
-        );
+  if (computedRoot !== rootProof) {
+    throw new Error(
+      `recomputed root ${computedRoot} differs from the proof root ${rootProof} — stopping before spending ETH`,
+    );
+  }
+
+  for (const i of STUDENT_INDEXES) {
+    const p = proofs.find((x: any) => x.student_index === i);
+
+    if (!p) {
+      throw new Error(`no proof for student_index ${i}`);
     }
 
-    for (const i of CHI_SO) {
-        const p = proofs.find((x: any) => x.student_index === i);
-
-        if (!p) {
-            throw new Error(`không có proof cho student_index ${i}`);
-        }
-
-        if (String(p.root).toLowerCase() !== rootProof) {
-            throw new Error(`proof ${i} không cùng root với pool`);
-        }
-
-        // A25 — proof phải mang ví nhận, và đúng ví của sinh viên đó.
-        if (!p.recipient || BigInt(p.recipient) !== BigInt(p.address)) {
-            throw new Error(
-                `proof ${i} không mang ví nhận ${p.address} — là proof đo TRƯỚC A25;`
-                + " chạy lại định lượng (npm run experiment:quantitative) trước khi kiểm nghiệm"
-            );
-        }
+    if (String(p.root).toLowerCase() !== rootProof) {
+      throw new Error(`proof ${i} does not share the pool root`);
     }
 
-    // ---------- 2. kết nối, chặn mạng lạ, kiểm số dư ----------
-    const provider = new ethers.JsonRpcProvider(RPC_URL);
-    const chainId = String((await provider.getNetwork()).chainId);
-    const tenMang = TEN_MANG[chainId];
+    if (!p.recipient || BigInt(p.recipient) !== BigInt(p.address)) {
+      throw new Error(
+        `proof ${i} does not carry recipient ${p.address} — it was measured BEFORE A25;` +
+          ' rerun the quantitative experiment (npm run experiment:quantitative) before validating',
+      );
+    }
+  }
 
-    if (!tenMang) {
-        throw new Error(`chainId ${chainId} không nằm trong danh sách cho phép (ganache / hardhat / sepolia)`);
+  const provider = new ethers.JsonRpcProvider(RPC_URL);
+  const chainId = String((await provider.getNetwork()).chainId);
+  const networkName = NETWORK_NAME[chainId];
+
+  if (!networkName) {
+    throw new Error(`chainId ${chainId} is not in the allowed list (ganache / hardhat / sepolia)`);
+  }
+
+  const local = isLocalMachine(RPC_URL);
+  const defaultWallet = ethers.Wallet.fromPhrase(GANACHE_MNEMONIC);
+
+  let wallet: any;
+
+  if (PRIVATE_KEY) {
+    wallet = new ethers.Wallet(PRIVATE_KEY, provider);
+  } else if (local) {
+    wallet = defaultWallet.connect(provider);
+  } else {
+    throw new Error('A public network needs SEPOLIA_PRIVATE_KEY in backend/.env');
+  }
+
+  if (!local && wallet.address.toLowerCase() === defaultWallet.address.toLowerCase()) {
+    throw new Error("refusing to use a wallet from the public 'test … junk' mnemonic on a real network");
+  }
+
+  const totalAmount: bigint = studentData.reduce((s: bigint, student: any) => s + BigInt(student.note.amount), 0n);
+
+  const poolFunding = totalAmount + totalAmount / BigInt(N);
+
+  const resumeDir = process.env.SEPOLIA_RUN;
+  const runLog = resumeDir ? RunLog.open(resumeDir) : RunLog.create(OUTPUT_DIR, networkName);
+  let state = runLog.readState();
+
+  const balanceAtStart: bigint = await provider.getBalance(wallet.address);
+  const fullNeed = await affordable(
+    provider,
+    wallet.address,
+    (resumeDir ? 0n : SETUP_GAS_RESERVE) + WITHDRAWAL_GAS_RESERVE * BigInt(STUDENT_INDEXES.length),
+  );
+
+  console.error(
+    `Network ${networkName} (chainId ${chainId}) | wallet ${wallet.address}` +
+      ` | balance ${ethers.formatEther(balanceAtStart)} ETH | ${STUDENT_INDEXES.length} withdrawals planned` +
+      ` | estimated need for all ${ethers.formatEther(fullNeed.needed + poolFunding)} ETH` +
+      ` at ${ethers.formatUnits(fullNeed.price, 'gwei')} gwei | run folder ${runLog.dir}`,
+  );
+
+  let pool: any;
+  let deployment: any;
+  let rootApproval: any;
+  let calldataRoot: any;
+
+  if (resumeDir) {
+    if (state.chain_id !== chainId || String(state.school_address).toLowerCase() !== wallet.address.toLowerCase()) {
+      throw new Error(`SEPOLIA_RUN belongs to chain ${state.chain_id} / school ${state.school_address}`);
     }
 
-    const cucBo = laMayCucBo(RPC_URL);
-    const viMacDinh = ethers.Wallet.fromPhrase(GANACHE_MNEMONIC);
-
-    let vi: any;
-
-    if (PRIVATE_KEY) {
-        vi = new ethers.Wallet(PRIVATE_KEY, provider);
-    } else if (cucBo) {
-        vi = viMacDinh.connect(provider);
-    } else {
-        throw new Error("mạng thật cần KIEM_NGHIEM_PRIVATE_KEY trong backend/.env");
-    }
-
-    if (!cucBo && vi.address.toLowerCase() === viMacDinh.address.toLowerCase()) {
-        throw new Error("không dùng ví của mnemonic công khai 'test … junk' trên mạng thật");
-    }
-
-    const tongTien: bigint =
-        sinhVien.reduce((s: bigint, sv: any) => s + BigInt(sv.note.amount), 0n);
-
-    // Giống runner định lượng: vốn = tổng + tổng / n.
-    const vonPool = tongTien + tongTien / BigInt(N);
-
-    const phi = await provider.getFeeData();
-    const giaGas: bigint = phi.maxFeePerGas ?? phi.gasPrice ?? 0n;
-    const soDu: bigint = await provider.getBalance(vi.address);
-    const canCo = giaGas * GAS_DU_TRU + vonPool;
+    pool = new ethers.Contract(state.shielded_pool, POOL_ARTIFACT.abi, wallet);
+    deployment = state.deploy_pool;
+    rootApproval = state.update_root;
+    calldataRoot = state.update_root_calldata;
 
     console.error(
-        `Mạng ${tenMang} (chainId ${chainId}) | ví ${vi.address}`
-        + ` | số dư ${ethers.formatEther(soDu)} ETH | dự trù ${ethers.formatEther(canCo)} ETH`
+      `Resuming pool ${state.shielded_pool} (${runLog.readWithdrawals().length} withdrawals already logged)`,
+    );
+  } else {
+    const setup = await affordable(provider, wallet.address, SETUP_GAS_RESERVE + WITHDRAWAL_GAS_RESERVE);
+
+    if (balanceAtStart < setup.needed + poolFunding) {
+      throw new Error(
+        `insufficient balance: about ${ethers.formatEther(setup.needed + poolFunding)} ETH needed to deploy,` +
+          ' approve the root and make one withdrawal',
+      );
+    }
+
+    state = runLog.writeState({
+      network: networkName,
+      chain_id: chainId,
+      school_address: wallet.address,
+      started_at: new Date().toISOString(),
+    });
+
+    console.error('Deploy ShieldedPool ...');
+
+    const factory = new ethers.ContractFactory(POOL_ARTIFACT.abi, POOL_ARTIFACT.bytecode, wallet);
+
+    pool = await factory.deploy('0', { value: poolFunding, ...(await feeOverrides(provider)) });
+    deployment = await waitForReceipt(pool.deploymentTransaction());
+
+    state = runLog.writeState({ shielded_pool: String(await pool.getAddress()), deploy_pool: deployment });
+
+    console.error(`Approving the root with ${commitments.length} commitments ...`);
+
+    const txRoot = await pool.updateRoot(rootProof, commitments, await feeOverrides(provider));
+    rootApproval = await waitForReceipt(txRoot);
+    calldataRoot = parseCalldata(String(txRoot.data));
+
+    state = runLog.writeState({ update_root: rootApproval, update_root_calldata: calldataRoot });
+  }
+
+  const poolAddress = String(await pool.getAddress());
+  const currentRoot = String(await pool.currentRoot()).toLowerCase();
+  const rootValid = Boolean(await pool.validRoot(rootProof));
+
+  if (currentRoot !== rootProof || !rootValid) {
+    throw new Error(`pool ${poolAddress} does not hold the dataset root — stopping`);
+  }
+
+  const alreadyLogged = new Set(runLog.readWithdrawals().map((w: any) => w.student_index));
+  let stoppedReason: string | null = null;
+  let skippedAlreadyUsed = 0;
+
+  for (const i of STUDENT_INDEXES) {
+    if (alreadyLogged.has(i)) {
+      continue;
+    }
+
+    const p = proofs.find((x: any) => x.student_index === i);
+
+    if (await pool.usedNullifier(p.nullifier)) {
+      skippedAlreadyUsed++;
+      console.error(`student ${i}: nullifier already used on chain but not in the log — skipped`);
+      continue;
+    }
+
+    const budget = await affordable(provider, wallet.address, WITHDRAWAL_GAS_RESERVE);
+
+    if (!budget.ok) {
+      stoppedReason =
+        `balance ${ethers.formatEther(budget.balance)} ETH is below one withdrawal` +
+        ` (${ethers.formatEther(budget.needed)} ETH) before student ${i}`;
+      console.error(`STOPPING: ${stoppedReason}`);
+      break;
+    }
+
+    const verification = runProver('verify', {
+      proof: p.proof,
+      root: p.root,
+      nullifier: p.nullifier,
+      amount: p.amount,
+      recipient: p.recipient,
+    });
+
+    if (verification.verified !== true) {
+      throw new Error(`proof ${i} failed off-chain verification`);
+    }
+
+    const recipientAddress = await addressState(provider, p.address);
+
+    const receipt = await sendTimed(
+      provider,
+      (overrides: any) => pool.withdrawOffChain(p.root, p.nullifier, p.address, p.amountWei, overrides),
+      TX_TIMEOUT_MS,
     );
 
-    if (soDu < canCo) {
-        throw new Error(`số dư không đủ: cần khoảng ${ethers.formatEther(canCo)} ETH`);
-    }
+    const baselineRow = baseline.find((r: any) => Number(r.student_index) === i);
+    const baselineGas = baselineRow ? Number(baselineRow.withdraw_gas) : null;
 
-    // ---------- 3. deploy ----------
-    console.error("Deploy ShieldedPool ...");
-
-    const factory = new ethers.ContractFactory(POOL_ARTIFACT.abi, POOL_ARTIFACT.bytecode, vi);
-
-    // V1(b): poolDenomination = 0 — giống runner định lượng.
-    const pool: any = await factory.deploy("0", { value: vonPool });
-    const trienKhai = await choBienNhan(pool.deploymentTransaction());
-    const diaChiPool = String(await pool.getAddress());
-
-    // ---------- 4. duyệt root với đủ 500 commitment ----------
-    console.error(`Duyệt root với ${commitments.length} commitment ...`);
-
-    const txRoot = await pool.updateRoot(rootProof, commitments);
-    const duyetRoot = await choBienNhan(txRoot);
-    const calldataRoot = phanTichCalldata(String(txRoot.data));
-
-    const currentRoot = String(await pool.currentRoot()).toLowerCase();
-    const rootHopLe = Boolean(await pool.validRoot(rootProof));
-
-    // ---------- 5. rút cho 3 sinh viên ----------
-    const luotRut: any[] = [];
-
-    for (const i of CHI_SO) {
-        const p = proofs.find((x: any) => x.student_index === i);
-
-        // Nhánh off-chain: backend xác thực TRƯỚC khi gửi — làm đúng như vậy.
-        const xacThuc =
-            runRust("verify", {
-                proof: p.proof,
-                root: p.root,
-                nullifier: p.nullifier,
-                amount: p.amount,
-                // A25 — ví nhận, public input thứ 4.
-                recipient: p.recipient
-            });
-
-        if (xacThuc.verified !== true) {
-            throw new Error(`proof ${i} không qua xác thực off-chain`);
-        }
-
-        const nguoiNhan = await trangThaiDiaChi(provider, p.address);
-
-        console.error(`Rút cho sinh viên ${i} ...`);
-
-        const tx = await pool.withdrawOffChain(p.root, p.nullifier, p.address, p.amountWei);
-        const bn = await choBienNhan(tx);
-
-        const dongMoc = moc.find((r: any) => Number(r.student_index) === i);
-        const gasMoc = dongMoc ? Number(dongMoc.withdraw_gas) : null;
-
-        luotRut.push({
-            student_index: i,
-            recipient: p.address,
-            recipient_existed_before: nguoiNhan.existed,
-            offchain_verified: true,
-            offchain_verify_ms: xacThuc.verify_ms,
-            tx: { ...bn, explorer: lienKet(chainId, bn.hash) },
-            ganache_gas_used: gasMoc,
-            delta_vs_ganache: gasMoc === null ? null : bn.gas_used - gasMoc,
-            nullifier_marked_used: Boolean(await pool.usedNullifier(p.nullifier))
-        });
-    }
-
-    // ---------- 6. dùng lại nullifier — phải bị từ chối ----------
-    console.error("Dùng lại nullifier của sinh viên 0 ...");
-
-    const p0 = proofs.find((x: any) => x.student_index === CHI_SO[0]);
-
-    const dungLai =
-        await guiPhaiRevert(
-            pool.withdrawOffChain,
-            [p0.root, p0.nullifier, p0.address, p0.amountWei],
-            200_000n,
-            provider
-        );
-
-    // ---------- 7. bên thứ ba dựng lại cây từ log trên chuỗi ----------
-    console.error("Dựng lại cây từ log CommitmentsPublished ...");
-
-    const suKien = pool.interface.getEvent("CommitmentsPublished");
-
-    const logs =
-        await provider.getLogs({
-            address: diaChiPool,
-            topics: [suKien.topicHash],
-            fromBlock: duyetRoot.block,
-            toBlock: duyetRoot.block
-        });
-
-    if (logs.length === 0) {
-        throw new Error("không tìm thấy log CommitmentsPublished trên chuỗi");
-    }
-
-    const giaiMa = pool.interface.parseLog(logs[0]);
-    const csTrenChuoi: string[] = Array.from(giaiMa.args.commitments).map((x: any) => String(x));
-    const rootDungLai = String(runRust("root", { commitments: csTrenChuoi }).root).toLowerCase();
-
-    // ---------- 8. kết luận + ghi bằng chứng ----------
-    const gasDeployMoc = Number(moc[0]?.deploy_pool_gas);
-    const gasRootMoc = Number(moc[0]?.update_root_gas);
-
-    const tieuChi = {
-        deployed: trienKhai.status === 1,
-        root_approved: duyetRoot.status === 1 && currentRoot === rootProof && rootHopLe,
-        all_withdrawals_succeeded: luotRut.every((r: any) => r.tx.status === 1 && r.nullifier_marked_used),
-        replay_rejected: dungLai.static_call_reverted && (dungLai.status === 0 || dungLai.send_error !== null),
-        root_rebuilt_from_chain_logs: rootDungLai === currentRoot && csTrenChuoi.length === N
+    const entry = {
+      student_index: i,
+      recipient: p.address,
+      recipient_existed_before: recipientAddress.existed,
+      offchain_verified: true,
+      offchain_verify_ms: verification.verify_ms,
+      tx: { ...receipt, explorer: explorerLink(chainId, receipt.hash) },
+      ganache_gas_used: baselineGas,
+      delta_vs_ganache: baselineGas === null ? null : receipt.gas_used - baselineGas,
+      nullifier_marked_used: Boolean(await pool.usedNullifier(p.nullifier)),
     };
 
-    const tatCaDat = Object.values(tieuChi).every(Boolean);
+    runLog.appendWithdrawal(entry, [
+      { student_index: i, step: 'withdrawOffChain', tx_hash: receipt.hash, ...receipt, note: `recipient ${p.address}` },
+    ]);
 
-    const bangChung = {
-        metadata: {
-            mechanism: "offchain",
-            measured_at_local: thoiDiem(),
-            network: tenMang,
-            chain_id: chainId,
-            // Chỉ ghi host: URL của Infura/Alchemy chứa API key.
-            rpc_host: new URL(RPC_URL).host,
-            school_address: vi.address,
-            n_pool: N,
-            students_withdrawn: CHI_SO,
-            reference_run: "experiments/results/quantitative/luot_bao_cao (09/09/2026, Ganache, Shanghai)",
-            proof_source: path.relative(PROJECT_ROOT, TEP_PROOF).replace(/\\/g, "/"),
-            baseline_same_circuit: PROOF_CUNG_LUOT_DO,
-            baseline_note: PROOF_CUNG_LUOT_DO
-                ? "proof và gas CSV cùng một lô đo — mọi delta_vs_ganache đều là số so sánh thật"
-                : "gas_offchain_n500.csv là của lô đo 09/09 (TRƯỚC A25). Hợp đồng ADV không đổi"
-                    + " nên deploy/update_root/withdraw vẫn so được; proof là bản mới, nên"
-                    + " thời gian xác thực off-chain không so với lô cũ."
-        },
-        level2_criteria: tieuChi,
-        level2_reached: tatCaDat && tenMang === "sepolia",
-        contracts: {
-            shielded_pool: diaChiPool,
-            explorer: EXPLORER[chainId] ? `${EXPLORER[chainId]}/address/${diaChiPool}` : null
-        },
-        deploy_pool: {
-            ...trienKhai,
-            explorer: lienKet(chainId, trienKhai.hash),
-            ganache_gas_used: gasDeployMoc,
-            delta_vs_ganache: trienKhai.gas_used - gasDeployMoc
-        },
-        update_root: {
-            ...duyetRoot,
-            explorer: lienKet(chainId, duyetRoot.hash),
-            commitments: commitments.length,
-            ganache_gas_used: gasRootMoc,
-            delta_vs_ganache: duyetRoot.gas_used - gasRootMoc,
-            calldata: calldataRoot,
-            gas_equals_eip7623_floor: duyetRoot.gas_used === calldataRoot.eip7623_floor_gas,
-            current_root_on_chain: currentRoot,
-            valid_root_on_chain: rootHopLe
-        },
-        withdrawals: luotRut,
-        nullifier_replay: {
-            student_index: CHI_SO[0],
-            ...dungLai,
-            explorer: dungLai.hash ? lienKet(chainId, dungLai.hash) : null
-        },
-        root_rebuild_from_logs: {
-            log_block: duyetRoot.block,
-            commitments_in_log: csTrenChuoi.length,
-            rebuilt_root: rootDungLai,
-            matches_current_root: rootDungLai === currentRoot
-        }
-    };
-
-    fs.mkdirSync(THU_MUC_RA, { recursive: true });
-
-    const tep = path.join(THU_MUC_RA, `kiem_nghiem_${tenMang}_${thoiDiem()}.json`);
-
-    fs.writeFileSync(tep, JSON.stringify(bangChung, null, 2) + "\n", "utf8");
-
-    // Bản CSV cho bảng của bài báo — chuyển dạng từ chính JSON trên.
-    const tepCsv = ghiCsv(bangChung, tep.replace(/\.json$/, ".csv"));
-
-    // ---------- tóm tắt ----------
-    const dongTomTat = (ten: string, moi: number, cu: number) =>
-        `  ${ten.padEnd(24)} ${String(moi).padStart(10)}   Ganache ${String(cu).padStart(10)}   lệch ${moi - cu >= 0 ? "+" : ""}${moi - cu}`;
-
-    console.log(`\n=== KIỂM NGHIỆM OFF-CHAIN trên ${tenMang} (chainId ${chainId}) ===`);
-    console.log(`  pool: ${diaChiPool}`);
-    console.log(dongTomTat("deploy_pool", trienKhai.gas_used, gasDeployMoc));
-    console.log(
-        dongTomTat("update_root (500)", duyetRoot.gas_used, gasRootMoc)
-        + `   sàn EIP-7623 ${calldataRoot.eip7623_floor_gas}`
+    console.error(
+      `student ${i}: withdrawOffChain gas ${receipt.gas_used}, ${receipt.blocks_waited} block(s), ${receipt.confirm_ms} ms`,
     );
+  }
 
-    for (const r of luotRut) {
-        console.log(
-            dongTomTat(`withdraw sv ${r.student_index}`, r.tx.gas_used, r.ganache_gas_used)
-            + (r.recipient_existed_before ? "" : "   (địa chỉ nhận mới)")
-        );
+  const withdrawalRun = runLog.readWithdrawals();
+
+  if (withdrawalRun.length === 0) {
+    throw new Error(`no withdrawal was made${stoppedReason ? ` — ${stoppedReason}` : ''}`);
+  }
+
+  const replayIndex = withdrawalRun[0].student_index;
+
+  console.error(`Replaying the nullifier of student ${replayIndex} ...`);
+
+  const p0 = proofs.find((x: any) => x.student_index === replayIndex);
+
+  const reused = await sendExpectRevert(
+    pool.withdrawOffChain,
+    [p0.root, p0.nullifier, p0.address, p0.amountWei],
+    300_000n,
+    provider,
+  );
+
+  console.error('Rebuilding the tree from CommitmentsPublished logs ...');
+
+  const chainEvent = pool.interface.getEvent('CommitmentsPublished');
+
+  const logs = await provider.getLogs({
+    address: poolAddress,
+    topics: [chainEvent.topicHash],
+    fromBlock: rootApproval.block,
+    toBlock: rootApproval.block,
+  });
+
+  if (logs.length === 0) {
+    throw new Error('no CommitmentsPublished log found on chain');
+  }
+
+  const decoded = pool.interface.parseLog(logs[0]);
+  const onChainIndex: string[] = Array.from(decoded.args.commitments).map((x: any) => String(x));
+  const rebuiltRoot = String(runProver('root', { commitments: onChainIndex }).root).toLowerCase();
+
+  const baselineDeployGas = Number(baseline[0]?.deploy_pool_gas);
+  const baselineRootGas = Number(baseline[0]?.update_root_gas);
+
+  const criteria = {
+    deployed: deployment.status === 1,
+    root_approved: rootApproval.status === 1 && currentRoot === rootProof && rootValid,
+    all_withdrawals_succeeded: withdrawalRun.every((r: any) => r.tx.status === 1 && r.nullifier_marked_used),
+    replay_rejected: reused.static_call_reverted && (reused.status === 0 || reused.send_error !== null),
+    root_rebuilt_from_chain_logs: rebuiltRoot === currentRoot && onChainIndex.length === N,
+  };
+
+  const allPassed = Object.values(criteria).every(Boolean);
+
+  const finishedAt = new Date().toISOString();
+  const lastConfirmation = withdrawalRun
+    .map((r: any) => Date.parse(r.tx.sent_at) + r.tx.confirm_ms)
+    .reduce((a: number, b: number) => Math.max(a, b), 0);
+
+  const round = {
+    planned: STUDENT_INDEXES.length,
+    withdrawn: withdrawalRun.length,
+    complete: withdrawalRun.length === STUDENT_INDEXES.length,
+    stopped_reason: stoppedReason,
+    skipped_already_used_not_logged: skippedAlreadyUsed,
+    started_at: state.started_at,
+    last_confirmation_at: new Date(lastConfirmation).toISOString(),
+    round_wall_ms: lastConfirmation - Date.parse(state.started_at),
+    withdraw_gas: describe(withdrawalRun.map((r: any) => r.tx.gas_used)),
+    blocks_waited: describe(withdrawalRun.map((r: any) => r.tx.blocks_waited)),
+    confirm_ms: describe(withdrawalRun.map((r: any) => r.tx.confirm_ms)),
+    offchain_verify_ms: describe(withdrawalRun.map((r: any) => Number(r.offchain_verify_ms))),
+    recipients_existed_before: withdrawalRun.filter((r: any) => r.recipient_existed_before).length,
+    total_gas:
+      deployment.gas_used + rootApproval.gas_used + withdrawalRun.reduce((s: number, r: any) => s + r.tx.gas_used, 0),
+    note:
+      'withdrawals are sent one after another, each waiting for its receipt — round_wall_ms is the total time of' +
+      ' this sequential round, not a throughput measurement',
+  };
+
+  const evidence = {
+    metadata: {
+      mechanism: 'offchain',
+      measured_at_local: timestamp(),
+      finished_at: finishedAt,
+      network: networkName,
+      chain_id: chainId,
+      rpc_host: new URL(RPC_URL).host,
+      school_address: wallet.address,
+      n_pool: N,
+      students_withdrawn: withdrawalRun.map((r: any) => r.student_index),
+      run_folder: path.relative(PROJECT_ROOT, runLog.dir).replace(/\\/g, '/'),
+      reference_run: 'experiments/results/quantitative/report_run (09/09/2026, Ganache, Shanghai)',
+      proof_source: path.relative(PROJECT_ROOT, PROOF_FILE).replace(/\\/g, '/'),
+      baseline_same_circuit: SAME_LOT_PROOFS,
+      baseline_note: SAME_LOT_PROOFS
+        ? 'proofs and gas CSV come from the same measurement lot — every delta_vs_ganache is a true comparison'
+        : 'proofs come from SEPOLIA_PROOFS, not from report_run: same circuit, root and nullifiers, recipients' +
+          ' replaced by fresh wallets (the published recipients carry third-party EIP-7702 code on Sepolia that' +
+          ' rejects ETH). The contract does not read the proof, so withdraw gas stays comparable with report_run;' +
+          ' a fresh recipient adds the cost of creating its account.',
+    },
+    level2_criteria: criteria,
+    level2_reached: allPassed && networkName === 'sepolia',
+    round,
+    contracts: {
+      shielded_pool: poolAddress,
+      explorer: EXPLORER[chainId] ? `${EXPLORER[chainId]}/address/${poolAddress}` : null,
+    },
+    deploy_pool: {
+      ...deployment,
+      explorer: explorerLink(chainId, deployment.hash),
+      ganache_gas_used: baselineDeployGas,
+      delta_vs_ganache: deployment.gas_used - baselineDeployGas,
+    },
+    update_root: {
+      ...rootApproval,
+      explorer: explorerLink(chainId, rootApproval.hash),
+      commitments: commitments.length,
+      ganache_gas_used: baselineRootGas,
+      delta_vs_ganache: rootApproval.gas_used - baselineRootGas,
+      calldata: calldataRoot,
+      gas_equals_eip7623_floor: rootApproval.gas_used === calldataRoot.eip7623_floor_gas,
+      current_root_on_chain: currentRoot,
+      valid_root_on_chain: rootValid,
+    },
+    withdrawals: withdrawalRun,
+    nullifier_replay: {
+      student_index: replayIndex,
+      ...reused,
+      explorer: reused.hash ? explorerLink(chainId, reused.hash) : null,
+    },
+    root_rebuild_from_logs: {
+      log_block: rootApproval.block,
+      commitments_in_log: onChainIndex.length,
+      rebuilt_root: rebuiltRoot,
+      matches_current_root: rebuiltRoot === currentRoot,
+    },
+  };
+
+  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+
+  const file = path.join(OUTPUT_DIR, `validation_${networkName}.json`);
+
+  fs.writeFileSync(file, JSON.stringify(evidence, null, 2) + '\n', 'utf8');
+
+  const csvFile = writeCsv(evidence, file.replace(/\.json$/, '.csv'));
+
+  const summaryRow = (name: string, current: number, previous: number) =>
+    `  ${name.padEnd(24)} ${String(current).padStart(10)}   Ganache ${String(previous).padStart(10)}   delta ${current - previous >= 0 ? '+' : ''}${current - previous}`;
+
+  console.log(`\n=== OFF-CHAIN VALIDATION on ${networkName} (chainId ${chainId}) ===`);
+  console.log(`  pool: ${poolAddress}`);
+  console.log(summaryRow('deploy_pool', deployment.gas_used, baselineDeployGas));
+  console.log(
+    summaryRow('update_root (500)', rootApproval.gas_used, baselineRootGas) +
+      `   EIP-7623 floor ${calldataRoot.eip7623_floor_gas}`,
+  );
+
+  if (withdrawalRun.length <= 10) {
+    for (const r of withdrawalRun) {
+      console.log(
+        summaryRow(`withdraw student ${r.student_index}`, r.tx.gas_used, r.ganache_gas_used) +
+          (r.recipient_existed_before ? '' : '   (new recipient address)'),
+      );
     }
+  }
 
-    console.log(
-        `  dùng lại nullifier       ${tieuChi.replay_rejected ? "BỊ TỪ CHỐI ✅" : "KHÔNG bị từ chối 🔴"}`
-        + `   lý do: ${dungLai.revert_reason || dungLai.send_error}`
-    );
-    console.log(`  dựng lại cây từ log      ${tieuChi.root_rebuilt_from_chain_logs ? "KHỚP ✅" : "LỆCH 🔴"}`);
-    console.log(`  tiêu chí bậc 2           ${tatCaDat ? "ĐẠT CẢ 5 ✅" : "CHƯA ĐẠT 🔴"}${tenMang === "sepolia" ? "" : "   (chạy thử — không phải mạng công khai)"}`);
-    console.log(`\nĐã ghi: ${tep}`);
-    console.log(`Đã ghi: ${tepCsv}`);
+  console.log(
+    `  withdrawals              ${round.withdrawn} / ${round.planned}${round.stopped_reason ? `   STOPPED: ${round.stopped_reason}` : ''}`,
+  );
+  console.log(
+    `  withdraw gas             min ${round.withdraw_gas.min} · mean ${round.withdraw_gas.mean} · max ${round.withdraw_gas.max}`,
+  );
+  console.log(
+    `  blocks waited            min ${round.blocks_waited.min} · median ${round.blocks_waited.median} · max ${round.blocks_waited.max}`,
+  );
+  console.log(
+    `  confirmation ms          min ${round.confirm_ms.min} · median ${round.confirm_ms.median} · max ${round.confirm_ms.max}`,
+  );
+  console.log(`  round wall time          ${(round.round_wall_ms / 60000).toFixed(1)} min (sequential)`);
+  console.log(
+    `  nullifier replay         ${criteria.replay_rejected ? 'REJECTED ✅' : 'NOT rejected 🔴'}` +
+      `   reason: ${reused.revert_reason || reused.send_error}`,
+  );
+  console.log(`  tree rebuilt from logs   ${criteria.root_rebuilt_from_chain_logs ? 'MATCH ✅' : 'MISMATCH 🔴'}`);
+  console.log(
+    `  level-2 criteria         ${allPassed ? 'ALL 5 PASSED ✅' : 'NOT PASSED 🔴'}${networkName === 'sepolia' ? '' : '   (trial run — not a public network)'}`,
+  );
+  console.log(`\nWrote: ${file}`);
+  console.log(`Wrote: ${csvFile}`);
+  console.log(`Run folder: ${runLog.dir}${round.complete ? '' : '   (resume with SEPOLIA_RUN=<this folder>)'}`);
 
-    if (!tatCaDat) {
-        process.exit(1);
-    }
+  if (!allPassed) {
+    process.exit(1);
+  }
 }
 
-main().catch(
-    (error: any) => {
-        console.error(error);
-        process.exit(1);
-    }
-);
+main().catch((error: any) => {
+  console.error(error);
+  process.exit(1);
+});

@@ -1,0 +1,19 @@
+{
+  "createdBy": "backend/src/clients/ipfs/noteEncryption.ts (encryptNoteForStudent, derivePublicKeyFromPrivateKey)",
+  "notePrivateKey": "0xafd0cb5b34e34685d24a2955b32cde3c3de3be3c4f02ac0b4bd8b3b43136c092",
+  "notePublicKey": "0x046e5403a3d8b9c7ed6c09d6f8e83b2c9cedcab0cc5b8934130c520c5a2074ad62b9db9268ba34cd42652326d55054e00d9dd3f87ad3463dff127a907b9e2ca3c4",
+  "note": {
+    "student_id": 24561001,
+    "amount": "100000000000000000",
+    "rho": "1234567890123456789012345678901234567890"
+  },
+  "envelope": {
+    "version": "ecdh-secp256k1-aes-256-gcm-v1",
+    "ephemeralPublicKey": "04e2e78a256a7cd6d8488ef485a954358bdbe66583999111a34418b47413a81f6e5a794be281c568b4e1fda4f90eeccb98acfbde2625cda9a147d607dbb2d8568c",
+    "iv": "dbf3a35b6d2331c54dd28c0c",
+    "authTag": "bfc1633769474e248ae3b18fea9164de",
+    "ciphertext": "77fe249f8034b7be4f9279d8dfabdfa2bd3fe639d8251b39b3b026f79c9d5b1ae4f395fdda8ad099e2b43d7aebd8bd51ded84c5ce95c5b6acbf46cc9217ea1727f6962f0ff10aac34b10815283905a0808e9eb736f910769ad57dc99e9dfbdaadd4b10d7afa2"
+  },
+  "otherPrivateKey": "0xf0bbc03601d3b53e9193e864e4153ed0e4c7fde7d47b38bc96408e37d2a47865",
+  "otherPublicKey": "0x04a92c8e0f14e3e0677dddb57178ff043436121d40df1dba324491e858a68e5530e8c3831fe572e59bfab7fd753130a4af437277e949238d7eee5ae883fa8fce0e"
+}

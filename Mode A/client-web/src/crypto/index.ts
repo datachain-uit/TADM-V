@@ -1,0 +1,6 @@
+export { generateNoteKeyPair, notePublicKeyOf } from './noteKeys'
+export type { NoteKeyPair } from './noteKeys'
+export { decryptNote, ENCRYPTED_NOTE_VERSION } from './noteDecryption'
+export type { EncryptedNoteEnvelope, StudentNote } from './noteDecryption'
+export { encryptBackup, decryptBackup, downloadJson, MIN_BACKUP_PASSWORD_LENGTH } from './keyBackup'
+export type { StudentSecrets, KeyBackupFile } from './keyBackup'

@@ -1,0 +1,11 @@
+step,actor,call,nullifier_source,recipient,amount_wei,outcome,revert_reason,gas_used,pool_balance_after_wei,tx_hash
+1,student (genuine),withdrawOffChain,published proof,0x70997970C51812dc3A010C7d01b50e0d17dc79C8,2,paid,,64667,18,0x611a7accaa3f1a6db9da05d96cc16a59ea11afa7f88f9f928d0d3473aff02da8
+2,university insider,withdrawOffChain,fabricated #1,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2,paid,,62167,16,0x3896a8454a2f56af9b926ba9cb45f25d02d7429810a35a3648ee86e43e6e497f
+3,university insider,withdrawOffChain,fabricated #2,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2,paid,,62167,14,0xc17261d05972900ecc6cd08c4cb29e5a62f18f41dbc9deb9286c860a5b319f6f
+4,university insider,withdrawOffChain,fabricated #3,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2,paid,,62167,12,0xa09b166186086f1c2dccecba957a29107020024481831c705f7e459904578158
+5,university insider,withdrawOffChain,fabricated #4,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,6,paid,,62167,6,0x73656b6c9aedf5587453582505eb195d9a6547c96f0763f7f28728dd21b86d56
+6,university insider,withdrawOffChain,fabricated #1 again,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2,reverted,nullifier already used,,6,
+7,university insider,withdrawOffChain,fabricated #5,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2,reverted,root not in history,,6,
+8,university insider,withdrawOffChain,fabricated #6,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2000,reverted,insufficient pool,,6,
+9,outsider,withdrawOffChain,fabricated #7,0x70997970C51812dc3A010C7d01b50e0d17dc79C8,2,reverted,not school,,6,
+summary,,,commitments published: 1,,,payouts: 5,,,6,

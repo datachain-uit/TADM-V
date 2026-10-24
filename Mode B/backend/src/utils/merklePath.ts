@@ -1,175 +1,86 @@
-/*
- * K10 — 03/09/2026
- *
- * Suy duong Merkle tu CAC NUT da co san, khong bam lai gi.
- *
- * Day la ban port cua `MerkleTree::get_path`
- * (circuits/src/merkle_tree.rs:173). Phai giong HET, vi lech
- * mot chi tiet la ra root khac va proof hong:
- *
- *   is_right      = index % 2 == 1
- *   sibling_index = is_right ? index - 1 : index + 1
- *   o TRONG       -> zeros[level]
- *                    (KHONG nhan doi nut trai — CVE-2012-2459)
- *   index         = floor(index / 2) sau moi tang
- *
- * Ham nay THUAN: khong doc MongoDB, khong doc file. Nguoi goi
- * truyen vao `timNut` de quyet dinh nut den tu dau — repository
- * lay tu MongoDB, runner thuc nghiem lay tu mang trong bo nho.
- * Nho vay chi co MOT cai dat cua quy uoc tren.
- */
+type FindNode = (level: number, index: number) => string | undefined;
 
-type TimNut = (
-    level: number,
-    index: number
-) => string | undefined;
+function merklePathFromNodes(
+  merkleIndex: number,
 
-function duongMerkleTuNut(
-    merkleIndex:
-        number,
+  depth: number,
 
-    depth:
-        number,
+  zeros: string[],
 
-    zeros:
-        string[],
-
-    timNut:
-        TimNut
+  findNode: FindNode,
 ): {
-    siblings: string[];
-    directions: boolean[];
+  siblings: string[];
+  directions: boolean[];
 } {
+  if (!Number.isInteger(merkleIndex) || merkleIndex < 0) {
+    throw new Error('merkleIndex must be a non-negative integer');
+  }
 
-    if (
-        !Number.isInteger(merkleIndex)
-        ||
-        merkleIndex < 0
-    ) {
-        throw new Error(
-            "merkleIndex must be a non-negative integer"
-        );
-    }
+  if (!Number.isInteger(depth) || depth <= 0) {
+    throw new Error('depth must be a positive integer');
+  }
 
-    if (
-        !Number.isInteger(depth)
-        ||
-        depth <= 0
-    ) {
-        throw new Error(
-            "depth must be a positive integer"
-        );
-    }
+  if (!Array.isArray(zeros) || zeros.length < depth) {
+    throw new Error('zeros must have at least `depth` entries');
+  }
 
-    if (
-        !Array.isArray(zeros)
-        ||
-        zeros.length < depth
-    ) {
-        throw new Error(
-            "zeros must have at least `depth` entries"
-        );
-    }
+  const siblings: string[] = [];
 
-    const siblings:
-        string[] = [];
+  const directions: boolean[] = [];
 
-    const directions:
-        boolean[] = [];
+  let position = merkleIndex;
 
-    let viTri =
-        merkleIndex;
+  for (let level = 0; level < depth; level += 1) {
+    const isRightChild = position % 2 === 1;
 
-    for (
-        let level = 0;
-        level < depth;
-        level += 1
-    ) {
-        const laConPhai =
-            viTri % 2 === 1;
+    const siblingIndex = isRightChild ? position - 1 : position + 1;
 
-        const chiSoAnhEm =
-            laConPhai
-                ? viTri - 1
-                : viTri + 1;
+    const seen = findNode(level, siblingIndex);
 
-        const daCo =
-            timNut(
-                level,
-                chiSoAnhEm
-            );
+    siblings.push(String(seen !== undefined ? seen : zeros[level]));
 
-        siblings.push(
-            String(
-                daCo !== undefined
-                    ? daCo
-                    : zeros[level]
-            )
-        );
+    directions.push(isRightChild);
 
-        directions.push(
-            laConPhai
-        );
+    position = Math.floor(position / 2);
+  }
 
-        viTri =
-            Math.floor(
-                viTri / 2
-            );
-    }
-
-    return {
-        siblings,
-        directions
-    };
+  return {
+    siblings,
+    directions,
+  };
 }
 
-/*
- * Tien ich cho nguoi goi da co san toan bo cay trong bo nho
- * (runner thuc nghiem): `nodes[level][index]`.
- */
-function duongMerkleTuMang(
-    merkleIndex:
-        number,
+function merklePathFromArray(
+  merkleIndex: number,
 
-    nodes:
-        string[][],
+  nodes: string[][],
 
-    zeros:
-        string[]
+  zeros: string[],
 ): {
-    siblings: string[];
-    directions: boolean[];
+  siblings: string[];
+  directions: boolean[];
 } {
+  return merklePathFromNodes(
+    merkleIndex,
 
-    return duongMerkleTuNut(
-        merkleIndex,
+    nodes.length - 1,
 
-        nodes.length - 1,
+    zeros,
 
-        zeros,
+    (
+      level: number,
 
-        (
-            level:
-                number,
+      index: number,
+    ) => {
+      const treeLevel = nodes[level];
 
-            index:
-                number
-        ) => {
-            const tang =
-                nodes[level];
+      if (!treeLevel) {
+        return undefined;
+      }
 
-            if (!tang) {
-                return undefined;
-            }
-
-            return index < tang.length
-                ? tang[index]
-                : undefined;
-        }
-    );
+      return index < treeLevel.length ? treeLevel[index] : undefined;
+    },
+  );
 }
 
-module.exports = {
-    duongMerkleTuNut,
-    duongMerkleTuMang
-};
+export { merklePathFromNodes, merklePathFromArray };

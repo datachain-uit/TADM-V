@@ -1,0 +1,9 @@
+step,actor,call,proof_source,recipient,amount_wei,outcome,revert_reason,gas_used,pool_balance_after_wei,tx_hash
+1,university insider,verifyAndRecord,"published proof, fabricated nullifier argument",0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2,reverted,nullifier differs from proof,,1000000000000000000,
+2,university insider,verifyAndRecord,"published proof, recipient argument changed",0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2,reverted,recipient differs from proof,,1000000000000000000,
+3,university insider,verifyAndRecord,published proof with one proof byte changed,0x70997970C51812dc3A010C7d01b50e0d17dc79C8,2,reverted,invalid proof,,1000000000000000000,
+4,university insider,verifyAndRecord,"NEW real proof of the same note, university wallet as recipient",0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2,recorded,,615739,1000000000000000000,0x08e7e38808ae7290f91d2a784992f6bab3fbeeaea208dffef628763edcaae65a
+5,university insider,settle,claim recorded in step 4,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2,paid,,67126,999999999999999998,0xf297c9b6fa2a41fec1172691dc13452f6fb312bed0fb711e10534e3b5db02bf5
+6,student (genuine),verifyAndRecord,published proof,0x70997970C51812dc3A010C7d01b50e0d17dc79C8,2,reverted,claim already recorded,,999999999999999998,
+7,university insider,settle,same note again,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,2,reverted,nullifier already used,,999999999999999998,
+summary,,,commitments published: 1,,,payouts: 1 (to 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266),,,999999999999999998,
